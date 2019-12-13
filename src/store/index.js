@@ -37,6 +37,24 @@ export default new Vuex.Store({
           console.log(err)
           err.response ? commit('SET_MESSAGE', err.response.data.message.join(', ')) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
+    },
+    login ({ commit }, payload) {
+      axios.post('/users/signin', payload, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log(data)
+          localStorage.setItem('token', data.token)
+          commit('SET_IS_LOGIN', true)
+          commit('SET_MESSAGE', '')
+          router.push('/')
+        })
+        .catch(err => {
+          console.log(err)
+          err.response ? commit('SET_MESSAGE', err.response.data.message.join(', ')) : commit('SET_MESSAGE', `couldn't connect to the server`)
+        })
     }
   },
   modules: {

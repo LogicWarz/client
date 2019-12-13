@@ -21,36 +21,41 @@
       <small>{{ message }}</small>
     </v-alert>
     <div v-if="showLogin">
-      <div class="mt-5">
-        <v-text-field
-          label="Email"
-          email
-          outlined
-          dense
-        ></v-text-field>
-        <v-text-field
-          label="Password"
-          password
-          outlined
-          dense
-        ></v-text-field>
-      </div>
-      <v-row>
-        <v-col
-          cols="6"
-          sm="6"
-        >
-          <div>
-            Don't have an account?
-          </div>
-          <div>
-            <b @click="showLogin = false" class="clickable text-primary">Sign Up</b>
-          </div>
-        </v-col>
-        <v-col style="padding: 2vh">
-          <v-btn class="custom-font float-right primary-gradient"><b>SIGN IN</b></v-btn>
-        </v-col>
-      </v-row>
+      <Form @submit.prevent="login">
+        <div class="mt-5">
+          <v-text-field
+            label="Email"
+            email
+            outlined
+            dense
+            v-model="emailLog"
+          ></v-text-field>
+          <v-text-field
+            label="Password"
+            password
+            outlined
+            dense
+            type="password"
+            v-model="passLog"
+          ></v-text-field>
+        </div>
+        <v-row>
+          <v-col
+            cols="6"
+            sm="6"
+          >
+            <div>
+              Don't have an account?
+            </div>
+            <div>
+              <b @click="showLogin = false" class="clickable text-primary">Sign Up</b>
+            </div>
+          </v-col>
+          <v-col style="padding: 2vh">
+            <v-btn type="submit" class="custom-font float-right primary-gradient"><b>SIGN IN</b></v-btn>
+          </v-col>
+        </v-row>
+      </Form>
     </div>
     <div v-if="!showLogin">
       <Form @submit.prevent="register">
@@ -108,7 +113,9 @@ export default {
       showLogin: true,
       name: '',
       emailReg: '',
-      passReg: ''
+      passReg: '',
+      emailLog: '',
+      passLog: ''
     }
   },
   computed: {
@@ -122,6 +129,13 @@ export default {
         password: this.passReg
       }
       this.$store.dispatch('register', payload)
+    },
+    login () {
+      let payload = {
+        email: this.emailLog,
+        password: this.passLog
+      }
+      this.$store.dispatch('login', payload)
     }
   }
 }

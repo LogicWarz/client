@@ -4,8 +4,7 @@
     class="mx-auto elevated room clickable bg-white-fade"
     :elevation="hover ? 5 : 'none'"
     opacity="0.5"
-    max-width="344"
-    :style="hover? 'opacity: 1;' : 'opacity: 0.9;'"
+    :style="hover? 'opacity: 1;' : 'opacity: 0.9'"
     shaped
     @click="$router.push('/editor')"
   >

@@ -44,9 +44,16 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     <v-container>
-      <v-col v-for="n in 11" :key="n" sm="4">
-        <Room></Room>
-      </v-col>
+      <v-row>
+        <v-col
+          v-for="n in 4"
+          :key="n"
+          cols="12"
+          sm="4"
+        >
+          <Room></Room>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -75,4 +82,7 @@ export default {
 </script>
 
 <style scoped>
+.home {
+  height: 90vh;
+}
 </style>

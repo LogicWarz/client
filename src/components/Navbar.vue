@@ -63,4 +63,7 @@ export default {
 
 </script>
 <style scoped>
+.navbar {
+  padding-top: 5px;
+}
 </style>
