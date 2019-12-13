@@ -4,18 +4,14 @@
       class="bg-standard navbar elevated"
       dense
       collapse-on-scroll
-      style="padding-left: 10vw; padding-right: 10vw"
+      style="padding-left: 10vw; padding-right: 10vw; margin:"
     >
-      <v-toolbar-title>Codiator</v-toolbar-title>
+      <v-toolbar-title class="clickable" @click="$router.push('/')">CodeRoyale</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
+      <v-btn v-if="isLogin" icon>
         <v-icon>mdi-comment</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-account</v-icon>
       </v-btn>
 
       <v-menu
@@ -23,8 +19,8 @@
         bottom
       >
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
+          <v-btn icon v-on="on" v-if="isLogin">
+            <v-icon>mdi-account</v-icon>
           </v-btn>
         </template>
 
@@ -41,5 +37,15 @@
     </v-app-bar>
 </template>
 
+<script>
+import { mapState } from 'vuex'
+export default {
+  name: 'Navbar',
+  computed: {
+    ...mapState(['isLogin'])
+  }
+}
+
+</script>
 <style scoped>
 </style>

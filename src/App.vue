@@ -14,10 +14,14 @@ export default {
   components: {
     Navbar
   },
-
   data: () => ({
     //
-  })
+  }),
+  created () {
+    if (localStorage.getItem('token')) {
+      this.$store.commit('SET_IS_LOGIN', true)
+    }
+  }
 }
 </script>
 
@@ -75,5 +79,8 @@ code {
 }
 .clickable {
   cursor: pointer;
+}
+.text-primary {
+  color: #4A00E0 !important;
 }
 </style>

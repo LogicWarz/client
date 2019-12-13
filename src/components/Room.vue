@@ -7,6 +7,7 @@
     max-width="344"
     :style="hover? 'opacity: 1;' : 'opacity: 0.9;'"
     shaped
+    @click="$router.push('/editor')"
   >
     <v-list-item three-line>
       <v-list-item-content>
