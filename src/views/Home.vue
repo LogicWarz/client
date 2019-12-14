@@ -18,13 +18,20 @@
           dense
           v-model="roomName"
         ></v-text-field>
+        <v-select
+          :items="levels"
+          label="Level"
+          dense
+          outlined
+          v-model="level"
+        ></v-select>
         </div>
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
             text
-            @click="addRoom"
+            @click="createRoom"
           >
             ADD ROOM
           </v-btn>
@@ -44,7 +51,7 @@
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     <v-container>
-      <div class="center-item mt-5" v-if="rooms.length === 0">
+      <div class="center-item mt-5" v-if="getRooms.length === 0">
         No room yet. Go make one!
          <v-img
           src="../assets/empty.png"
@@ -55,12 +62,12 @@
       </div>
       <v-row>
         <v-col
-          v-for="(room, i) in rooms"
+          v-for="(room, i) in getRooms"
           :key="i"
           cols="12"
           sm="4"
         >
-          <Room></Room>
+          <Room :room="room"></Room>
         </v-col>
       </v-row>
     </v-container>
@@ -69,7 +76,9 @@
 
 <script>
 import Room from '../components/Room'
-import { mapState } from 'vuex'
+import axios from '../../apis/axios';
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:3000");
 
 export default {
   name: 'home',
@@ -79,18 +88,55 @@ export default {
   data () {
     return {
       dialog: false,
-      roomName: ''
+      roomName: '',
+      levels: [
+        'Mortal',
+        'King',
+        'Demigod',
+        'God'
+      ],
+      level: '',
+      name: "testQueen",
+      err: "",
+      roomData: [],
     }
   },
   methods: {
-    addRoom () {
-      alert(this.roomName)
-      this.dialog = false
+    createRoom() {
+      this.$store
+        .dispatch("createRoom", {
+          title: this.roomName,
+          level: this.level,
+          player: this.name
+        })
+        .then(room => {
+          socket.emit("getRoom", room);
+          this.$store.dispatch("fetchRoomId", { id: room._id });
+          this.$router.push(`/lobby/${room._id}`);
+          this.roomName = "";
+          this.level = "";
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   computed: {
-    ...mapState(['rooms'])
+    getRooms() {
+      return this.$store.state.allRoom;
+    }
+  },
+  created() {
+    this.$store.dispatch("fetchRoom");
+    socket.on("getRoom", data => {
+      this.$store.dispatch("fetchRoom");
+    });
+
+    socket.on("remove-room", () => {
+      this.$store.dispatch("fetchRoom");
+    });
   }
+  
 }
 </script>
 
