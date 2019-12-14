@@ -12,7 +12,7 @@
           <h2>All Questions</h2>
         </div>
         <v-divider></v-divider>
-        <Question v-for="n in 2" :key="n"></Question>
+        <Question v-for="question in questions" :key="question._id" :question="question"></Question>
       </v-col>
     </v-row>
     </v-container>
@@ -21,11 +21,16 @@
 
 <script>
 import Question from '../components/Question'
+import { mapState } from "vuex";
 export default {
   name: 'Questions',
   components: {
     Question
-  }
+  },
+  created() {
+    this.$store.dispatch("fetchQuestions")
+  },
+  computed: mapState(["questions"])
 }
 </script>
 

@@ -1,11 +1,11 @@
 <template>
   <v-row class="mt-4" justify="center">
     <v-col cols="12" sm="8">
-      <div @click="$router.push('question/1')" class="clickable">
-        <h3>This is a title of a question</h3>
+      <div @click="$router.push(`question/${question._id}`)" class="clickable">
+        <h3>{{question.title}}</h3>
       </div>
       <div @click="$router.push('question/1')" class="clickable">
-        <small style="color: grey">This is a the preview of the detailed question and often truncated This is a the preview of the detailed question and often truncated...</small>
+        <small style="color: grey" v-html="question.description"></small>
       </div>
       <div>
         <v-chip small class="mt-2 mr-1">sometag</v-chip>
@@ -18,7 +18,7 @@
             alt="John"
           >
         </v-avatar>
-        <small>John Watts</small>
+        <small>{{question.UserId.name}}</small>
         <v-chip
           class="ma-2"
           color="green"
@@ -28,12 +28,12 @@
         >
           beginner
         </v-chip>
-        <small style="color: grey">Asked on Dec 12, 2019</small>
+        <small style="color: grey">{{question.createdAt}}</small>
       </div>
     </v-col>
     <v-col class="center-item" cols="6" sm="2">
       <v-avatar class="primary-gradient" size="40">
-        <span class="white--text">12</span>
+        <span class="white--text">{{question.answers.length}}</span>
       </v-avatar>
       <div>
         <small style="color: grey">answers</small>
@@ -41,7 +41,7 @@
     </v-col>
     <v-col class="center-item" cols="6" sm="2">
       <v-avatar color="white" size="40">
-        <span class="grey--text">2</span>
+        <span class="grey--text">{{question.downvotes.length + question.upvotes.length}}</span>
       </v-avatar>
       <div>
         <small style="color: grey">votes</small>
@@ -52,7 +52,8 @@
 
 <script>
 export default {
-
+  name: "question",
+  props: ["question"]
 }
 </script>
 

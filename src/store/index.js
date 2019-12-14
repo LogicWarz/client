@@ -13,7 +13,9 @@ export default new Vuex.Store({
       players: []
     },
     message: '',
-    testString: ''
+    testString: '',
+    questions: [],
+    question: {}
   },
   mutations: {
     SET_IS_LOGIN (state, payload) {
@@ -36,6 +38,12 @@ export default new Vuex.Store({
     },
     ROOM_ID (state, room) {
       state.oneRoom = room
+    },
+    SET_QUESTIONS (state,payload) {
+      state.questions = payload
+    },
+    SET_QUESTION (state,payload) {
+      state.question = payload
     }
   },
   actions: {
@@ -63,6 +71,7 @@ export default new Vuex.Store({
         .then(({ data }) => {
           console.log(data)
           localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.user_data._id)
           commit('SET_IS_LOGIN', true)
           commit('SET_MESSAGE', '')
           router.push('/')
@@ -80,16 +89,20 @@ export default new Vuex.Store({
       axios({
         method: 'get',
         url: '/rooms',
+      })
+      .then(({ data }) => {
+        context.commit('ALL_ROOM', data.rooms)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+    },
+    addQuestion({commit}, payload) {
+      return axios.post("/questions", payload, {
         headers: {
           token: localStorage.getItem('token')
         }
       })
-        .then(({ data }) => {
-          context.commit('ALL_ROOM', data.rooms)
-        })
-        .catch(({ response }) => {
-          console.log(response)
-        })
     },
     fetchRoomId (context, payload) {
       console.log('fetch room payload', payload)
@@ -154,6 +167,32 @@ export default new Vuex.Store({
             reject(response)
           })
       })
+    },
+    fetchQuestions ({ commit }, payload) {
+      axios.get('/questions')
+        .then(({ data }) => {
+          commit('SET_QUESTIONS', data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+    findOneQuestion ({ commit }, payload) {
+      return axios.get(`/questions/${payload}`)
+    },
+
+    deleteQuestion ({ commit }, payload) {
+      axios.delete(`/questions/${payload}`, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          router.push('/forum')
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   modules: {
