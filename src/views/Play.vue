@@ -26,6 +26,8 @@
         <div>
           <code class="full-width">Input: 4<br>Output: 24</code>
         </div>
+
+        
       </v-col>
       <v-col
         cols="12"
@@ -33,8 +35,9 @@
         style="padding: 0"
       >
         <v-row
-        style="height: 70vh; background-color: black;"
+        style="height: 70vh;"
         >
+          <Editor></Editor>
         </v-row>
         <v-row
         style="height: 20vh;"
@@ -66,7 +69,7 @@
 
 <script>
 // @ is an alias to /src
-
+import Editor from "../components/Editor";
 // console.log(editor.value, 'value')
 export default {
   name: 'play',
@@ -75,7 +78,11 @@ export default {
       aa: ''
     }
   },
+  methods: {
+    
+  },
   components: {
+    Editor
   }
 }
 </script>
