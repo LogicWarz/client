@@ -4,9 +4,9 @@
     class="mx-auto elevated room clickable bg-white-fade"
     :elevation="hover ? 5 : 'none'"
     opacity="0.5"
-    max-width="344"
-    :style="hover? 'opacity: 1;' : 'opacity: 0.9;'"
+    :style="hover? 'opacity: 1;' : 'opacity: 0.9'"
     shaped
+    @click="$router.push('/editor')"
   >
     <v-list-item three-line>
       <v-list-item-content>
@@ -16,11 +16,11 @@
             text-color="white"
             x-small
           >
-            Beginner
+            LEVEL
           </v-chip>
         </div>
-        <v-list-item-title class="headline mb-1">Headline 5</v-list-item-title>
-        <v-list-item-subtitle><small>Greyhound divisely hello coldly fonwderfully</small></v-list-item-subtitle>
+        <v-list-item-title class="headline mb-1">Challenge Name</v-list-item-title>
+        <v-list-item-subtitle><small>The description of the challenge</small></v-list-item-subtitle>
       </v-list-item-content>
       <v-badge color="purple" style="margin-right: 10px">
         <template v-slot:badge><b><small>129</small></b></template>
