@@ -10,8 +10,9 @@ export default new Vuex.Store({
     isLogin: false,
     rooms: [],
     message: '',
-    testString: '',
-    questions: []
+    testString: "",
+    questions: [],
+    question: {}
   },
   mutations: {
     SET_IS_LOGIN (state, payload) {
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     SET_QUESTIONS (state, payload) {
       state.questions = payload
+    },
+    SET_QUESTION (state,payload) {
+      state.question = payload
     }
   },
   actions: {
@@ -55,6 +59,7 @@ export default new Vuex.Store({
         .then(({ data }) => {
           console.log(data)
           localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.user_data._id)
           commit('SET_IS_LOGIN', true)
           commit('SET_MESSAGE', '')
           router.push('/')
@@ -86,6 +91,24 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
+    },
+
+    findOneQuestion({commit}, payload) {
+      return axios.get(`/questions/${payload}`)
+    },
+
+    deleteQuestion({commit}, payload) {
+      axios.delete(`/questions/${payload}`,{
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+      .then(({data}) => {
+        router.push("/forum")
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
   modules: {
