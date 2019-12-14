@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     isLogin: false,
     rooms: [],
-    message: ''
+    message: '',
+    testString: ""
   },
   mutations: {
     SET_IS_LOGIN (state, payload) {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     },
     SET_MESSAGE (state, payload) {
       state.message = payload
+    },
+    SET_TEST (state, payload) {
+      state.testString = payload
     }
   },
   actions: {
@@ -55,6 +59,11 @@ export default new Vuex.Store({
           console.log(err)
           err.response ? commit('SET_MESSAGE', err.response.data.message.join(', ')) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
+    },
+
+    parsingData ({commit}, payload) {
+      return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {
+      }) 
     }
   },
   modules: {
