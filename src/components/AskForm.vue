@@ -24,28 +24,28 @@
 
 <script>
 export default {
-  name: "askForm",
-  data(){
+  name: 'askForm',
+  data () {
     return {
-      title: "",
-      description: ""
+      title: '',
+      description: ''
     }
   },
 
   methods: {
-    addQuestion() {
+    addQuestion () {
       let obj = {
         title: this.title,
         description: this.description,
-        tags: ["testing", "testtt"]
+        tags: ['testing', 'testtt']
       }
 
-      this.$store.dispatch("addQuestion", obj)
+      this.$store.dispatch('addQuestion', obj)
         .then(() => {
-          this.$router.push("/forum")
+          this.$router.push('/forum')
         })
         .catch(() => {
-          console.log("Error")
+          console.log('Error')
         })
     }
   }

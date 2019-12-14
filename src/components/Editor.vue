@@ -15,7 +15,7 @@ export default {
   },
   data () {
     return {
-      testing: ""
+      testing: ''
     }
   },
   methods: {
@@ -23,13 +23,11 @@ export default {
       console.log(value)
     },
 
-    submitEvent() {
-     this.$store.dispatch("parsingData", this.testing)
-      .then(({data}) => {
-        console.log(data)
-      })
-
-      
+    submitEvent () {
+      this.$store.dispatch('parsingData', this.testing)
+        .then(({ data }) => {
+          console.log(data)
+        })
     }
   }
 }

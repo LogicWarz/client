@@ -21,16 +21,16 @@
 
 <script>
 import Question from '../components/Question'
-import { mapState } from "vuex";
+import { mapState } from 'vuex'
 export default {
   name: 'Questions',
   components: {
     Question
   },
-  created() {
-    this.$store.dispatch("fetchQuestions")
+  created () {
+    this.$store.dispatch('fetchQuestions')
   },
-  computed: mapState(["questions"])
+  computed: mapState(['questions'])
 }
 </script>
 

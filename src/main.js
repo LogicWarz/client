@@ -3,12 +3,12 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import "vue-wysiwyg/dist/vueWysiwyg.css";
+import 'vue-wysiwyg/dist/vueWysiwyg.css'
 
-import wysiwyg from "vue-wysiwyg";
+import wysiwyg from 'vue-wysiwyg'
 Vue.use(wysiwyg, {
-  maxHeight: "500px"
-});
+  maxHeight: '500px'
+})
 
 Vue.config.productionTip = false
 

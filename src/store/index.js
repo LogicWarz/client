@@ -10,7 +10,7 @@ export default new Vuex.Store({
     isLogin: false,
     rooms: [],
     message: '',
-    testString: "",
+    testString: '',
     questions: []
   },
   mutations: {
@@ -26,7 +26,7 @@ export default new Vuex.Store({
     SET_TEST (state, payload) {
       state.testString = payload
     },
-    SET_QUESTIONS (state,payload) {
+    SET_QUESTIONS (state, payload) {
       state.questions = payload
     }
   },
@@ -65,23 +65,23 @@ export default new Vuex.Store({
         })
     },
 
-    parsingData ({commit}, payload) {
+    parsingData ({ commit }, payload) {
       return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {
-      }) 
+      })
     },
 
-    addQuestion({commit}, payload) {
-      return axios.post("/questions", payload, {
+    addQuestion ({ commit }, payload) {
+      return axios.post('/questions', payload, {
         headers: {
           token: localStorage.getItem('token')
         }
       })
     },
 
-    fetchQuestions({commit}, payload) {
+    fetchQuestions ({ commit }, payload) {
       axios.get('/questions')
-        .then(({data}) => {
-          commit("SET_QUESTIONS", data)
+        .then(({ data }) => {
+          commit('SET_QUESTIONS', data)
         })
         .catch(err => {
           console.log(err)

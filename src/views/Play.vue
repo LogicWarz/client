@@ -27,7 +27,6 @@
           <code class="full-width">Input: 4<br>Output: 24</code>
         </div>
 
-        
       </v-col>
       <v-col
         cols="12"
@@ -69,7 +68,7 @@
 
 <script>
 // @ is an alias to /src
-import Editor from "../components/Editor";
+import Editor from '../components/Editor'
 // console.log(editor.value, 'value')
 export default {
   name: 'play',
@@ -79,7 +78,7 @@ export default {
     }
   },
   methods: {
-    
+
   },
   components: {
     Editor
