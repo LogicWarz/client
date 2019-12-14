@@ -1,10 +1,10 @@
 <template>
   <v-row class="mt-4" justify="center">
     <v-col cols="12" sm="8">
-      <div>
+      <div @click="$router.push('question/1')" class="clickable">
         <h3>This is a title of a question</h3>
       </div>
-      <div>
+      <div @click="$router.push('question/1')" class="clickable">
         <small style="color: grey">This is a the preview of the detailed question and often truncated This is a the preview of the detailed question and often truncated...</small>
       </div>
       <div>

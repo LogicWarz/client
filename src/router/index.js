@@ -47,6 +47,18 @@ const routes = [
     }
   },
   {
+    path: '/question/:id',
+    name: 'question',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/QuestionDetail.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,
