@@ -23,6 +23,18 @@ const routes = [
     }
   },
   {
+    path: '/forum',
+    name: 'forum',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/Questions.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,

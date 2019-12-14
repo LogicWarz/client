@@ -32,22 +32,31 @@
       </v-card>
     </v-dialog>
     <v-btn
-        absolute
+        fixed
         dark
         fab
+        bottom
         right
-        fixed
-        style="margin-right: 3vw"
+        style="margin: 4vw"
         @click="dialog = true"
         class="primary-gradient"
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
     <v-container>
+      <div class="center-item mt-5" v-if="rooms.length === 0">
+        No room yet. Go make one!
+         <v-img
+          src="../assets/empty.png"
+          height="200"
+          width="300"
+          class="center-self mt-2"
+        ></v-img>
+      </div>
       <v-row>
         <v-col
-          v-for="n in 4"
-          :key="n"
+          v-for="(room, i) in rooms"
+          :key="i"
           cols="12"
           sm="4"
         >
@@ -60,6 +69,7 @@
 
 <script>
 import Room from '../components/Room'
+import { mapState } from 'vuex'
 
 export default {
   name: 'home',
@@ -77,12 +87,15 @@ export default {
       alert(this.roomName)
       this.dialog = false
     }
+  },
+  computed: {
+    ...mapState(['rooms'])
   }
 }
 </script>
 
 <style scoped>
 .home {
-  height: 90vh;
+  min-height: 90vh;
 }
 </style>

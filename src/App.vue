@@ -77,6 +77,9 @@ code {
 .center-item {
   text-align: center;
 }
+.center-self {
+  margin: auto;
+}
 .clickable {
   cursor: pointer;
 }

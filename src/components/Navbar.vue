@@ -10,7 +10,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn v-if="isLogin" icon>
+      <v-btn @click="$router.push('/forum')" v-if="isLogin" icon>
         <v-icon>mdi-comment</v-icon>
       </v-btn>
 
