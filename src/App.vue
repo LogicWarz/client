@@ -31,7 +31,7 @@ export default {
 
 .app {
   background: rgb(254,254,255) !important;
-  background: linear-gradient(142deg, rgba(254,254,255,1) 0%, rgba(239,236,255,1) 50%, rgba(225,220,255,1) 100%) !important;
+  background: linear-gradient(142deg, rgba(254,254,255,1) 0%, rgb(226, 222, 255) 50%, rgb(212, 204, 255) 100%) !important;
   font-family: 'Montserrat', sans-serif;
 }
 .bg-standard {
