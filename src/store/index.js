@@ -8,9 +8,12 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     isLogin: false,
-    rooms: [],
+    allRoom: [],
+    oneRoom: {
+      players: []
+    },
     message: '',
-    testString: "",
+    testString: '',
     questions: [],
     question: {}
   },
@@ -26,6 +29,15 @@ export default new Vuex.Store({
     },
     SET_TEST (state, payload) {
       state.testString = payload
+    },
+    CREATED_ROOM (state, room) {
+      state.allRoom.unshift(room)
+    },
+    ALL_ROOM (state, room) {
+      state.allRoom = room
+    },
+    ROOM_ID (state, room) {
+      state.oneRoom = room
     },
     SET_QUESTIONS (state,payload) {
       state.questions = payload
@@ -69,12 +81,22 @@ export default new Vuex.Store({
           err.response ? commit('SET_MESSAGE', err.response.data.message) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
     },
-
-    parsingData ({commit}, payload) {
+    parsingData ({ commit }, payload) {
       return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {
-      }) 
+      })
     },
-
+    fetchRoom (context, payload) {
+      axios({
+        method: 'get',
+        url: '/rooms',
+      })
+      .then(({ data }) => {
+        context.commit('ALL_ROOM', data.rooms)
+      })
+      .catch(({ response }) => {
+        console.log(response)
+      })
+    },
     addQuestion({commit}, payload) {
       return axios.post("/questions", payload, {
         headers: {
@@ -82,33 +104,95 @@ export default new Vuex.Store({
         }
       })
     },
-
-    fetchQuestions({commit}, payload) {
+    fetchRoomId (context, payload) {
+      console.log('fetch room payload', payload)
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'get',
+          url: `/rooms/${payload.id}`,
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+          .then(({ data }) => {
+            console.log(data)
+            context.commit('ROOM_ID', data.room)
+            resolve(data)
+          })
+          .catch(({ response }) => {
+            reject(response)
+          })
+      })
+    },
+    createRoom (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'post',
+          url: '/rooms',
+          data: {
+            title: payload.title,
+            level: payload.level,
+            player: payload.player
+          },
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+          .then(({ data }) => {
+            console.log(data)
+            context.commit('CREATED_ROOM', data.room)
+            resolve(data.room)
+          })
+          .catch(({ response }) => {
+            reject(response)
+          })
+      })
+    },
+    joinRoom (context, payload) {
+      return new Promise((resolve, reject) => {
+        axios({
+          method: 'patch',
+          url: `/rooms/join/${payload.id}`,
+          data: { player: payload.name },
+          headers: {
+            token: localStorage.getItem('token')
+          }
+        })
+          .then(({ data }) => {
+            context.commit('ROOM_ID', data.room)
+            // context.commit('JOIN_ROOM', data.room)
+            resolve(data)
+          })
+          .catch(({ response }) => {
+            reject(response)
+          })
+      })
+    },
+    fetchQuestions ({ commit }, payload) {
       axios.get('/questions')
-        .then(({data}) => {
-          commit("SET_QUESTIONS", data)
+        .then(({ data }) => {
+          commit('SET_QUESTIONS', data)
         })
         .catch(err => {
           console.log(err)
         })
     },
-
-    findOneQuestion({commit}, payload) {
+    findOneQuestion ({ commit }, payload) {
       return axios.get(`/questions/${payload}`)
     },
 
-    deleteQuestion({commit}, payload) {
-      axios.delete(`/questions/${payload}`,{
+    deleteQuestion ({ commit }, payload) {
+      axios.delete(`/questions/${payload}`, {
         headers: {
           token: localStorage.getItem('token')
         }
       })
-      .then(({data}) => {
-        router.push("/forum")
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        .then(({ data }) => {
+          router.push('/forum')
+        })
+        .catch(err => {
+          console.log(err)
+        })
     }
   },
   modules: {
