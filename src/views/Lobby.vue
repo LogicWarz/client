@@ -86,13 +86,13 @@
 </template>
 
 <script>
-import io from "socket.io-client";
 import axios from "../../apis/axios";
+import io from "socket.io-client";
 const socket = io.connect("http://localhost:3000");
 import Typed from 'typed.js';
 
 export default {
-  name: 'Lobby',
+  name: "Lobby",
   data() {
     return {
       newUser: "",
@@ -105,15 +105,18 @@ export default {
         method: "patch",
         url: `/rooms/play/${id}`,
         headers: {
-          token: localStorage.getItem('token')
+          token: localStorage.getItem("token")
         }
       })
         .then(({ data }) => {
+          // this.$store.commit("SET_INGAME_PLAYERS", data.room.players);
           return this.$store.dispatch("fetchRoomId", { id: data.room._id });
         })
         .then(() => {
           socket.emit("play-game", { id, msg: "game start" });
-          this.$router.push('/editor')
+          setTimeout(() => {
+            this.$router.push(`/editor/${this.$route.params.room}`);
+          }, 300);
         })
         .catch(({ response }) => {
           console.log(response);
@@ -127,7 +130,7 @@ export default {
           player: "testQueen"
         },
         headers: {
-          token: localStorage.getItem('token')
+          token: localStorage.getItem("token")
         }
       })
         .then(({ data }) => {
@@ -148,16 +151,21 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room })
+    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+
     socket.on("joinRoom", data => {
-      console.log('join room listened in client', data)
       if (data.id === this.$route.params.room) {
         this.$store.dispatch("fetchRoom");
         this.newUser = data.msg;
         this.$store
           .dispatch("fetchRoomId", { id: data.id })
-          .then(() => {
-            console.log("joined");
+          .then(data => {
+            if (data.room.players.length === 2) {
+              socket.emit("play-game", {
+                id: data.room._id,
+                msg: "game start"
+              });
+            }
           })
           .catch(err => {
             console.log(err);
@@ -184,6 +192,7 @@ export default {
 
     socket.on("playGame", data => {
       this.$store.dispatch("fetchRoomId", { id: data.id });
+      this.$router.push(`/editor/${this.$route.params.room}`);
     });
   }
 };
