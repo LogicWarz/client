@@ -9,7 +9,7 @@
     </div> -->
     <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
-    <div class="center-item mt-2">
+    <div class="center-item mt-10">
       <v-btn
         text
         @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2"

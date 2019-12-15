@@ -1,6 +1,6 @@
 <template>
   <v-app class="app custom-font">
-    <Navbar></Navbar>
+    <Navbar v-if="showNavbar"></Navbar>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -15,11 +15,17 @@ export default {
     Navbar
   },
   data: () => ({
-    //
+    showNavbar: true
   }),
   created () {
     if (localStorage.getItem('token')) {
       this.$store.commit('SET_IS_LOGIN', true)
+    }
+    console.log(this.$router.history.current.fullPath)
+  },
+  watch: {
+    $route (to, from){
+      this.showNavbar = !(to.fullPath.includes('lobby') || to.fullPath.includes('editor') || to.fullPath.includes('result'))
     }
   }
 }
@@ -85,5 +91,11 @@ code {
 }
 .text-primary {
   color: #4A00E0 !important;
+}
+.zoom-hover {
+  transition: transform .4s !important; /* Animation */
+}
+.zoom-hover:hover {
+  transform: scale(1.1) !important; /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 </style>

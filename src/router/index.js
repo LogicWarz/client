@@ -15,6 +15,7 @@ const routes = [
     name: 'editor',
     component: () => import(/* webpackChunkName: "about" */ '../views/Play.vue'),
     beforeEnter: (to, from, next) => {
+      console.log(from, 'widhjoiwahdo')
       if (localStorage.getItem('token')) {
         next()
       } else {
@@ -63,6 +64,15 @@ const routes = [
     name: 'lobby',
     component: () => import(/* webpackChunkName: "forum" */ '../views/Lobby.vue'),
     beforeEnter: (to, from, next) => {
+      // if (localStorage.getItem('token')) {
+      //   if (!from.name) {
+      //     next('/')
+      //   } else {
+      //     next()
+      //   }
+      // } else {
+      //   next('/signin')
+      // }
       if (localStorage.getItem('token')) {
         next()
       } else {
