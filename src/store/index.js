@@ -57,6 +57,9 @@ export default new Vuex.Store({
         .then(({ data }) => {
           console.log(data)
           localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.user_data._id)
+          localStorage.setItem('name', data.user_data.name)
+          localStorage.setItem('email', data.user_data.email)
           commit('SET_IS_LOGIN', true)
           commit('SET_MESSAGE', '')
           router.push('/')
@@ -76,6 +79,8 @@ export default new Vuex.Store({
           console.log(data)
           localStorage.setItem('token', data.token)
           localStorage.setItem('id', data.user_data._id)
+          localStorage.setItem('name', data.user_data.name)
+          localStorage.setItem('email', data.user_data.email)
           commit('SET_IS_LOGIN', true)
           commit('SET_MESSAGE', '')
           router.push('/')
