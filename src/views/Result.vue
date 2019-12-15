@@ -28,23 +28,38 @@
     </div>
     <v-container>
       <v-row>
-        <v-col sm="6">
-          <div >
-          <vue-typed-js :strings="['Prepare for battle']">
-            <h3 class="typing"></h3 >
-          </vue-typed-js>
-          <v-img
-            style="margin: auto;"
-            src="../assets/lobby.png"
-            max-height="50vh"
-            max-width="50vh"
-          ></v-img>
-          </div>
-        </v-col>
-        <v-col sm="6" class="lobby-container bg-white-fade elevated pa-5">
+        <v-col sm="6" class="lobby-container bg-white-fade elevated pa-5 center-item">
           <div>
-            <h3>Players</h3>
+            <h3>Winner</h3>
           </div>
+          <v-row>
+            <v-col>
+              <div>
+              <v-avatar size="150">
+                <img
+                  src="https://cdn.vuetifyjs.com/images/john.jpg"
+                  alt="John"
+                >
+              </v-avatar>
+              </div>
+              <div class="mt-3">
+                John Watts
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col v-for="n in 3" :key="n" sm="4">
+              <v-avatar>
+                <img
+                  src="https://cdn.vuetifyjs.com/images/john.jpg"
+                  alt="John"
+                >
+              </v-avatar>
+              <div class="mt-3">
+                <small>John Watts</small>
+              </div>
+            </v-col>
+          </v-row>
           <v-row v-for="player in listPlayer.players" :key="player._id" justify="center" align="center">
           <v-col sm="2">
             <v-badge color="orange">
@@ -79,6 +94,19 @@
             
           </v-col>
           </v-row>
+        </v-col>
+        <v-col sm="6">
+          <div >
+          <vue-typed-js :strings="['Player name wins!']">
+            <h3 style="margin: auto;" class="typing"></h3 >
+          </vue-typed-js>
+          <v-img
+            style="margin: auto;"
+            src="../assets/win.gif"
+            max-height="50vh"
+            max-width="50vh"
+          ></v-img>
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -148,6 +176,9 @@ export default {
     }
   },
   created() {
+    this.$confetti.start({
+      particlesPerFrame: 0.2,
+    });
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room })
     socket.on("joinRoom", data => {
       console.log('join room listened in client', data)
@@ -185,6 +216,9 @@ export default {
     socket.on("playGame", data => {
       this.$store.dispatch("fetchRoomId", { id: data.id });
     });
+  },
+  beforeDestroy() {
+    this.$confetti.stop()
   }
 };
 </script>
