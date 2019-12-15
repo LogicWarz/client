@@ -76,9 +76,9 @@
 
 <script>
 import Room from '../components/Room'
-import axios from '../../apis/axios';
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+import axios from '../../apis/axios'
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:3000')
 
 export default {
   name: 'home',
@@ -96,47 +96,47 @@ export default {
         'God'
       ],
       level: '',
-      name: "testQueen",
-      err: "",
-      roomData: [],
+      name: 'testQueen',
+      err: '',
+      roomData: []
     }
   },
   methods: {
-    createRoom() {
+    createRoom () {
       this.$store
-        .dispatch("createRoom", {
+        .dispatch('createRoom', {
           title: this.roomName,
           level: this.level,
           player: this.name
         })
         .then(room => {
-          socket.emit("getRoom", room);
-          this.$store.dispatch("fetchRoomId", { id: room._id });
-          this.$router.push(`/lobby/${room._id}`);
-          this.roomName = "";
-          this.level = "";
+          socket.emit('getRoom', room)
+          this.$store.dispatch('fetchRoomId', { id: room._id })
+          this.$router.push(`/lobby/${room._id}`)
+          this.roomName = ''
+          this.level = ''
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     }
   },
   computed: {
-    getRooms() {
-      return this.$store.state.allRoom;
+    getRooms () {
+      return this.$store.state.allRoom
     }
   },
-  created() {
-    this.$store.dispatch("fetchRoom");
-    socket.on("getRoom", data => {
-      this.$store.dispatch("fetchRoom");
-    });
+  created () {
+    this.$store.dispatch('fetchRoom')
+    socket.on('getRoom', data => {
+      this.$store.dispatch('fetchRoom')
+    })
 
-    socket.on("remove-room", () => {
-      this.$store.dispatch("fetchRoom");
-    });
+    socket.on('remove-room', () => {
+      this.$store.dispatch('fetchRoom')
+    })
   }
-  
+
 }
 </script>
 

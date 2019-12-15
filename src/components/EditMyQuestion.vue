@@ -29,7 +29,7 @@
                 @paste="updateTags">
       </v-combobox>
     </v-flex>
-    <v-btn rounded class="primary-gradient" @click="addQuestion">
+    <v-btn rounded class="primary-gradient" @click="editQuestion">
       <b>POST</b>
     </v-btn>
   </v-container>
@@ -37,7 +37,7 @@
 
 <script>
 export default {
-  name: 'askForm',
+  name: 'EditMyQuestion',
   data () {
     return {
       title: '',
@@ -47,20 +47,33 @@ export default {
     }
   },
   methods: {
-    addQuestion () {
-      let obj = {
+    getQuestionDetail() {
+      this.$store.dispatch('getQuestionDetail', this.$route.params.id)
+        .then((response) => {
+          this.title = response.data.title;
+          this.description = response.data.description;
+          this.tags = response.data.tags;
+        })
+        .catch((err) => {
+          console.log(err);
+          // this.danger(err.response.data.message);
+        });
+    },
+    editQuestion() {
+      this.$store.dispatch('editQuestion', {
         title: this.title,
         description: this.description,
-        tags: this.tags
-      }
-
-      this.$store.dispatch('addQuestion', obj)
-        .then(() => {
-          this.$router.push('/forum')
+        tags: this.tags,
+        QuestionId: this.$route.params.id,
+      })
+        .then((response) => {
+          // this.success('Question edited successfully');
+          this.$router.back();
         })
-        .catch(() => {
-          console.log('Error')
-        })
+        .catch((err) => {
+          console.log(err);
+          // this.danger(err.response.data.message);
+        });
     },
     updateTags() {
       this.$nextTick(() => {
@@ -70,7 +83,10 @@ export default {
         });
       });
     }
-  }
+  },
+  created() {
+    this.getQuestionDetail();
+  },
 }
 </script>
 

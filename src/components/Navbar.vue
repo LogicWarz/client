@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-app-bar
@@ -14,7 +13,7 @@
       </v-btn>
 
       <v-btn icon>
-        <v-icon @click="logout">mdi-logout</v-icon>
+        <v-icon @click="logout" v-if="isLogin" >mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
   </div>
@@ -71,6 +70,7 @@ export default {
     logout () {
       localStorage.removeItem('token')
       this.$store.commit('SET_IS_LOGIN', false)
+      this.$store.commit('SET_USER', {})
       this.$router.push('/signin')
     }
   }

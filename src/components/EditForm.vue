@@ -1,11 +1,11 @@
 <template>
   <v-container class="form-container bg-white-fade elevated pa-10">
-    <v-text-field
+    <!-- <v-text-field
       label="Title"
       dense
       outlined
       v-model="title"
-    ></v-text-field>
+    ></v-text-field> -->
     <!-- <v-textarea
       v-model="description"
       label="Content"
@@ -16,61 +16,52 @@
       shaped
     ></v-textarea> -->
     <wysiwyg v-model="description" style="height: 100%; border-color: black; margin-bottom: 20px;" />
-    <v-flex xs12>
-      <v-combobox multiple
-                v-model="tags" 
-                label="Tags" 
-                append-icon
-                chips
-                deletable-chips
-                class="tag-input"
-                :search-input.sync="search" 
-                @keyup.tab="updateTags"
-                @paste="updateTags">
-      </v-combobox>
-    </v-flex>
-    <v-btn rounded class="primary-gradient" @click="addQuestion">
+    
+    <v-btn rounded class="primary-gradient" @click="editAnswer">
       <b>POST</b>
     </v-btn>
   </v-container>
 </template>
 
 <script>
-export default {
-  name: 'askForm',
-  data () {
-    return {
-      title: '',
-      description: '',
-      tags: [],
-      search: "" //sync search
-    }
-  },
-  methods: {
-    addQuestion () {
-      let obj = {
-        title: this.title,
-        description: this.description,
-        tags: this.tags
-      }
+import {mapState} from 'vuex'
 
-      this.$store.dispatch('addQuestion', obj)
-        .then(() => {
-          this.$router.push('/forum')
+export default {
+  name: 'EditForm',
+  data: () => ({
+    description: '',
+  }),
+  methods: {
+    getAnswerDetail() {
+      this.$store.dispatch('getAnswerDetail', this.$route.params.id)
+        .then((response) => {
+          this.description = response.data.description;
+          this.$store.commit('SET_ANSWER_DETAIL', response.data);
         })
-        .catch(() => {
-          console.log('Error')
-        })
-    },
-    updateTags() {
-      this.$nextTick(() => {
-        this.tags.push(...this.search.split(","));
-        this.$nextTick(() => {
-          this.search = "";
+        .catch((err) => {
+          console.log(err);
+          // this.danger(err.response.data.message);
         });
-      });
-    }
-  }
+    },
+    editAnswer() {
+      this.$store.dispatch('editAnswer', {
+        description: this.description,
+        AnswerId: this.$route.params.id,
+      })
+        .then((response) => {
+          // this.success('Answer edited successfully');
+          this.$router.back();
+        })
+        .catch((err) => {
+          console.log(err);
+          // this.danger(err.response.data.message);
+        });
+    },
+  },
+  created() {
+    this.getAnswerDetail();
+  },
+  computed: mapState(['answer_detail', 'user'])
 }
 </script>
 

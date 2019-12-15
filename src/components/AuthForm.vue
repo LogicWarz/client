@@ -84,12 +84,13 @@
         </div>
         <v-row>
           <v-col
-            cols="6"
-            sm="6"
+            cols="4"
+            sm="4"
+            style="padding: 2vh"
           >
           <v-btn type="submit" class="custom-font primary-gradient"><b>SIGN UP</b></v-btn>
           </v-col>
-          <v-col style="padding: 2vh; text-align: right">
+          <v-col style="text-align: right">
             <div>
               Already have an account?
             </div>

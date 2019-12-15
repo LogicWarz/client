@@ -20,6 +20,14 @@ export default {
   created () {
     if (localStorage.getItem('token')) {
       this.$store.commit('SET_IS_LOGIN', true)
+      this.$store.dispatch('getUserData')
+        .then((response) => {
+          this.$store.commit('SET_USER', response.data)
+        })
+        .catch((err) => {
+          console.log(err)
+          this.danger(err.response.data.message)
+        })
     }
   }
 }
