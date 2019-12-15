@@ -11,8 +11,8 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Auth.vue')
   },
   {
-    path: '/editor/:room',
-    name: 'editor',
+    path: '/play/:room',
+    name: 'play',
     component: () => import(/* webpackChunkName: "about" */ '../views/Play.vue'),
     beforeEnter: (to, from, next) => {
       console.log(from, 'widhjoiwahdo')

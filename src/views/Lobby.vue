@@ -115,7 +115,7 @@ export default {
         .then(() => {
           socket.emit("play-game", { id, msg: "game start" });
           setTimeout(() => {
-            this.$router.push(`/editor/${this.$route.params.room}`);
+            this.$router.push(`/play/${this.$route.params.room}`);
           }, 300);
         })
         .catch(({ response }) => {
@@ -165,7 +165,7 @@ export default {
                 id: data.room._id,
                 msg: "game start"
               });
-              this.$router.push(`/editor/${this.$route.params.room}`);
+              this.$router.push(`/play/${this.$route.params.room}`);
             }
           })
           .catch(err => {
@@ -193,7 +193,7 @@ export default {
 
     socket.on("playGame", data => {
       this.$store.dispatch("fetchRoomId", { id: data.id });
-      this.$router.push(`/editor/${this.$route.params.room}`);
+      this.$router.push(`/play/${this.$route.params.room}`);
     });
   }
 };
