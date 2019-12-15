@@ -14,7 +14,7 @@
       </v-btn>
 
       <v-btn icon>
-        <v-icon @click="logout">mdi-logout</v-icon>
+        <v-icon v-if="isLogin" @click="logout">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
   </div>
