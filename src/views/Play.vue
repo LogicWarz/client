@@ -79,7 +79,7 @@ export default {
       this.$store.dispatch("fetchRoom");
     });
     socket.on("successChallenge", () => {
-      this.$router.push("/");
+      this.$router.push(`/result/${this.$route.params.room}`);
     });
   }
 };
