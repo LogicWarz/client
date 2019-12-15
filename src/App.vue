@@ -1,6 +1,7 @@
 <template>
   <v-app class="app custom-font">
     <Navbar v-if="showNavbar"></Navbar>
+    <Header v-if="!showNavbar"></Header>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -9,10 +10,12 @@
 
 <script>
 import Navbar from './components/Navbar'
+import Header from './components/Header'
 export default {
   name: 'App',
   components: {
-    Navbar
+    Navbar,
+    Header
   },
   data: () => ({
     showNavbar: true
@@ -25,7 +28,7 @@ export default {
   },
   watch: {
     $route (to, from){
-      this.showNavbar = !(to.fullPath.includes('lobby') || to.fullPath.includes('editor') || to.fullPath.includes('result'))
+      this.showNavbar = !(to.fullPath.includes('lobby') || to.fullPath.includes('play') || to.fullPath.includes('result'))
     }
   }
 }
@@ -97,5 +100,8 @@ code {
 }
 .zoom-hover:hover {
   transform: scale(1.1) !important; /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+.scroll {
+  overflow: scroll;
 }
 </style>

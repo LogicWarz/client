@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    {{getRooms}}
     <v-dialog v-model="dialog" max-width="500">
       <v-card>
         <v-card-title class="primary-gradient" primary-title><b>Create Room</b></v-card-title>
