@@ -41,8 +41,8 @@ export default {
           socket.emit("remove-room");
           socket.emit("success-challenge");
           setTimeout(() => {
-            this.$router.push("/");
-          }, 1000);
+            this.$router.push(`/result/${this.$route.params.room}`);
+          }, 300);
         })
         .catch(({ response }) => {
           console.log(response);

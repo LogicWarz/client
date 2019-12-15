@@ -91,6 +91,7 @@ export default {
                 id: data.room._id,
                 msg: "game start"
               });
+              this.$router.push(`/editor/${this.$route.params.room}`);
             }
           })
           .catch(err => {
