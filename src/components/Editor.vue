@@ -55,7 +55,7 @@ export default {
 
 <style>
 .editor {
-  width: 900px;
+  width: 66vw;
   height: 70vh;
 }
 </style>

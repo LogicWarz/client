@@ -1,7 +1,6 @@
 <template>
   <div class="play custom-font">
-    {{getPlayers}}
-    <v-row style="height: 90vh">
+    <v-row style="height: 95vh; margin-top: 5vh;">
       <v-col cols="12" sm="4" class="challenge-container">
         <v-chip color="green" text-color="white" small>Beginner</v-chip>
         <hr />
