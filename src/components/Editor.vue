@@ -32,7 +32,7 @@ export default {
       });
       axios({
         method: "delete",
-        url: `/rooms/${this.$route.params.room}`,
+        url: `/rooms/success/${this.$route.params.room}`,
         headers: {
           token: localStorage.getItem("token")
         }
