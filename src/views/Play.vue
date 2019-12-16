@@ -47,8 +47,7 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+import socket from "../socket/socket";
 // @ is an alias to /src
 import Editor from "../components/Editor";
 // console.log(editor.value, 'value')
@@ -78,7 +77,8 @@ export default {
     socket.on("remove-room", () => {
       this.$store.dispatch("fetchRoom");
     });
-    socket.on("successChallenge", () => {
+    socket.on("successChallenge", id => {
+      // socket.emit("winner-page", { id });
       this.$router.push(`/result/${this.$route.params.room}`);
     });
   }

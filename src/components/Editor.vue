@@ -6,10 +6,10 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+// import io from "socket.io-client";
 import axios from "../../apis/axios";
 import MonacoEditor from "vue-monaco";
-const socket = io.connect("http://localhost:3000");
+import socket from "../socket/socket";
 
 export default {
   name: "Editor",
@@ -27,29 +27,37 @@ export default {
     },
 
     submitEvent() {
-      this.$store.dispatch("parsingData", this.testing).then(({ data }) => {
-        console.log(data);
-      });
-      axios({
-        method: "delete",
-        url: `/rooms/success/${this.$route.params.room}`,
-        headers: {
-          token: localStorage.getItem("token")
-        }
-      })
+      this.$store
+        .dispatch("parsingData", this.testing)
         .then(({ data }) => {
-          socket.emit("remove-room");
-          socket.emit("success-challenge");
-          setTimeout(() => {
-            this.$router.push(`/result/${this.$route.params.room}`);
-          }, 300);
+          console.log(data);
+          return axios({
+            method: "delete",
+            url: `/rooms/success/${this.$route.params.room}`,
+            headers: {
+              token: localStorage.getItem("token")
+            }
+          });
         })
-        .catch(({ response }) => {
-          console.log(response);
+        .then(() => {
+          console.log("nice");
+        })
+        .catch(err => {
+          console.log(err);
         });
+      this.$store.commit("SET_WINNER", localStorage.getItem("id"));
+      socket.emit("remove-room");
+      socket.emit("success-challenge", {
+        id: localStorage.getItem("id"),
+        room: this.$route.params.room
+      });
     }
   },
-  created() {}
+  computed: {
+    getPlayers() {
+      return this.$store.state.oneRoom.players;
+    }
+  }
 };
 </script>
 

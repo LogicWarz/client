@@ -43,8 +43,7 @@
 <script>
 import Room from "../components/Room";
 import axios from "../../apis/axios";
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+import socket from "../socket/socket";
 
 export default {
   name: "home",
@@ -88,12 +87,22 @@ export default {
     }
   },
   created() {
+    console.log("-=");
     if (localStorage.getItem("token")) {
       this.$store.dispatch("fetchRoom");
     }
     socket.on("getRoom", data => {
       this.$store.dispatch("fetchRoom");
     });
+
+    socket.on("roomGone", () => {
+      console.log("masuk");
+      this.$store.dispatch("fetchRoom");
+    });
+
+    // socket.on("refreshRoom", () => {
+    //   this.$store.dispatch("fetchRoom");
+    // });
 
     socket.on("remove-room", () => {
       this.$store.dispatch("fetchRoom");

@@ -16,9 +16,12 @@ export default new Vuex.Store({
     testString: '',
     questions: [],
     question: {},
-    // inGame: []
+    winner: null
   },
   mutations: {
+    SET_WINNER(state, payload) {
+      state.winner = payload
+    },
     SET_IS_LOGIN(state, payload) {
       state.isLogin = payload
     },
@@ -45,14 +48,10 @@ export default new Vuex.Store({
     },
     SET_QUESTION(state, payload) {
       state.question = payload
-    },
-    // SET_INGAME_PLAYERS(state, payload) {
-    //   state.inGame = payload
-    // }
+    }
   },
   actions: {
     register({ commit }, payload) {
-      console.log('aaaa')
       axios.post('/users/signup', payload)
         .then(({ data }) => {
           console.log(data)
@@ -117,7 +116,6 @@ export default new Vuex.Store({
       })
     },
     fetchRoomId(context, payload) {
-      console.log('fetch room payload', payload)
       return new Promise((resolve, reject) => {
         axios({
           method: 'get',
@@ -127,7 +125,6 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
             context.commit('ROOM_ID', data.room)
             resolve(data)
           })
@@ -151,7 +148,7 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
+            // console.log(data)
             context.commit('CREATED_ROOM', data.room)
             resolve(data.room)
           })

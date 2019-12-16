@@ -42,8 +42,7 @@
 
 <script>
 import axios from "../../apis/axios";
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+import socket from "../socket/socket";
 
 export default {
   name: "Room",
@@ -84,6 +83,34 @@ export default {
           console.log(response);
         });
     }
+  },
+  created() {
+    socket.on("joinRoom", data => {
+      console.log("join-room triggered");
+      // if (data.id === this.$route.params.room) {
+      //   this.$store.dispatch("fetchRoom");
+      //   this.newUser = data.msg;
+      //   this.$store
+      //     .dispatch("fetchRoomId", { id: data.id })
+      //     .then(data => {
+      //       if (data.room.players.length === 3) {
+      //         socket.emit("play-game", {
+      //           id: data.room._id,
+      //           msg: "game start"
+      //         });
+      //         this.$router.push(`/editor/${this.$route.params.room}`);
+      //       }
+      //     })
+      //     .catch(err => {
+      //       console.log(err);
+      //     });
+      //   setTimeout(() => {
+      //     this.newUser = "";
+      //   }, 2000);
+      // } else {
+      this.$store.dispatch("fetchRoomId", { id: data.id });
+      // }
+    });
   }
 };
 </script>
