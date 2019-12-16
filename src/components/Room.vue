@@ -10,12 +10,12 @@
       <v-list-item three-line>
         <v-list-item-content>
           <div class="overline mb-4">
-            <v-chip v-if="room.level === 'Beginner'" color="green" text-color="white" x-small>
+            <v-chip v-if="room.level === 'beginner'" color="green" text-color="white" x-small>
               <b>{{room.level}}</b>
               <v-icon size="small" right>mdi-star-outline</v-icon>
             </v-chip>
             <v-chip
-              v-else-if="room.level === 'Intermediate'"
+              v-else-if="room.level === 'intermediate'"
               color="blue"
               text-color="white"
               x-small

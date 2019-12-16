@@ -28,7 +28,7 @@
               </div>
               <div>
                 <v-chip
-                  v-if="level === 'Beginner'"
+                  v-if="level === 'beginner'"
                   class="ma-2"
                   color="green"
                   text-color="white"
@@ -38,7 +38,7 @@
                   <v-icon size="small" right>mdi-star-outline</v-icon>
                 </v-chip>
                 <v-chip
-                  v-else-if="level === 'Intermediate'"
+                  v-else-if="level === 'intermediate'"
                   class="ma-2"
                   color="blue"
                   text-color="white"
