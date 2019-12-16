@@ -10,15 +10,12 @@
       <v-list-item three-line>
         <v-list-item-content>
           <div class="overline mb-4">
-            <v-chip v-if="room.level === 'Beginner'"
-              color="green"
-              text-color="white"
-              x-small
-            >
+            <v-chip v-if="room.level === 'Beginner'" color="green" text-color="white" x-small>
               <b>{{room.level}}</b>
               <v-icon size="small" right>mdi-star-outline</v-icon>
             </v-chip>
-            <v-chip v-else-if="room.level === 'Intermediate'"
+            <v-chip
+              v-else-if="room.level === 'Intermediate'"
               color="blue"
               text-color="white"
               x-small
@@ -26,11 +23,7 @@
               <b>{{room.level}}</b>
               <v-icon size="small" right>mdi-star-half</v-icon>
             </v-chip>
-            <v-chip v-else
-              color="red"
-              text-color="white"
-              x-small
-            >
+            <v-chip v-else color="red" text-color="white" x-small>
               <b>{{room.level}}</b>
               <v-icon size="small" right>mdi-star</v-icon>
             </v-chip>
@@ -39,7 +32,7 @@
               color="green"
               text-color="white"
               x-small
-            >{{ room.level }}</v-chip> -->
+            >{{ room.level }}</v-chip>-->
           </div>
           <v-list-item-title
             @click="joinRoom(room._id, room.status)"
@@ -49,9 +42,16 @@
             <small>{{ room.status }}</small>
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-badge v-if="room.players[0]" color="orange" class="center-item" style="margin-right: 10px">
+        <v-badge
+          v-if="room.players[0]"
+          color="orange"
+          class="center-item"
+          style="margin-right: 10px"
+        >
           <template v-slot:badge>
-              <small><b>{{room.players[0].points + 'p'}}</b></small>
+            <small>
+              <b>{{room.players[0].points + 'p'}}</b>
+            </small>
           </template>
           <v-avatar>
             <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
@@ -66,9 +66,8 @@
 </template>
 
 <script>
-import axios from '../../apis/axios'
-import io from 'socket.io-client'
-const socket = io.connect('http://localhost:3000')
+import axios from "../../apis/axios";
+import socket from "../socket/socket";
 
 export default {
   name: "Room",
@@ -79,9 +78,9 @@ export default {
     };
   },
   methods: {
-    joinRoom (roomId, status) {
+    joinRoom(roomId, status) {
       this.$store
-        .dispatch('joinRoom', { id: roomId, name: this.username })
+        .dispatch("joinRoom", { id: roomId, name: this.username })
         .then(data => {
           this.$store.dispatch("fetchRoom");
           this.$router.push(`/lobby/${roomId}`);
@@ -91,24 +90,52 @@ export default {
           });
         })
         .catch(err => {
-          console.log(err)
-        })
+          console.log(err);
+        });
     },
-    deleteRoom (roomId) {
+    deleteRoom(roomId) {
       axios({
-        method: 'delete',
+        method: "delete",
         url: `/rooms/${roomId}`,
         headers: {
           token: localStorage.getItem("token")
         }
       })
         .then(({ data }) => {
-          socket.emit('remove-room')
+          socket.emit("remove-room");
         })
         .catch(({ response }) => {
-          console.log(response)
-        })
+          console.log(response);
+        });
     }
+  },
+  created() {
+    socket.on("joinRoom", data => {
+      console.log("join-room triggered");
+      // if (data.id === this.$route.params.room) {
+      //   this.$store.dispatch("fetchRoom");
+      //   this.newUser = data.msg;
+      //   this.$store
+      //     .dispatch("fetchRoomId", { id: data.id })
+      //     .then(data => {
+      //       if (data.room.players.length === 3) {
+      //         socket.emit("play-game", {
+      //           id: data.room._id,
+      //           msg: "game start"
+      //         });
+      //         this.$router.push(`/editor/${this.$route.params.room}`);
+      //       }
+      //     })
+      //     .catch(err => {
+      //       console.log(err);
+      //     });
+      //   setTimeout(() => {
+      //     this.newUser = "";
+      //   }, 2000);
+      // } else {
+      this.$store.dispatch("fetchRoomId", { id: data.id });
+      // }
+    });
   }
 };
 </script>

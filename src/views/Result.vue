@@ -6,16 +6,11 @@
     <div v-for="(item,index) in listPlayer.players" :key="index">
       <span>{{index+1}}</span> :
       <span>{{item}}</span>
-    </div> -->
+    </div>-->
     <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
     <div class="center-item mt-2 mb-5">
-      <v-btn
-        text
-        @click="$router.push('/')"
-        rounded
-        class="primary-gradient"
-      >
+      <v-btn text @click="$router.push('/')" rounded class="primary-gradient">
         <b>BACK TO ROOM LIST</b>
       </v-btn>
     </div>
@@ -28,77 +23,63 @@
           <v-row>
             <v-col>
               <div>
-              <v-avatar size="150">
-                <img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                >
-              </v-avatar>
+                <v-avatar size="150">
+                  <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+                </v-avatar>
               </div>
-              <div class="mt-3">
-                John Watts
-              </div>
+              <div class="mt-3">John Watts</div>
             </v-col>
           </v-row>
           <v-row>
             <v-col v-for="n in 3" :key="n" sm="4">
               <v-avatar>
-                <img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                >
+                <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
               </v-avatar>
               <div class="mt-3">
                 <small>John Watts</small>
               </div>
             </v-col>
           </v-row>
-          <v-row v-for="player in listPlayer.players" :key="player._id" justify="center" align="center">
-          <v-col sm="2">
-            <v-badge color="orange">
-              <template v-slot:badge><b><small>{{player.points}}</small></b></template>
-            <v-avatar>
-              <img
-                src="https://cdn.vuetifyjs.com/images/john.jpg"
-                alt="John"
-              >
-            </v-avatar>
-            </v-badge>
-          </v-col>
-          <v-col>
-            <span class="ml-3" style="color: grey" ><b>{{ player.name }}</b></span>  
-          </v-col>
-          <v-col sm="3">
-            <v-chip
-              class="ma-2"
-              color="green"
-              text-color="white"
-            >
-              Beginner
-              <v-icon right>mdi-star</v-icon>
-            </v-chip>
-          </v-col>
-          <v-col sm="2">
-            <v-img
-              src="../assets/beginner.png"
-              max-height="70px"
-              max-width="70px"
-            ></v-img>
-            
-          </v-col>
+          <v-row
+            v-for="player in listPlayer.players"
+            :key="player._id"
+            justify="center"
+            align="center"
+          >
+            <v-col sm="2">
+              <v-badge color="orange">
+                <template v-slot:badge>
+                  <b>
+                    <small>{{player.points}}</small>
+                  </b>
+                </template>
+                <v-avatar>
+                  <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+                </v-avatar>
+              </v-badge>
+            </v-col>
+            <v-col>
+              <span class="ml-3" style="color: grey">
+                <b>{{ player.name }}</b>
+              </span>
+            </v-col>
+            <v-col sm="3">
+              <v-chip class="ma-2" color="green" text-color="white">
+                Beginner
+                <v-icon right>mdi-star</v-icon>
+              </v-chip>
+            </v-col>
+            <v-col sm="2">
+              <v-img src="../assets/beginner.png" max-height="70px" max-width="70px"></v-img>
+            </v-col>
           </v-row>
         </v-col>
         <v-col sm="6">
-          <div >
-          <vue-typed-js :strings="['Player name wins!']">
-            <h3 style="margin: auto;" class="typing"></h3 >
-          </vue-typed-js>
-          <v-img
-            style="margin: auto;"
-            src="../assets/win.gif"
-            max-height="50vh"
-            max-width="50vh"
-          ></v-img>
+          <div>
+            <vue-typed-js :strings="['Player name wins!']">
+              <h3 style="margin: auto;" class="typing"></h3>
+            </vue-typed-js>
+            <v-img style="margin: auto;" src="../assets/win.gif" max-height="50vh" max-width="50vh"></v-img>
           </div>
         </v-col>
       </v-row>
@@ -109,109 +90,62 @@
 <script>
 import io from "socket.io-client";
 import axios from "../../apis/axios";
+import Typed from "typed.js";
 const socket = io.connect("http://localhost:3000");
-import Typed from 'typed.js';
 
 export default {
-  name: 'Lobby',
+  name: "Lobby",
   data() {
     return {
-      newUser: "",
+      newUser: null,
       player: []
     };
   },
-  methods: {
-    playGame(id) {
-      axios({
-        method: "patch",
-        url: `/rooms/play/${id}`,
-        headers: {
-          token: localStorage.getItem('token')
-        }
-      })
-        .then(({ data }) => {
-          return this.$store.dispatch("fetchRoomId", { id: data.room._id });
-        })
-        .then(() => {
-          socket.emit("play-game", { id, msg: "game start" });
-          this.$router.push('/editor')
-        })
-        .catch(({ response }) => {
-          console.log(response);
-        });
-    },
-    leaveRoom(id) {
-      axios({
-        method: "patch",
-        url: `/rooms/leave/${id}`,
-        data: {
-          player: "testQueen"
-        },
-        headers: {
-          token: localStorage.getItem('token')
-        }
-      })
-        .then(({ data }) => {
-          return this.$store.dispatch("fetchRoomId", { id: data.room._id });
-        })
-        .then(() => {
-          socket.emit("leave-room", { id, msg: "testQueen is disconnected" });
-          this.$router.push("/");
-        })
-        .catch(({ response }) => {
-          console.log(response);
-        });
-    }
-  },
+  methods: {},
   computed: {
+    loser() {
+      if (this.$store.state.winner) {
+        return this.$store.state.oneRoom.players.filter(player => {
+          return player._id != this.$store.state.winner;
+        });
+      } else {
+        return this.$store.state.oneRoom.players.filter(player => {
+          return player._id != this.newUser;
+        });
+      }
+    },
     listPlayer() {
       return this.$store.state.oneRoom;
+    },
+    winner() {
+      return this.$store.state.winner;
     }
   },
   created() {
-    this.$confetti.start({
-      particlesPerFrame: 0.2,
+    console.log("ini winner nya ya", this.$store.state.winner);
+    if (this.$store.state.winner) {
+      this.$confetti.start({
+        particlesPerFrame: 0.2
+      });
+    }
+    if (this.$store.state.winner) {
+      // let testTemp = this.$store.state.oneRoom.players.filter(player => {
+      //   player._id != localStorage.getItem("id");
+      // });
+      socket.emit("wadidaw", { winner: localStorage.getItem("id") });
+    }
+    socket.on("jiwa", data => {
+      console.log("ini dia ====", data);
+      this.newUser = data;
     });
-    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room })
-    socket.on("joinRoom", data => {
-      console.log('join room listened in client', data)
-      if (data.id === this.$route.params.room) {
-        this.$store.dispatch("fetchRoom");
-        this.newUser = data.msg;
-        this.$store
-          .dispatch("fetchRoomId", { id: data.id })
-          .then(() => {
-            console.log("joined");
-          })
-          .catch(err => {
-            console.log(err);
-          });
-        setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
-      } else {
-        this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
-      }
-    });
-
-    socket.on("leaveRoom", data => {
-      if (data.id === this.$route.params.id) {
-        this.newUser = data.msg;
-        this.$store.dispatch("fetchRoomId", { id: data.id });
-        setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
-      } else {
-        this.$store.dispatch("fetchRoomId", { id: data.id });
-      }
-    });
-
-    socket.on("playGame", data => {
-      this.$store.dispatch("fetchRoomId", { id: data.id });
-    });
+    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+    setTimeout(() => {
+      this.$router.push("/");
+    }, 5000);
   },
   beforeDestroy() {
-    this.$confetti.stop()
+    console.log("ini before destroy");
+    this.$confetti.stop();
   }
 };
 </script>

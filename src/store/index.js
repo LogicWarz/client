@@ -19,21 +19,26 @@ export default new Vuex.Store({
     testString: '',
     // Question Store
     questions: [],
+    question: {},
+    winner: null,
     my_questions: [],
     my_answers: [],
     question_detail: {},
     answer_detail: {}
   },
   mutations: {
+    SET_WINNER(state, payload) {
+      state.winner = payload
+    },
     // User Mutation
-    SET_IS_LOGIN (state, payload) {
+    SET_IS_LOGIN(state, payload) {
       state.isLogin = payload
     },
-    SET_USER (state, payload) {
+    SET_USER(state, payload) {
       state.user = payload
     },
     // Room Mutation
-    SET_ROOMS (state, payload) {
+    SET_ROOMS(state, payload) {
       state.rooms = payload
     },
     SET_MESSAGE(state, payload) {
@@ -52,24 +57,27 @@ export default new Vuex.Store({
       state.oneRoom = room
     },
     // Question Mutation
-    SET_QUESTIONS (state, payload) {
+    SET_QUESTIONS(state, payload) {
       state.questions = payload
     },
-    SET_MY_QUESTIONS (state, payload) {
+    SET_MY_QUESTIONS(state, payload) {
       state.my_questions = payload
     },
-    SET_MY_ANSWERS (state, payload) {
+    SET_MY_ANSWERS(state, payload) {
       state.my_answers = payload
     },
-    SET_QUESTION_DETAIL (state, payload) {
+    SET_QUESTION_DETAIL(state, payload) {
       state.question_detail = payload
     },
-    SET_ANSWER_DETAIL (state, payload) {
+    SET_ANSWER_DETAIL(state, payload) {
       state.answer_detail = payload
+    },
+    SET_QUESTION(state, payload) {
+      state.question = payload
     }
   },
   actions: {
-    register ({ commit }, payload) {
+    register({ commit }, payload) {
       axios.post('/users/signup', payload)
         .then(({ data }) => {
           // console.log(data)
@@ -129,7 +137,6 @@ export default new Vuex.Store({
         })
     },
     fetchRoomId(context, payload) {
-      console.log('fetch room payload', payload)
       return new Promise((resolve, reject) => {
         axios({
           method: 'get',
@@ -139,7 +146,6 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
             context.commit('ROOM_ID', data.room)
             resolve(data)
           })
@@ -163,7 +169,7 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
+            // console.log(data)
             context.commit('CREATED_ROOM', data.room)
             resolve(data.room)
           })
@@ -225,7 +231,7 @@ export default new Vuex.Store({
     //     })
     // }
 
-    glogin (context, payload) {
+    glogin(context, payload) {
       return axios({
         method: 'POST',
         url: '/users/gsignin',
@@ -234,7 +240,7 @@ export default new Vuex.Store({
         }
       })
     },
-    getUserData (context) {
+    getUserData(context) {
       return axios({
         method: 'GET',
         url: '/users',
@@ -243,13 +249,13 @@ export default new Vuex.Store({
         }
       })
     },
-    getQuestions (context) {
+    getQuestions(context) {
       return axios({
         method: 'GET',
         url: '/questions'
       })
     },
-    getMyQuestions (context) {
+    getMyQuestions(context) {
       return axios({
         method: 'GET',
         url: '/questions/user',
@@ -258,7 +264,7 @@ export default new Vuex.Store({
         }
       })
     },
-    getMyAnswers (context) {
+    getMyAnswers(context) {
       return axios({
         method: 'GET',
         url: '/answers/user',
@@ -267,7 +273,7 @@ export default new Vuex.Store({
         }
       })
     },
-    getQuestionDetail (context, payload) {
+    getQuestionDetail(context, payload) {
       return axios({
         method: 'GET',
         url: `/questions/${payload}`,
@@ -276,7 +282,7 @@ export default new Vuex.Store({
         }
       })
     },
-    viewQuestion (context, payload) {
+    viewQuestion(context, payload) {
       return axios({
         method: 'PATCH',
         url: `/questions/view/${payload}`,
@@ -285,7 +291,7 @@ export default new Vuex.Store({
         }
       })
     },
-    addQuestion (context, payload) {
+    addQuestion(context, payload) {
       return axios({
         method: 'POST',
         url: '/questions',
@@ -299,7 +305,7 @@ export default new Vuex.Store({
         }
       })
     },
-    editQuestion (context, payload) {
+    editQuestion(context, payload) {
       return axios({
         method: 'PUT',
         url: `/questions/${payload.QuestionId}`,
@@ -313,7 +319,7 @@ export default new Vuex.Store({
         }
       })
     },
-    deleteQuestion (context, payload) {
+    deleteQuestion(context, payload) {
       return axios({
         method: 'DELETE',
         url: `/questions/${payload}`,
@@ -322,7 +328,7 @@ export default new Vuex.Store({
         }
       })
     },
-    addSolution (context, payload) {
+    addSolution(context, payload) {
       return axios({
         method: 'PATCH',
         url: `/questions/solution/${payload.questionId}`,
@@ -334,7 +340,7 @@ export default new Vuex.Store({
         }
       })
     },
-    upvoteQuestion (context, payload) {
+    upvoteQuestion(context, payload) {
       return axios({
         method: 'PATCH',
         url: `/questions/upvote/${payload}`,
@@ -343,7 +349,7 @@ export default new Vuex.Store({
         }
       })
     },
-    downvoteQuestion (context, payload) {
+    downvoteQuestion(context, payload) {
       return axios({
         method: 'PATCH',
         url: `/questions/downvote/${payload}`,
@@ -352,7 +358,7 @@ export default new Vuex.Store({
         }
       })
     },
-    getAnswerDetail (context, payload) {
+    getAnswerDetail(context, payload) {
       return axios({
         method: 'GET',
         url: `/answers/${payload}`,
@@ -361,7 +367,7 @@ export default new Vuex.Store({
         }
       })
     },
-    addAnswer (context, payload) {
+    addAnswer(context, payload) {
       return axios({
         method: 'POST',
         url: '/answers',
@@ -374,7 +380,7 @@ export default new Vuex.Store({
         }
       })
     },
-    editAnswer (context, payload) {
+    editAnswer(context, payload) {
       return axios({
         method: 'PUT',
         url: `/answers/${payload.AnswerId}`,
@@ -386,7 +392,7 @@ export default new Vuex.Store({
         }
       })
     },
-    deleteAnswer (context, payload) {
+    deleteAnswer(context, payload) {
       return axios({
         method: 'DELETE',
         url: `/answers/${payload}`,
@@ -395,7 +401,7 @@ export default new Vuex.Store({
         }
       })
     },
-    upvoteAnswer (context, payload) {
+    upvoteAnswer(context, payload) {
       return axios({
         method: 'PATCH',
         url: `/answers/upvote/${payload}`,
@@ -404,7 +410,7 @@ export default new Vuex.Store({
         }
       })
     },
-    downvoteAnswer (context, payload) {
+    downvoteAnswer(context, payload) {
       return axios({
         method: 'PATCH',
         url: `/answers/downvote/${payload}`,
