@@ -116,7 +116,7 @@ export default {
   methods: {
     createRoom(level) {
       this.$store
-        .dispatch("createRoom", {
+        .dispatch('createRoom', {
           title: this.roomName,
           level,
           player: this.name
@@ -147,9 +147,9 @@ export default {
       this.$store.dispatch("fetchRoom");
     });
 
-    socket.on("remove-room", () => {
-      this.$store.dispatch("fetchRoom");
-    });
+    socket.on('remove-room', () => {
+      this.$store.dispatch('fetchRoom')
+    })
   }
 };
 </script>

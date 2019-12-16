@@ -66,9 +66,9 @@
 </template>
 
 <script>
-import axios from "../../apis/axios";
-import io from "socket.io-client";
-const socket = io.connect("http://localhost:3000");
+import axios from '../../apis/axios'
+import io from 'socket.io-client'
+const socket = io.connect('http://localhost:3000')
 
 export default {
   name: "Room",
@@ -79,9 +79,9 @@ export default {
     };
   },
   methods: {
-    joinRoom(roomId, status) {
+    joinRoom (roomId, status) {
       this.$store
-        .dispatch("joinRoom", { id: roomId, name: this.username })
+        .dispatch('joinRoom', { id: roomId, name: this.username })
         .then(data => {
           this.$store.dispatch("fetchRoom");
           this.$router.push(`/lobby/${roomId}`);
@@ -91,23 +91,23 @@ export default {
           });
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
-    deleteRoom(roomId) {
+    deleteRoom (roomId) {
       axios({
-        method: "delete",
+        method: 'delete',
         url: `/rooms/${roomId}`,
         headers: {
           token: localStorage.getItem("token")
         }
       })
         .then(({ data }) => {
-          socket.emit("remove-room");
+          socket.emit('remove-room')
         })
         .catch(({ response }) => {
-          console.log(response);
-        });
+          console.log(response)
+        })
     }
   }
 };

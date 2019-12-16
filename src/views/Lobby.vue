@@ -58,7 +58,7 @@
             </v-badge>
           </v-col>
           <v-col>
-            <span class="ml-3" style="color: grey" ><b>{{ player.name }}</b></span>  
+            <span class="ml-3" style="color: grey" ><b>{{ player.name }}</b></span>
           </v-col>
           <v-col sm="3">
             <v-chip
@@ -76,7 +76,7 @@
               max-height="70px"
               max-width="70px"
             ></v-img>
-            
+
           </v-col>
           </v-row>
         </v-col>
@@ -95,14 +95,14 @@ export default {
   name: "Lobby",
   data() {
     return {
-      newUser: "",
+      newUser: '',
       player: []
-    };
+    }
   },
   methods: {
-    playGame(id) {
+    playGame (id) {
       axios({
-        method: "patch",
+        method: 'patch',
         url: `/rooms/play/${id}`,
         headers: {
           token: localStorage.getItem("token")
@@ -119,35 +119,35 @@ export default {
           }, 300);
         })
         .catch(({ response }) => {
-          console.log(response);
-        });
+          console.log(response)
+        })
     },
-    leaveRoom(id) {
+    leaveRoom (id) {
       axios({
-        method: "patch",
+        method: 'patch',
         url: `/rooms/leave/${id}`,
         data: {
-          player: "testQueen"
+          player: 'testQueen'
         },
         headers: {
           token: localStorage.getItem("token")
         }
       })
         .then(({ data }) => {
-          return this.$store.dispatch("fetchRoomId", { id: data.room._id });
+          return this.$store.dispatch('fetchRoomId', { id: data.room._id })
         })
         .then(() => {
           socket.emit("leave-room", { id, msg: "testQueen is disconnected" });
           this.$router.push("/");
         })
         .catch(({ response }) => {
-          console.log(response);
-        });
+          console.log(response)
+        })
     }
   },
   computed: {
-    listPlayer() {
-      return this.$store.state.oneRoom;
+    listPlayer () {
+      return this.$store.state.oneRoom
     }
   },
   created() {
@@ -155,8 +155,8 @@ export default {
 
     socket.on("joinRoom", data => {
       if (data.id === this.$route.params.room) {
-        this.$store.dispatch("fetchRoom");
-        this.newUser = data.msg;
+        this.$store.dispatch('fetchRoom')
+        this.newUser = data.msg
         this.$store
           .dispatch("fetchRoomId", { id: data.id })
           .then(data => {
@@ -169,34 +169,34 @@ export default {
             }
           })
           .catch(err => {
-            console.log(err);
-          });
+            console.log(err)
+          })
         setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
+          this.newUser = ''
+        }, 2000)
       } else {
-        this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+        this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
       }
-    });
+    })
 
-    socket.on("leaveRoom", data => {
+    socket.on('leaveRoom', data => {
       if (data.id === this.$route.params.id) {
-        this.newUser = data.msg;
-        this.$store.dispatch("fetchRoomId", { id: data.id });
+        this.newUser = data.msg
+        this.$store.dispatch('fetchRoomId', { id: data.id })
         setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
+          this.newUser = ''
+        }, 2000)
       } else {
-        this.$store.dispatch("fetchRoomId", { id: data.id });
+        this.$store.dispatch('fetchRoomId', { id: data.id })
       }
-    });
+    })
 
     socket.on("playGame", data => {
       this.$store.dispatch("fetchRoomId", { id: data.id });
       this.$router.push(`/play/${this.$route.params.room}`);
     });
   }
-};
+}
 </script>
 
 <style>

@@ -85,7 +85,7 @@ import axios from "../../apis/axios";
 import io from "socket.io-client";
 const socket = io.connect("http://localhost:3000");
 // @ is an alias to /src
-import Editor from "../components/Editor";
+import Editor from '../components/Editor'
 // console.log(editor.value, 'value')
 export default {
   name: "play",
