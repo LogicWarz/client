@@ -36,6 +36,30 @@ const routes = [
     }
   },
   {
+    path: '/challenges',
+    name: 'challenges',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/Challenges.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/add-challenge',
+    name: 'add-challenge',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/AddChallenge.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
     path: '/ask',
     name: 'ask',
     component: () => import(/* webpackChunkName: "forum" */ '../views/AskQuestion.vue'),
