@@ -12,7 +12,7 @@
           <h2>All Challenges</h2>
         </div>
         <v-divider></v-divider>
-        <Challenge v-for="n in 2" :key="n" :challenge="null"></Challenge>
+        <Challenge v-for="challenge in challenges" :key="challenge._id" :challenge="challenge"></Challenge>
       </v-col>
     </v-row>
     </v-container>
@@ -27,11 +27,10 @@ export default {
   components: {
     Challenge
   },
-  // bikin dulu challenges di store
-  // created() {
-  //   this.$store.dispatch("fetchChallenges")
-  // },
-  // computed: mapState(["challenges"])
+  created() {
+    this.$store.dispatch("fetchChallenges")
+  },
+  computed: mapState(["challenges"])
 }
 </script>
 

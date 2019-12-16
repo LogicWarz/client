@@ -16,7 +16,8 @@ export default new Vuex.Store({
     testString: '',
     questions: [],
     question: {},
-    // inGame: []
+    // inGame: [],
+    challenges: []
   },
   mutations: {
     SET_IS_LOGIN(state, payload) {
@@ -49,6 +50,9 @@ export default new Vuex.Store({
     // SET_INGAME_PLAYERS(state, payload) {
     //   state.inGame = payload
     // }
+    SET_CHALLENGES(state,payload){
+      state.challenges = payload
+    }
   },
   actions: {
     register({ commit }, payload) {
@@ -205,7 +209,29 @@ export default new Vuex.Store({
         .catch(err => {
           console.log(err)
         })
-    }
+    },
+
+    addChallenge({commit}, payload) {
+      return axios.post('/challenges', payload, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+
+    fetchChallenges({commit}, payload) {
+      axios.get(`/challenges`, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({data}) => {
+          commit("SET_CHALLENGES", data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } 
   },
   modules: {
   }
