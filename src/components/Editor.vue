@@ -24,8 +24,10 @@ export default {
     },
 
     submitEvent() {
+      // console.log(this.testing)
      this.$store.dispatch("parsingData", this.testing)
       .then(({data}) => {
+        // alert(JSON.stringify(data))
         console.log(data)
       })
 
