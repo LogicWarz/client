@@ -18,11 +18,11 @@
     ></v-textarea> -->
     <wysiwyg v-model="description" placeholder="Description" style="height: 100%; border-color: #BDBDC3; margin-bottom: 20px;" />
     <MonacoEditor class="editor" v-model="skeleton" language="javascript" />
-    <div v-for="(testCase, i) in testCases" :key="i">
-    <MonacoEditor  class="editor" v-model="testCase.value" language="javascript" />
+    <div >
+    <MonacoEditor  class="editor" v-model="testCase" language="javascript" />
     </div>
-    <v-btn @click="addTestCase" text color="orange"><b>ADD TEST CASE</b></v-btn>
-    <v-btn rounded class="float-right primary-gradient" @click="addQuestion">
+    <!-- <v-btn @click="addTestCase" text color="orange"><b>ADD TEST CASE</b></v-btn> -->
+    <v-btn rounded class="float-right primary-gradient" @click="addChallenge">
       <b>POST</b>
     </v-btn>
   </v-container>
@@ -37,33 +37,36 @@ export default {
     return {
       title: "",
       description: "",
-      skeleton: '// Skeleton Code',
-      testCases: [{value: '//Test case 1'}]
+      skeleton: '// Skeleton Code\n\nfunction yourFunctionName (param1,param2){\n    \n}',
+      testCase: '[\n    {\n        \"input\": [\"params1\",\"params2\"],\n        \"output\": \"asdasddsa\"\n    },\n    {\n        \"input\": [\"params1\",\"params2\"],\n        \"output\": \"asdasddsa\"\n    },\n    {\n        \"input\": [\"params1\",\"params2\"],\n        \"output\": \"asdasddsa\"\n    }\n]'
     }
   },
   components: {
     MonacoEditor
   },
   methods: {
-    addQuestion() {
-      let obj = {
+    addChallenge() {
+      this.testCase = this.testCase.replace(/'/g, `"`)
+      let parseTestCase = JSON.parse(this.testCase)
+      let challenge = {
         title: this.title,
         description: this.description,
-        tags: ["testing", "testtt"]
+        skeletonCode: this.skeleton,
+        testCase: parseTestCase,
+        difficulty: 'beginner'
       }
 
-      this.$store.dispatch("addQuestion", obj)
+      this.$store.dispatch('addChallenge', challenge)
         .then(() => {
-          this.$router.push("/forum")
+          this.$router.push('/challenges');
         })
-        .catch(() => {
-          console.log("Error")
+        .catch(err => {
+          console.log(err)
         })
     },
-    addTestCase() {
-      const length = this.testCases.length
-      this.testCases.push({ value: `//Test case ${length + 1}` });
-    }
+    // addTestCase() {
+    //   console.log(JSON.parse(this.testCase))
+    // }
   }
 }
 </script>

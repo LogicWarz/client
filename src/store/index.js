@@ -20,6 +20,8 @@ export default new Vuex.Store({
     // Question Store
     questions: [],
     question: {},
+    // inGame: [],
+    challenges: []
     winner: null,
     my_questions: [],
     my_answers: [],
@@ -74,6 +76,12 @@ export default new Vuex.Store({
     },
     SET_QUESTION(state, payload) {
       state.question = payload
+    },
+    // SET_INGAME_PLAYERS(state, payload) {
+    //   state.inGame = payload
+    // }
+    SET_CHALLENGES(state,payload){
+      state.challenges = payload
     }
   },
   actions: {
@@ -418,6 +426,35 @@ export default new Vuex.Store({
           token: localStorage.getItem('token')
         }
       })
+        .then(({ data }) => {
+          router.push('/forum')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    },
+
+    addChallenge({commit}, payload) {
+      return axios.post('/challenges', payload, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+
+    fetchChallenges({commit}, payload) {
+      axios.get(`/challenges`, {
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+        .then(({data}) => {
+          commit("SET_CHALLENGES", data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } 
     }
   },
   modules: {
