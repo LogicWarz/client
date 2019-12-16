@@ -9,7 +9,7 @@
     </div>-->
     <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
-    {{listPlayer}}
+    <!-- {{listPlayer}} -->
     <div class="center-item mt-10">
       <v-btn
         text
@@ -72,13 +72,32 @@
               </span>
             </v-col>
             <v-col sm="3">
-              <v-chip class="ma-2" color="green" text-color="white">
-                Beginner
-                <v-icon right>mdi-star</v-icon>
+              <v-chip v-if="player.points < 100" color="green" text-color="white" x-small>
+                <b>Beginner</b>
+                <v-icon size="small" right>mdi-star-outline</v-icon>
+              </v-chip>
+              <v-chip
+                v-else-if="player.points < 200"
+                color="blue"
+                text-color="white"
+                x-small
+              >
+                <b>Intermediate</b>
+                <v-icon size="small" right>mdi-star-half</v-icon>
+              </v-chip>
+              <v-chip v-else color="red" text-color="white" x-small>
+                <b>Advance</b>
+                <v-icon size="small" right>mdi-star</v-icon>
               </v-chip>
             </v-col>
-            <v-col sm="2">
-              <v-img src="../assets/beginner.png" max-height="70px" max-width="70px"></v-img>
+            <v-col v-if="player.points < 100" sm="2">
+              <v-img :src="require(`../assets/beginner.png`)" max-height="70px" max-width="70px"></v-img>
+            </v-col>
+            <v-col v-else-if="player.points < 200" sm="2">
+              <v-img :src="require(`../assets/intermediate.png`)" max-height="70px" max-width="70px"></v-img>
+            </v-col>
+            <v-col v-else sm="2">
+              <v-img :src="require(`../assets/advance.png`)" max-height="70px" max-width="70px"></v-img>
             </v-col>
           </v-row>
         </v-col>

@@ -2,11 +2,11 @@
   <div class="play custom-font">
     <v-row style="height: 90vh;">
       <v-col cols="12" sm="4" style="height: 90vh;" class="scroll challenge-container">
-        <v-chip v-if="room.level === 'Beginner'" color="green" text-color="white" small>
+        <v-chip v-if="room.level === 'beginner'" color="green" text-color="white" small>
           <b>{{room.level}}</b>
           <v-icon size="small" right>mdi-star-outline</v-icon>
         </v-chip>
-        <v-chip v-else-if="room.level === 'Intermediate'" color="blue" text-color="white" small>
+        <v-chip v-else-if="room.level === 'intermediate'" color="blue" text-color="white" small>
           <b>{{room.level}}</b>
           <v-icon size="small" right>mdi-star-half</v-icon>
         </v-chip>
@@ -16,30 +16,9 @@
         </v-chip>
         <hr />
         <div>
-          <h3 class="mt-4">First Factorial</h3>
+          <h3 class="mt-4">{{room.challenge.title}}</h3>
         </div>
-        <div>
-          Have the function
-          <span class="code-text">FirstFactorial(num)</span> take the num parameter being passed and return the factorial of it. For example: if num = 4, then your program should return (4 * 3 * 2 * 1) = 24. For the test cases, the range will be between 1 and 18 and the input will always be an integer.
-          <span
-            class="code-text"
-          >FirstFactorial(num)</span> take the num parameter being passed and return the factorial of it. For example: if num = 4, then your program should return (4 * 3 * 2 * 1) = 24. For the test cases, the range will be between 1 and 18 and the input will always be an integer.
-          <span
-            class="code-text"
-          >FirstFactorial(num)</span> take the num parameter being passed and return the factorial of it. For example: if num = 4, then your program should return (4 * 3 * 2 * 1) = 24. For the test cases, the range will be between 1 and 18 and the input will always be an integer.
-          <span
-            class="code-text"
-          >FirstFactorial(num)</span>
-          take the num parameter being passed and return the factorial of it. For example: if num = 4, then your program should return (4 * 3 * 2 * 1) = 24. For the test cases, the range will be between 1 and 18 and the input will always be an integer.
-        </div>
-        <div>
-          <h3 class="mt-4">Examples</h3>
-        </div>
-        <div>
-          <code class="full-width">
-            Input: 4
-            <br />Output: 24
-          </code>
+        <div v-html="room.challenge.description">
         </div>
       </v-col>
       <v-col cols="12" sm="8" style="padding: 0">
@@ -92,6 +71,7 @@ import axios from "../../apis/axios";
 
 // @ is an alias to /src
 import Editor from "../components/Editor";
+import errorHandler from '../utils/errorHandler';
 // console.log(editor.value, 'value')
 export default {
   name: "play",
@@ -133,7 +113,7 @@ export default {
           room: this.$route.params.room
         });
       } else {
-        alert("salah nih");
+        errorHandler({ data })
       }
       // .then(({ data }) => {
       //   if (data.input) {
