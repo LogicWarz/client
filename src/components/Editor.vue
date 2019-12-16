@@ -22,6 +22,13 @@ export default {
       console.log(value);
     }
   },
+  submitEvent() {
+      // console.log(this.testing)
+     this.$store.dispatch("parsingData", this.testing)
+      .then(({data}) => {
+        // alert(JSON.stringify(data))
+        console.log(data)
+      })
   watch: {
     userSolution() {
       this.$emit('setUserSolution', this.userSolution)
