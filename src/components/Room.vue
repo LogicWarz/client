@@ -42,6 +42,7 @@
             <small>{{ room.status }}</small>
           </v-list-item-subtitle>
         </v-list-item-content>
+        <div style="text-align: right">
         <v-badge
           v-if="room.players[0]"
           color="orange"
@@ -53,13 +54,14 @@
               <b>{{room.players[0].points + 'p'}}</b>
             </small>
           </template>
-          <v-avatar>
-            <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+          <v-avatar color="white">
+            <span><b>{{room.players[0].name.substring(0, 1).toUpperCase()}}</b></span>
           </v-avatar>
-          <div>
+          <div style="color: grey">
             <small>{{room.players[0].name}}</small>
           </div>
         </v-badge>
+        </div>
       </v-list-item>
     </v-card>
   </v-hover>
@@ -68,6 +70,7 @@
 <script>
 import axios from "../../apis/axios";
 import socket from "../socket/socket";
+import errorHandler from '../utils/errorHandler'
 
 export default {
   name: "Room",
@@ -109,9 +112,7 @@ export default {
         .then(({ data }) => {
           socket.emit("remove-room");
         })
-        .catch(({ response }) => {
-          console.log(response);
-        });
+        .catch(errorHandler);
     }
   },
   created() {

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '../../apis/axios'
 import router from '../router'
+import errorHandler from '../utils/errorHandler'
 
 Vue.use(Vuex)
 
@@ -27,7 +28,9 @@ export default new Vuex.Store({
     my_questions: [],
     my_answers: [],
     question_detail: {},
-    answer_detail: {}
+    answer_detail: {},
+    alert: false,
+    alertMessage: ''
   },
   mutations: {
     SET_WINNER(state, payload) {
@@ -83,6 +86,12 @@ export default new Vuex.Store({
     // }
     SET_CHALLENGES(state,payload){
       state.challenges = payload
+    },
+    SET_ALERT(state, payload) {
+      state.alert = payload
+    },
+    SET_ALERT_MESSAGE(state, payload) {
+      state.alertMessage = payload
     }
   },
   actions: {
@@ -140,9 +149,7 @@ export default new Vuex.Store({
         .then(({ data }) => {
           context.commit('ALL_ROOM', data.rooms)
         })
-        .catch(({ response }) => {
-          console.log(response)
-        })
+        .catch(errorHandler)
     },
     fetchRoomId(context, payload) {
       return new Promise((resolve, reject) => {

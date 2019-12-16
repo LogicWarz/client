@@ -74,6 +74,43 @@
       <v-icon>mdi-plus</v-icon>
     </v-btn>
     <v-container>
+      <v-row class="pl-5">
+        <v-col sm="1">
+          <v-avatar size="100" class="orange-gradient">
+            <span v-if="user.name" class="white--text" style="font-size: 4rem; font-weight: bold">{{user.name.substring(0, 1).toUpperCase()}}</span>
+          </v-avatar>
+        </v-col>
+        <v-col sm="10" class="pl-10">
+          <div>
+            <b>{{user.name}}</b>
+          </div>
+          <div style="color: grey">
+            {{user.email}}
+          </div>
+          <div>
+            {{user.points}} points
+          </div>
+          <div>
+            <v-chip v-if="user.points < 100" color="green" text-color="white" small>
+              <b>Beginner</b>
+              <v-icon small right>mdi-star-outline</v-icon>
+            </v-chip>
+            <v-chip
+              v-else-if="user.points < 200"
+              color="blue"
+              text-color="white"
+              x-small
+            >
+              <b>Intermediate</b>
+              <v-icon size="small" right>mdi-star-half</v-icon>
+            </v-chip>
+            <v-chip v-else color="red" text-color="white" x-small>
+              <b>Advance</b>
+              <v-icon size="small" right>mdi-star</v-icon>
+            </v-chip>
+          </div>
+        </v-col>
+      </v-row>
       <div class="center-item mt-5" v-if="getRooms.length === 0">
         No room yet. Go make one!
         <v-img src="../assets/empty.png" height="200" width="300" class="center-self mt-2"></v-img>
@@ -138,7 +175,7 @@ export default {
     getRooms() {
       return this.$store.state.allRoom;
     },
-    ...mapState(["message"])
+    ...mapState(["message", 'user'])
   },
   created() {
     console.log("-=");
