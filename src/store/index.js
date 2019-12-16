@@ -21,7 +21,7 @@ export default new Vuex.Store({
     questions: [],
     question: {},
     // inGame: [],
-    challenges: []
+    challenges: [],
     winner: null,
     my_questions: [],
     my_answers: [],
@@ -453,8 +453,7 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log(err)
-        })
-    } 
+        }) 
     }
   },
   modules: {
