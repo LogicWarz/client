@@ -4,8 +4,8 @@
     <v-row>
       <Sidebar />
       <v-col cols="12" sm="9">
-        <div style="display:flex; justify-content:space-between;">
-          <h2>All Questions</h2>
+        <div style="display:flex; justify-content:space-between; padding-bottom:10px;">
+          <h2>My Answers</h2>
           <div style="display:flex; justify-content:space-between;">
             <v-text-field
               solo
@@ -22,7 +22,7 @@
           </div>
         </div>
         <v-divider></v-divider>
-        <Question v-for="question in filteredQuestions" :key="question._id" :question="question"></Question>
+        <MyAnswer v-for="answer in filteredAnswers" :key="answer._id" :answer="answer"></MyAnswer>
       </v-col>
     </v-row>
     </v-container>
@@ -30,35 +30,40 @@
 </template>
 
 <script>
-import Question from '../components/Question'
+import MyAnswer from '../components/MyAnswer'
 import Sidebar from '../components/Sidebar'
 import { mapState } from 'vuex'
 export default {
-  name: 'Questions',
+  name: 'MyAnswers',
+  components: {
+    MyAnswer,
+    Sidebar
+  },
   data () {
     return {
       search: ''
     }
   },
-  components: {
-    Question,
-    Sidebar
+  methods: {
+    getMyAnswers() {
+      this.$store.dispatch('getMyAnswers')
+        .then((response) => {
+          this.$store.commit('SET_MY_ANSWERS', response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          // this.danger(err.response.data.message);
+        });
+    },
   },
   created () {
-    this.$store.dispatch('getQuestions')
-    .then((response) => {
-      this.$store.commit('SET_QUESTIONS', response.data);
-    })
-    .catch((err) => {
-      console.log(err);
-      // this.danger(err.response.data.message);
-    });
+    this.getMyAnswers();
   },
   computed: {
-    ...mapState(['questions']),
-    filteredQuestions() {
-      return this.questions.filter((el) => {
-        return el.title.toLowerCase().includes(this.search.toLowerCase());
+    ...mapState(['my_answers']),
+    filteredAnswers() {
+      return this.my_answers.filter((el) => {
+        return el.QuestionId.title.toLowerCase().includes(this.search.toLowerCase());
       });
     }
   }

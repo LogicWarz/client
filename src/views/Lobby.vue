@@ -1,6 +1,15 @@
 <template>
   <div class="about mb-10">
-    <div class="center-item mt-2">
+    <!-- <h1>HAI</h1> -->
+    <!-- <h6>{{newUser}}</h6> -->
+    <!-- {{listPlayer.status}}
+    <div v-for="(item,index) in listPlayer.players" :key="index">
+      <span>{{index+1}}</span> :
+      <span>{{item}}</span>
+    </div>-->
+    <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
+    <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
+    <div class="center-item mt-10">
       <v-btn
         text
         @click="playGame(listPlayer._id)"
@@ -106,7 +115,7 @@ export default {
         })
         .then(() => {
           socket.emit("play-game", { id, msg: "game start" });
-          this.$router.push(`/editor/${this.$route.params.room}`);
+          this.$router.push(`/play/${this.$route.params.room}`);
         })
         .catch(({ response }) => {
           console.log(response);
@@ -170,7 +179,7 @@ export default {
                 id: data.room._id,
                 msg: "game start"
               });
-              this.$router.push(`/editor/${this.$route.params.room}`);
+              this.$router.push(`/play/${this.$route.params.room}`);
             }
           })
           .catch(err => {
@@ -200,7 +209,7 @@ export default {
 
     socket.on("playGame", data => {
       this.$store.dispatch("fetchRoomId", { id: data.id });
-      this.$router.push(`/editor/${this.$route.params.room}`);
+      this.$router.push(`/play/${this.$route.params.room}`);
     });
   }
 };

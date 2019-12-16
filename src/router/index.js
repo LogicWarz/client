@@ -8,13 +8,14 @@ const routes = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Auth.vue')
+    component: () => import(/* webpackChunkName: "signin" */ '../views/Auth.vue')
   },
   {
-    path: '/editor/:room',
-    name: 'editor',
+    path: '/play/:room',
+    name: 'play',
     component: () => import(/* webpackChunkName: "about" */ '../views/Play.vue'),
     beforeEnter: (to, from, next) => {
+      console.log(from, 'widhjoiwahdo')
       if (localStorage.getItem('token')) {
         next()
       } else {
@@ -35,9 +36,57 @@ const routes = [
     }
   },
   {
+    path: '/challenges',
+    name: 'challenges',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/Challenges.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/add-challenge',
+    name: 'add-challenge',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/AddChallenge.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
     path: '/ask',
     name: 'ask',
-    component: () => import(/* webpackChunkName: "forum" */ '../views/AskQuestion.vue'),
+    component: () => import(/* webpackChunkName: "ask" */ '../views/AskQuestion.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/questions',
+    name: 'questions',
+    component: () => import(/* webpackChunkName: "questions" */ '../views/MyQuestions.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/question/edit/:id',
+    name: 'editquestion',
+    component: () => import(/* webpackChunkName: "editquestion" */ '../views/MyQuestionEdit.vue'),
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('token')) {
         next()
@@ -49,7 +98,31 @@ const routes = [
   {
     path: '/question/:id',
     name: 'question',
-    component: () => import(/* webpackChunkName: "forum" */ '../views/QuestionDetail.vue'),
+    component: () => import(/* webpackChunkName: "question" */ '../views/QuestionDetail.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/answers',
+    name: 'answers',
+    component: () => import(/* webpackChunkName: "answers" */ '../views/MyAnswers.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/answer/:id',
+    name: 'answer',
+    component: () => import(/* webpackChunkName: "answer" */ '../views/AnswerEdit.vue'),
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('token')) {
         next()
@@ -61,8 +134,17 @@ const routes = [
   {
     path: '/lobby/:room',
     name: 'lobby',
-    component: () => import(/* webpackChunkName: "forum" */ '../views/Lobby.vue'),
+    component: () => import(/* webpackChunkName: "lobby" */ '../views/Lobby.vue'),
     beforeEnter: (to, from, next) => {
+      // if (localStorage.getItem('token')) {
+      //   if (!from.name) {
+      //     next('/')
+      //   } else {
+      //     next()
+      //   }
+      // } else {
+      //   next('/signin')
+      // }
       if (localStorage.getItem('token')) {
         next()
       } else {

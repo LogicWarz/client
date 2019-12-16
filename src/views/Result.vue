@@ -1,9 +1,19 @@
 <template>
   <div class="about mb-10">
-    <div>{{ winner}}</div>
-    <div>{{newUser}}</div>
-    <hr />
-    <div>{{loser}}</div>
+    <!-- <h1>HAI</h1> -->
+    <!-- <h6>{{newUser}}</h6> -->
+    <!-- {{listPlayer.status}}
+    <div v-for="(item,index) in listPlayer.players" :key="index">
+      <span>{{index+1}}</span> :
+      <span>{{item}}</span>
+    </div>-->
+    <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
+    <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
+    <div class="center-item mt-2 mb-5">
+      <v-btn text @click="$router.push('/')" rounded class="primary-gradient">
+        <b>BACK TO ROOM LIST</b>
+      </v-btn>
+    </div>
     <v-container>
       <v-row>
         <v-col sm="6" class="lobby-container bg-white-fade elevated pa-5 center-item">

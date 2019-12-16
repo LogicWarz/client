@@ -1,15 +1,15 @@
 <template>
   <v-container>
-    <AskForm></AskForm>
+    <EditForm></EditForm>
   </v-container>
 </template>
 
 <script>
-import AskForm from '../components/AskForm'
+import EditForm from '../components/EditForm'
 export default {
-  name: 'AskQuestion',
+  name: 'AnswerEdit',
   components: {
-    AskForm
+    EditForm
   }
 }
 </script>

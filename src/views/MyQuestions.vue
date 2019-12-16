@@ -4,8 +4,8 @@
     <v-row>
       <Sidebar />
       <v-col cols="12" sm="9">
-        <div style="display:flex; justify-content:space-between;">
-          <h2>All Questions</h2>
+        <div style="display:flex; justify-content:space-between; padding-bottom:10px;">
+          <h2>My Questions</h2>
           <div style="display:flex; justify-content:space-between;">
             <v-text-field
               solo
@@ -22,7 +22,7 @@
           </div>
         </div>
         <v-divider></v-divider>
-        <Question v-for="question in filteredQuestions" :key="question._id" :question="question"></Question>
+        <MyQuestion v-for="question in filteredQuestions" :key="question._id" :question="question"></MyQuestion>
       </v-col>
     </v-row>
     </v-container>
@@ -30,34 +30,39 @@
 </template>
 
 <script>
-import Question from '../components/Question'
+import MyQuestion from '../components/MyQuestion'
 import Sidebar from '../components/Sidebar'
 import { mapState } from 'vuex'
 export default {
-  name: 'Questions',
+  name: 'MyQuestions',
+  components: {
+    MyQuestion,
+    Sidebar
+  },
   data () {
     return {
       search: ''
     }
   },
-  components: {
-    Question,
-    Sidebar
+  methods: {
+    getMyQuestions() {
+      this.$store.dispatch('getMyQuestions')
+        .then((response) => {
+          this.$store.commit('SET_MY_QUESTIONS', response.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          // this.danger(err.response.data.message);
+        });
+    },
   },
   created () {
-    this.$store.dispatch('getQuestions')
-    .then((response) => {
-      this.$store.commit('SET_QUESTIONS', response.data);
-    })
-    .catch((err) => {
-      console.log(err);
-      // this.danger(err.response.data.message);
-    });
+    this.getMyQuestions();
   },
   computed: {
-    ...mapState(['questions']),
+    ...mapState(['my_questions']),
     filteredQuestions() {
-      return this.questions.filter((el) => {
+      return this.my_questions.filter((el) => {
         return el.title.toLowerCase().includes(this.search.toLowerCase());
       });
     }

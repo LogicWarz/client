@@ -1,6 +1,7 @@
 <template>
   <v-app class="app custom-font">
-    <Navbar></Navbar>
+    <Navbar v-if="showNavbar"></Navbar>
+    <Header v-if="!showNavbar"></Header>
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -9,17 +10,33 @@
 
 <script>
 import Navbar from './components/Navbar'
+import Header from './components/Header'
 export default {
   name: 'App',
   components: {
-    Navbar
+    Navbar,
+    Header
   },
   data: () => ({
-    //
+    showNavbar: true
   }),
   created () {
     if (localStorage.getItem('token')) {
       this.$store.commit('SET_IS_LOGIN', true)
+      this.$store.dispatch('getUserData')
+        .then((response) => {
+          this.$store.commit('SET_USER', response.data)
+        })
+        .catch((err) => {
+          console.log(err)
+          this.danger(err.response.data.message)
+        })
+    }
+    console.log(this.$router.history.current.fullPath)
+  },
+  watch: {
+    $route (to, from){
+      this.showNavbar = !(to.fullPath.includes('lobby') || to.fullPath.includes('play') || to.fullPath.includes('result'))
     }
   }
 }
@@ -85,5 +102,14 @@ code {
 }
 .text-primary {
   color: #4A00E0 !important;
+}
+.zoom-hover {
+  transition: transform .4s !important; /* Animation */
+}
+.zoom-hover:hover {
+  transform: scale(1.1) !important; /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+}
+.scroll {
+  overflow: scroll;
 }
 </style>

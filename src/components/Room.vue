@@ -10,12 +10,29 @@
       <v-list-item three-line>
         <v-list-item-content>
           <div class="overline mb-4">
+            <v-chip v-if="room.level === 'Beginner'" color="green" text-color="white" x-small>
+              <b>{{room.level}}</b>
+              <v-icon size="small" right>mdi-star-outline</v-icon>
+            </v-chip>
             <v-chip
+              v-else-if="room.level === 'Intermediate'"
+              color="blue"
+              text-color="white"
+              x-small
+            >
+              <b>{{room.level}}</b>
+              <v-icon size="small" right>mdi-star-half</v-icon>
+            </v-chip>
+            <v-chip v-else color="red" text-color="white" x-small>
+              <b>{{room.level}}</b>
+              <v-icon size="small" right>mdi-star</v-icon>
+            </v-chip>
+            <!-- <v-chip
               @click="deleteRoom(room._id)"
               color="green"
               text-color="white"
               x-small
-            >{{ room.level }}</v-chip>
+            >{{ room.level }}</v-chip>-->
           </div>
           <v-list-item-title
             @click="joinRoom(room._id, room.status)"
@@ -25,15 +42,23 @@
             <small>{{ room.status }}</small>
           </v-list-item-subtitle>
         </v-list-item-content>
-        <v-badge color="purple" style="margin-right: 10px">
+        <v-badge
+          v-if="room.players[0]"
+          color="orange"
+          class="center-item"
+          style="margin-right: 10px"
+        >
           <template v-slot:badge>
-            <b>
-              <small>129</small>
-            </b>
+            <small>
+              <b>{{room.players[0].points + 'p'}}</b>
+            </small>
           </template>
           <v-avatar>
             <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
           </v-avatar>
+          <div>
+            <small>{{room.players[0].name}}</small>
+          </div>
         </v-badge>
       </v-list-item>
     </v-card>

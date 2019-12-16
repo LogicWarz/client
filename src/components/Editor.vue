@@ -1,7 +1,6 @@
 <template>
   <div>
-    <MonacoEditor class="editor" v-model="testing" language="javascript" />
-    <button @click="submitEvent">Submit</button>
+    <MonacoEditor class="editor" v-model="userSolution" language="javascript" />
   </div>
 </template>
 
@@ -18,7 +17,7 @@ export default {
   },
   data() {
     return {
-      testing: ""
+      userSolution: ""
     };
   },
   methods: {
@@ -56,6 +55,17 @@ export default {
   computed: {
     getPlayers() {
       return this.$store.state.oneRoom.players;
+      // console.log(this.testing)
+      this.$store.dispatch("parsingData", this.testing).then(({ data }) => {
+        // alert(JSON.stringify(data))
+        console.log(data);
+      });
+    }
+  },
+
+  watch: {
+    userSolution() {
+      this.$emit("setUserSolution", this.userSolution);
     }
   }
 };
@@ -63,7 +73,7 @@ export default {
 
 <style>
 .editor {
-  width: 900px;
-  height: 70vh;
+  width: 66vw;
+  height: 50vh;
 }
 </style>
