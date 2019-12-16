@@ -9,6 +9,10 @@
 
       <v-spacer></v-spacer>
 
+      <v-btn @click="$router.push('/challenges')" v-if="isLogin" icon>
+        <v-icon>mdi-settings</v-icon>
+      </v-btn>
+
       <v-btn @click="$router.push('/forum')" v-if="isLogin" icon>
         <v-icon>mdi-comment</v-icon>
       </v-btn>
