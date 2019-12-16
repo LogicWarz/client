@@ -13,7 +13,8 @@ export default new Vuex.Store({
     // Room Store
     allRoom: [],
     oneRoom: {
-      players: []
+      players: [],
+      challenge: {}
     },
     message: '',
     testString: '',
@@ -126,8 +127,7 @@ export default new Vuex.Store({
         })
     },
     parsingData({ commit }, payload) {
-      return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {
-      })
+      return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {})
     },
     fetchRoom(context, payload) {
       axios({
