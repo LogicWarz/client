@@ -9,6 +9,7 @@
     </div>-->
     <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
+    {{listPlayer}}
     <div class="center-item mt-10">
       <v-btn
         text
@@ -115,6 +116,8 @@ export default {
         })
         .then(() => {
           socket.emit("play-game", { id, msg: "game start" });
+          socket.emit("room-closed");
+          this.$store.dispatch("fetchRoom");
           this.$router.push(`/play/${this.$route.params.room}`);
         })
         .catch(({ response }) => {
@@ -167,7 +170,7 @@ export default {
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
 
     socket.on("joinRoom", data => {
-      console.log("join-room triggered");
+      // console.log("join-room triggered");
       if (data.id === this.$route.params.room) {
         this.$store.dispatch("fetchRoom");
         this.newUser = data.msg;
@@ -194,7 +197,7 @@ export default {
     });
 
     socket.on("leaveRoom", data => {
-      console.log("masuk listener");
+      // console.log("masuk listener");
       this.$store.dispatch("fetchRoom");
       if (data.id === this.$route.params.id) {
         this.newUser = data.msg;
@@ -208,6 +211,8 @@ export default {
     });
 
     socket.on("playGame", data => {
+      // console.log("ini listener play game");
+      this.$store.dispatch("fetchRoom");
       this.$store.dispatch("fetchRoomId", { id: data.id });
       this.$router.push(`/play/${this.$route.params.room}`);
     });

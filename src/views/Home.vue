@@ -139,7 +139,7 @@ export default {
     return {
       dialog: false,
       roomName: "",
-      levels: ["Beginner", "Intermediate", "Advance"],
+      levels: ["beginner", "intermediate", "advance"],
       name: "testQueen",
       err: "",
       roomData: []
@@ -154,6 +154,7 @@ export default {
           player: this.name
         })
         .then(room => {
+          console.log("ini room dengan challenge", room);
           socket.emit("getRoom", room);
           this.$store.dispatch("fetchRoomId", { id: room._id });
           this.$router.push(`/lobby/${room._id}`);
@@ -181,6 +182,11 @@ export default {
     if (localStorage.getItem("token")) {
       this.$store.dispatch("fetchRoom");
     }
+
+    // socket.on("refetchRoom", () => {
+    //   this.$store.dispatch("fetchRoom");
+    // });
+
     socket.on("getRoom", data => {
       this.$store.dispatch("fetchRoom");
     });
@@ -190,11 +196,12 @@ export default {
       this.$store.dispatch("fetchRoom");
     });
 
-    // socket.on("refreshRoom", () => {
-    //   this.$store.dispatch("fetchRoom");
-    // });
+    socket.on("closing", () => {
+      this.$store.dispatch("fetchRoom");
+    });
 
     socket.on("remove-room", () => {
+      console.log("masuk remove room kah ?");
       this.$store.dispatch("fetchRoom");
     });
   }
