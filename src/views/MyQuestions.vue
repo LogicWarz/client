@@ -6,12 +6,23 @@
       <v-col cols="12" sm="9">
         <div style="display:flex; justify-content:space-between; padding-bottom:10px;">
           <h2>My Questions</h2>
-          <v-btn @click="$router.push('/ask')" rounded class="primary-gradient">
-            <b>ASK QUESTION</b>
-          </v-btn>
+          <div style="display:flex; justify-content:space-between;">
+            <v-text-field
+              solo
+              dense
+              rounded
+              v-model="search"
+              label="Search question"
+              prepend-inner-icon="mdi-magnify"
+              style="margin-right:20px"
+            ></v-text-field>
+            <v-btn @click="$router.push('/ask')" rounded class="primary-gradient">
+              <b>ASK QUESTION</b>
+            </v-btn>
+          </div>
         </div>
         <v-divider></v-divider>
-        <MyQuestion v-for="question in my_questions" :key="question._id" :question="question"></MyQuestion>
+        <MyQuestion v-for="question in filteredQuestions" :key="question._id" :question="question"></MyQuestion>
       </v-col>
     </v-row>
     </v-container>
@@ -28,6 +39,11 @@ export default {
     MyQuestion,
     Sidebar
   },
+  data () {
+    return {
+      search: ''
+    }
+  },
   methods: {
     getMyQuestions() {
       this.$store.dispatch('getMyQuestions')
@@ -43,7 +59,14 @@ export default {
   created () {
     this.getMyQuestions();
   },
-  computed: mapState(['my_questions'])
+  computed: {
+    ...mapState(['my_questions']),
+    filteredQuestions() {
+      return this.my_questions.filter((el) => {
+        return el.title.toLowerCase().includes(this.search.toLowerCase());
+      });
+    }
+  }
 }
 </script>
 

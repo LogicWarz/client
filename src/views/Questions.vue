@@ -4,14 +4,25 @@
     <v-row>
       <Sidebar />
       <v-col cols="12" sm="9">
-        <div style="display:flex; justify-content:space-between; padding-bottom:10px;">
+        <div style="display:flex; justify-content:space-between;">
           <h2>All Questions</h2>
-          <v-btn @click="$router.push('/ask')" rounded class="primary-gradient">
-            <b>ASK QUESTION</b>
-          </v-btn>
+          <div style="display:flex; justify-content:space-between;">
+            <v-text-field
+              solo
+              dense
+              rounded
+              v-model="search"
+              label="Search question"
+              prepend-inner-icon="mdi-magnify"
+              style="margin-right:20px"
+            ></v-text-field>
+            <v-btn @click="$router.push('/ask')" rounded class="primary-gradient">
+              <b>ASK QUESTION</b>
+            </v-btn>
+          </div>
         </div>
         <v-divider></v-divider>
-        <Question v-for="question in questions" :key="question._id" :question="question"></Question>
+        <Question v-for="question in filteredQuestions" :key="question._id" :question="question"></Question>
       </v-col>
     </v-row>
     </v-container>
@@ -24,6 +35,11 @@ import Sidebar from '../components/Sidebar'
 import { mapState } from 'vuex'
 export default {
   name: 'Questions',
+  data () {
+    return {
+      search: ''
+    }
+  },
   components: {
     Question,
     Sidebar
@@ -38,7 +54,14 @@ export default {
       // this.danger(err.response.data.message);
     });
   },
-  computed: mapState(['questions'])
+  computed: {
+    ...mapState(['questions']),
+    filteredQuestions() {
+      return this.questions.filter((el) => {
+        return el.title.toLowerCase().includes(this.search.toLowerCase());
+      });
+    }
+  }
 }
 </script>
 
