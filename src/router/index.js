@@ -11,10 +11,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "signin" */ '../views/Auth.vue')
   },
   {
-    path: '/editor',
-    name: 'editor',
-    component: () => import(/* webpackChunkName: "editor" */ '../views/Play.vue'),
+    path: '/play/:room',
+    name: 'play',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Play.vue'),
     beforeEnter: (to, from, next) => {
+      console.log(from, 'widhjoiwahdo')
       if (localStorage.getItem('token')) {
         next()
       } else {
@@ -26,6 +27,30 @@ const routes = [
     path: '/forum',
     name: 'forum',
     component: () => import(/* webpackChunkName: "forum" */ '../views/Questions.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/challenges',
+    name: 'challenges',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/Challenges.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/add-challenge',
+    name: 'add-challenge',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/AddChallenge.vue'),
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('token')) {
         next()
@@ -110,6 +135,27 @@ const routes = [
     path: '/lobby/:room',
     name: 'lobby',
     component: () => import(/* webpackChunkName: "lobby" */ '../views/Lobby.vue'),
+    beforeEnter: (to, from, next) => {
+      // if (localStorage.getItem('token')) {
+      //   if (!from.name) {
+      //     next('/')
+      //   } else {
+      //     next()
+      //   }
+      // } else {
+      //   next('/signin')
+      // }
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/result/:room',
+    name: 'result',
+    component: () => import(/* webpackChunkName: "forum" */ '../views/Result.vue'),
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('token')) {
         next()

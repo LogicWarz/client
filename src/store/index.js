@@ -36,19 +36,19 @@ export default new Vuex.Store({
     SET_ROOMS (state, payload) {
       state.rooms = payload
     },
-    SET_MESSAGE (state, payload) {
+    SET_MESSAGE(state, payload) {
       state.message = payload
     },
-    SET_TEST (state, payload) {
+    SET_TEST(state, payload) {
       state.testString = payload
     },
-    CREATED_ROOM (state, room) {
+    CREATED_ROOM(state, room) {
       state.allRoom.unshift(room)
     },
-    ALL_ROOM (state, room) {
+    ALL_ROOM(state, room) {
       state.allRoom = room
     },
-    ROOM_ID (state, room) {
+    ROOM_ID(state, room) {
       state.oneRoom = room
     },
     // Question Mutation
@@ -75,6 +75,9 @@ export default new Vuex.Store({
           // console.log(data)
           localStorage.setItem('token', data.token)
           commit('SET_USER', data.user_data)
+          localStorage.setItem('id', data.user_data._id)
+          localStorage.setItem('name', data.user_data.name)
+          localStorage.setItem('email', data.user_data.email)
           commit('SET_IS_LOGIN', true)
           commit('SET_MESSAGE', '')
           router.push('/')
@@ -84,7 +87,7 @@ export default new Vuex.Store({
           err.response ? commit('SET_MESSAGE', err.response.data.message.join(', ')) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
     },
-    login ({ commit }, payload) {
+    login({ commit }, payload) {
       axios.post('/users/signin', payload, {
         headers: {
           token: localStorage.getItem('token')
@@ -94,6 +97,9 @@ export default new Vuex.Store({
           // console.log(data)
           localStorage.setItem('token', data.token)
           commit('SET_USER', data.user_data)
+          localStorage.setItem('id', data.user_data._id)
+          localStorage.setItem('name', data.user_data.name)
+          localStorage.setItem('email', data.user_data.email)
           commit('SET_IS_LOGIN', true)
           commit('SET_MESSAGE', '')
           router.push('/')
@@ -103,14 +109,17 @@ export default new Vuex.Store({
           err.response ? commit('SET_MESSAGE', err.response.data.message) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
     },
-    parsingData ({ commit }, payload) {
+    parsingData({ commit }, payload) {
       return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {
       })
     },
-    fetchRoom (context, payload) {
+    fetchRoom(context, payload) {
       axios({
         method: 'get',
-        url: '/rooms'
+        url: '/rooms',
+        headers: {
+          token: localStorage.getItem('token')
+        }
       })
         .then(({ data }) => {
           context.commit('ALL_ROOM', data.rooms)
@@ -119,7 +128,7 @@ export default new Vuex.Store({
           console.log(response)
         })
     },
-    fetchRoomId (context, payload) {
+    fetchRoomId(context, payload) {
       console.log('fetch room payload', payload)
       return new Promise((resolve, reject) => {
         axios({
@@ -139,7 +148,7 @@ export default new Vuex.Store({
           })
       })
     },
-    createRoom (context, payload) {
+    createRoom(context, payload) {
       return new Promise((resolve, reject) => {
         axios({
           method: 'post',
@@ -163,7 +172,7 @@ export default new Vuex.Store({
           })
       })
     },
-    joinRoom (context, payload) {
+    joinRoom(context, payload) {
       return new Promise((resolve, reject) => {
         axios({
           method: 'patch',
