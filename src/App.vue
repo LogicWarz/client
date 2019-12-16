@@ -5,12 +5,23 @@
     <v-content>
       <router-view></router-view>
     </v-content>
+    <v-snackbar
+    color="red"
+      :value="alert"
+      top
+      right
+      :timeout="3000"
+      style="margin: 5vh"
+    >
+      {{alertMessage}}
+    </v-snackbar>
   </v-app>
 </template>
 
 <script>
 import Navbar from './components/Navbar'
 import Header from './components/Header'
+import { mapState } from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -20,6 +31,9 @@ export default {
   data: () => ({
     showNavbar: true
   }),
+  computed: {
+    ...mapState(['alert', 'alertMessage'])
+  },
   created () {
     if (localStorage.getItem('token')) {
       this.$store.commit('SET_IS_LOGIN', true)
@@ -111,5 +125,15 @@ code {
 }
 .scroll {
   overflow: scroll;
+}
+.orange-gradient {
+  background: #f12711;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #f5af19, #f12711);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.blue-gradient {
+  background: #1A2980;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 </style>
