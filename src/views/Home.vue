@@ -102,7 +102,7 @@ export default {
     return {
       dialog: false,
       roomName: "",
-      levels: ["Beginner", "Intermediate", "Advance"],
+      levels: ["beginner", "intermediate", "advance"],
       name: "testQueen",
       err: "",
       roomData: []

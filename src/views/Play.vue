@@ -108,12 +108,16 @@ export default {
       this.userSolution = userSolution;
     },
     async submitSolution() {
+      console.log("ini room yaaa", this.room);
       // console.log("ini solution nya ya", this.userSolution);
       let obj = {
         code: this.userSolution,
         challenge: this.room.challenge
       };
+
+      console.log("ini challenge yaaa", obj.challenge);
       const { data } = await this.$store.dispatch("parsingData", obj);
+      console.log("masuk", data.input);
       if (data.input) {
         const response = await axios({
           method: "delete",
@@ -129,7 +133,7 @@ export default {
           room: this.$route.params.room
         });
       } else {
-        console.log("salah nih");
+        alert("salah nih");
       }
       // .then(({ data }) => {
       //   if (data.input) {
