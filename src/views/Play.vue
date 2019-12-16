@@ -47,10 +47,6 @@
             <br />Output: 24
           </code>
         </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> d48e0cd21e748d96b0a13997a70d158a333a6088
       </v-col>
       <v-col cols="12" sm="8" style="padding: 0">
         <v-row style="height: 50vh;">
