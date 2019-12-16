@@ -7,22 +7,39 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    // User Store
     isLogin: false,
+    user: {},
+    // Room Store
     allRoom: [],
     oneRoom: {
       players: []
     },
     message: '',
     testString: '',
+    // Question Store
     questions: [],
     question: {},
     // inGame: [],
     challenges: []
+    winner: null,
+    my_questions: [],
+    my_answers: [],
+    question_detail: {},
+    answer_detail: {}
   },
   mutations: {
+    SET_WINNER(state, payload) {
+      state.winner = payload
+    },
+    // User Mutation
     SET_IS_LOGIN(state, payload) {
       state.isLogin = payload
     },
+    SET_USER(state, payload) {
+      state.user = payload
+    },
+    // Room Mutation
     SET_ROOMS(state, payload) {
       state.rooms = payload
     },
@@ -41,8 +58,21 @@ export default new Vuex.Store({
     ROOM_ID(state, room) {
       state.oneRoom = room
     },
+    // Question Mutation
     SET_QUESTIONS(state, payload) {
       state.questions = payload
+    },
+    SET_MY_QUESTIONS(state, payload) {
+      state.my_questions = payload
+    },
+    SET_MY_ANSWERS(state, payload) {
+      state.my_answers = payload
+    },
+    SET_QUESTION_DETAIL(state, payload) {
+      state.question_detail = payload
+    },
+    SET_ANSWER_DETAIL(state, payload) {
+      state.answer_detail = payload
     },
     SET_QUESTION(state, payload) {
       state.question = payload
@@ -56,11 +86,11 @@ export default new Vuex.Store({
   },
   actions: {
     register({ commit }, payload) {
-      console.log('aaaa')
       axios.post('/users/signup', payload)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           localStorage.setItem('token', data.token)
+          commit('SET_USER', data.user_data)
           localStorage.setItem('id', data.user_data._id)
           localStorage.setItem('name', data.user_data.name)
           localStorage.setItem('email', data.user_data.email)
@@ -80,8 +110,9 @@ export default new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           localStorage.setItem('token', data.token)
+          commit('SET_USER', data.user_data)
           localStorage.setItem('id', data.user_data._id)
           localStorage.setItem('name', data.user_data.name)
           localStorage.setItem('email', data.user_data.email)
@@ -113,15 +144,7 @@ export default new Vuex.Store({
           console.log(response)
         })
     },
-    addQuestion({ commit }, payload) {
-      return axios.post("/questions", payload, {
-        headers: {
-          token: localStorage.getItem('token')
-        }
-      })
-    },
     fetchRoomId(context, payload) {
-      console.log('fetch room payload', payload)
       return new Promise((resolve, reject) => {
         axios({
           method: 'get',
@@ -131,7 +154,6 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
             context.commit('ROOM_ID', data.room)
             resolve(data)
           })
@@ -155,7 +177,7 @@ export default new Vuex.Store({
           }
         })
           .then(({ data }) => {
-            console.log(data)
+            // console.log(data)
             context.commit('CREATED_ROOM', data.room)
             resolve(data.room)
           })
@@ -184,21 +206,222 @@ export default new Vuex.Store({
           })
       })
     },
-    fetchQuestions({ commit }, payload) {
-      axios.get('/questions')
-        .then(({ data }) => {
-          commit('SET_QUESTIONS', data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    },
-    findOneQuestion({ commit }, payload) {
-      return axios.get(`/questions/${payload}`)
-    },
+    // fetchQuestions ({ commit }, payload) {
+    //   axios.get('/questions')
+    //     .then(({ data }) => {
+    //       commit('SET_QUESTIONS', data)
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // },
+    // findOneQuestion ({ commit }, payload) {
+    //   return axios.get(`/questions/${payload}`)
+    // },
+    // addQuestion({commit}, payload) {
+    //   return axios.post("/questions", payload, {
+    //     headers: {
+    //       token: localStorage.getItem('token')
+    //     }
+    //   })
+    // },
+    // deleteQuestion ({ commit }, payload) {
+    //   axios.delete(`/questions/${payload}`, {
+    //     headers: {
+    //       token: localStorage.getItem('token')
+    //     }
+    //   })
+    //     .then(({ data }) => {
+    //       router.push('/forum')
+    //     })
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // }
 
-    deleteQuestion({ commit }, payload) {
-      axios.delete(`/questions/${payload}`, {
+    glogin(context, payload) {
+      return axios({
+        method: 'POST',
+        url: '/users/gsignin',
+        data: {
+          idToken: payload.idToken
+        }
+      })
+    },
+    getUserData(context) {
+      return axios({
+        method: 'GET',
+        url: '/users',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    getQuestions(context) {
+      return axios({
+        method: 'GET',
+        url: '/questions'
+      })
+    },
+    getMyQuestions(context) {
+      return axios({
+        method: 'GET',
+        url: '/questions/user',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    getMyAnswers(context) {
+      return axios({
+        method: 'GET',
+        url: '/answers/user',
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    getQuestionDetail(context, payload) {
+      return axios({
+        method: 'GET',
+        url: `/questions/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    viewQuestion(context, payload) {
+      return axios({
+        method: 'PATCH',
+        url: `/questions/view/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    addQuestion(context, payload) {
+      return axios({
+        method: 'POST',
+        url: '/questions',
+        data: {
+          title: payload.title,
+          description: payload.description,
+          tags: payload.tags
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    editQuestion(context, payload) {
+      return axios({
+        method: 'PUT',
+        url: `/questions/${payload.QuestionId}`,
+        data: {
+          title: payload.title,
+          description: payload.description,
+          tags: payload.tags
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    deleteQuestion(context, payload) {
+      return axios({
+        method: 'DELETE',
+        url: `/questions/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    addSolution(context, payload) {
+      return axios({
+        method: 'PATCH',
+        url: `/questions/solution/${payload.questionId}`,
+        data: {
+          AnswerId: payload.answerId
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    upvoteQuestion(context, payload) {
+      return axios({
+        method: 'PATCH',
+        url: `/questions/upvote/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    downvoteQuestion(context, payload) {
+      return axios({
+        method: 'PATCH',
+        url: `/questions/downvote/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    getAnswerDetail(context, payload) {
+      return axios({
+        method: 'GET',
+        url: `/answers/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    addAnswer(context, payload) {
+      return axios({
+        method: 'POST',
+        url: '/answers',
+        data: {
+          QuestionId: payload.QuestionId,
+          description: payload.description
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    editAnswer(context, payload) {
+      return axios({
+        method: 'PUT',
+        url: `/answers/${payload.AnswerId}`,
+        data: {
+          description: payload.description
+        },
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    deleteAnswer(context, payload) {
+      return axios({
+        method: 'DELETE',
+        url: `/answers/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    upvoteAnswer(context, payload) {
+      return axios({
+        method: 'PATCH',
+        url: `/answers/upvote/${payload}`,
+        headers: {
+          token: localStorage.getItem('token')
+        }
+      })
+    },
+    downvoteAnswer(context, payload) {
+      return axios({
+        method: 'PATCH',
+        url: `/answers/downvote/${payload}`,
         headers: {
           token: localStorage.getItem('token')
         }
@@ -232,6 +455,7 @@ export default new Vuex.Store({
           console.log(err)
         })
     } 
+    }
   },
   modules: {
   }

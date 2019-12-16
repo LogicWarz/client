@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <v-app-bar
@@ -35,6 +34,7 @@ export default {
     logout () {
       localStorage.removeItem('token')
       this.$store.commit('SET_IS_LOGIN', false)
+      this.$store.commit('SET_USER', {})
       this.$router.push('/signin')
     }
   }
