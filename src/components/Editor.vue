@@ -1,46 +1,45 @@
 <template>
   <div>
-    <MonacoEditor class="editor" v-model="testing" language="javascript" />
-    <button @click="submitEvent">Submit</button>
+    <MonacoEditor class="editor" v-model="userSolution" language="javascript" />
   </div>
 </template>
 
 <script>
-import MonacoEditor from 'vue-monaco'
+import MonacoEditor from "vue-monaco";
 
 export default {
-  name: 'Editor',
+  name: "Editor",
   components: {
     MonacoEditor
   },
-  data () {
+  data() {
     return {
-      testing: ""
-    }
+      userSolution: ""
+    };
   },
   methods: {
-    onChange (value) {
-      console.log(value)
-    },
-
-    submitEvent() {
+    onChange(value) {
+      console.log(value);
+    }
+  },
+  submitEvent() {
       // console.log(this.testing)
      this.$store.dispatch("parsingData", this.testing)
       .then(({data}) => {
         // alert(JSON.stringify(data))
         console.log(data)
       })
-
-      
+  watch: {
+    userSolution() {
+      this.$emit('setUserSolution', this.userSolution)
     }
   }
-}
+};
 </script>
 
 <style>
-.editor{
-  width: 900px;
-  height: 70vh;
+.editor {
+  width: 66vw;
+  height: 50vh;
 }
-
 </style>
