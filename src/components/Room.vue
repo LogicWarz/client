@@ -79,19 +79,24 @@ export default {
   },
   methods: {
     joinRoom(roomId, status) {
-      this.$store
-        .dispatch("joinRoom", { id: roomId, name: this.username })
-        .then(data => {
-          this.$store.dispatch("fetchRoom");
-          this.$router.push(`/lobby/${roomId}`);
-          socket.emit("join-room", {
-            id: roomId,
-            msg: `${this.username} is now connected`
+      console.log(status);
+      if (status === "open" && this.room.players.length < 4) {
+        this.$store
+          .dispatch("joinRoom", { id: roomId, name: this.username })
+          .then(data => {
+            this.$store.dispatch("fetchRoom");
+            this.$router.push(`/lobby/${roomId}`);
+            socket.emit("join-room", {
+              id: roomId,
+              msg: `${this.username} is now connected`
+            });
+          })
+          .catch(err => {
+            console.log(err);
           });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      } else {
+        console.error("room sudah closed");
+      }
     },
     deleteRoom(roomId) {
       axios({
@@ -113,27 +118,27 @@ export default {
     socket.on("joinRoom", data => {
       console.log("join-room triggered");
       // if (data.id === this.$route.params.room) {
-      //   this.$store.dispatch("fetchRoom");
+      this.$store.dispatch("fetchRoom");
       //   this.newUser = data.msg;
-      //   this.$store
-      //     .dispatch("fetchRoomId", { id: data.id })
-      //     .then(data => {
-      //       if (data.room.players.length === 3) {
-      //         socket.emit("play-game", {
-      //           id: data.room._id,
-      //           msg: "game start"
-      //         });
-      //         this.$router.push(`/editor/${this.$route.params.room}`);
-      //       }
-      //     })
-      //     .catch(err => {
-      //       console.log(err);
-      //     });
+      this.$store
+        .dispatch("fetchRoomId", { id: data.id })
+        .then(data => {
+          if (data.room.players.length === 4) {
+            socket.emit("play-game", {
+              id: data.room._id,
+              msg: "game start"
+            });
+            this.$router.push(`/editor/${data.room._id}`);
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       //   setTimeout(() => {
       //     this.newUser = "";
       //   }, 2000);
       // } else {
-      this.$store.dispatch("fetchRoomId", { id: data.id });
+      // this.$store.dispatch("fetchRoomId", { id: data.id });
       // }
     });
   }

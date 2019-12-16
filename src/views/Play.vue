@@ -107,31 +107,55 @@ export default {
     setUserSolution(userSolution) {
       this.userSolution = userSolution;
     },
-    submitSolution() {
-      this.$store
-        .dispatch("parsingData", this.userSolution)
-        .then(({ data }) => {
-          console.log(data);
-          return axios({
-            method: "delete",
-            url: `/rooms/success/${this.$route.params.room}`,
-            headers: {
-              token: localStorage.getItem("token")
-            }
-          });
-        })
-        .then(() => {
-          console.log("nice");
-        })
-        .catch(err => {
-          console.log(err);
+    async submitSolution() {
+      // console.log("ini solution nya ya", this.userSolution);
+      let obj = {
+        code: this.userSolution,
+        challenge: this.room.challenge
+      };
+      const { data } = await this.$store.dispatch("parsingData", obj);
+      if (data.input) {
+        const response = await axios({
+          method: "delete",
+          url: `/rooms/success/${this.$route.params.room}`,
+          headers: {
+            token: localStorage.getItem("token")
+          }
         });
-      this.$store.commit("SET_WINNER", localStorage.getItem("id"));
-      socket.emit("remove-room");
-      socket.emit("success-challenge", {
-        id: localStorage.getItem("id"),
-        room: this.$route.params.room
-      });
+        this.$store.commit("SET_WINNER", localStorage.getItem("id"));
+        socket.emit("remove-room");
+        socket.emit("success-challenge", {
+          id: localStorage.getItem("id"),
+          room: this.$route.params.room
+        });
+      } else {
+        console.log("salah nih");
+      }
+      // .then(({ data }) => {
+      //   if (data.input) {
+      //     return axios({
+      //       method: "delete",
+      //       url: `/rooms/success/${this.$route.params.room}`,
+      //       headers: {
+      //         token: localStorage.getItem("token")
+      //       }
+      //     });
+      //   } else {
+      //     console.log("ini salah ya");
+      //   }
+      // })
+      // .then(() => {
+      //   console.log("nice");
+      // })
+      // .catch(err => {
+      //   console.log(err);
+      // });
+      // this.$store.commit("SET_WINNER", localStorage.getItem("id"));
+      // socket.emit("remove-room");
+      // socket.emit("success-challenge", {
+      //   id: localStorage.getItem("id"),
+      //   room: this.$route.params.room
+      // });
       // this.$store
       //   .dispatch("parsingData", this.userSolution)
       //   .then(({ data }) => {
@@ -162,6 +186,7 @@ export default {
     }
   },
   created() {
+    this.$store.dispatch("fetchRoom");
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
     socket.emit("in-game");
     socket.on("inGame", msg => {
@@ -169,10 +194,10 @@ export default {
     });
 
     socket.on("remove-room", () => {
+      socket.emit("getRoom", this.$store.state.oneRoom);
       this.$store.dispatch("fetchRoom");
     });
     socket.on("successChallenge", id => {
-      // socket.emit("winner-page", { id });
       this.$router.push(`/result/${this.$route.params.room}`);
     });
   }
