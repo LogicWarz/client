@@ -22,7 +22,7 @@
       </v-col>
       <v-col cols="12" sm="8" style="padding: 0">
         <v-row style="height: 50vh;">
-          <Editor @setUserSolution="setUserSolution"></Editor>
+          <Editor :skeletonCode="room.challenge.skeletonCode" @setUserSolution="setUserSolution"></Editor>
         </v-row>
         <v-row>
           <v-row style="height: 10vh;">
