@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import store from '../store'
 
 Vue.use(VueRouter)
 
@@ -8,7 +9,14 @@ const routes = [
   {
     path: '/signin',
     name: 'signin',
-    component: () => import(/* webpackChunkName: "signin" */ '../views/Auth.vue')
+    component: () => import(/* webpackChunkName: "signin" */ '../views/Auth.vue'),
+    beforeEnter: (to, from, next) => {
+      if (!localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/')
+      }
+    }
   },
   {
     path: '/play/:room',
@@ -64,7 +72,7 @@ const routes = [
     name: 'editchallenge',
     component: () => import(/* webpackChunkName: "editchallenge" */ '../views/EditChallenge.vue'),
     beforeEnter: (to, from, next) => {
-      if (localStorage.getItem('token')) {
+      if (localStorage.getItem('token') && store.state.user.admin) {
         next()
       } else {
         next('/signin')

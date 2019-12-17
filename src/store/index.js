@@ -31,7 +31,8 @@ export default new Vuex.Store({
     answer_detail: {},
     challenge_detail: {},
     alert: false,
-    alertMessage: ''
+    alertMessage: '',
+    loading: false
   },
   mutations: {
     SET_WINNER (state, payload) {
@@ -96,13 +97,18 @@ export default new Vuex.Store({
     },
     SET_ALERT_MESSAGE (state, payload) {
       state.alertMessage = payload
+    },
+    SET_LOADING(state, payload) {
+      state.loading = payload
     }
   },
   actions: {
-    register ({ commit }, payload) {
+    register({ commit }, payload) {
+      commit('SET_LOADING', true)
       axios.post('/users/signup', payload)
         .then(({ data }) => {
           // console.log(data)
+          commit('SET_LOADING', false)
           localStorage.setItem('token', data.token)
           commit('SET_USER', data.user_data)
           localStorage.setItem('id', data.user_data._id)
@@ -114,17 +120,19 @@ export default new Vuex.Store({
         })
         .catch(err => {
           console.log(err)
+          commit('SET_LOADING', false)
           err.response ? commit('SET_MESSAGE', err.response.data.message.join(', ')) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
     },
-    login ({ commit }, payload) {
+    login({ commit }, payload) {
+      commit('SET_LOADING', true)
       axios.post('/users/signin', payload, {
         headers: {
           token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          // console.log(data)
+          commit('SET_LOADING', false)
           localStorage.setItem('token', data.token)
           commit('SET_USER', data.user_data)
           localStorage.setItem('id', data.user_data._id)
@@ -135,6 +143,7 @@ export default new Vuex.Store({
           router.push('/')
         })
         .catch(err => {
+          commit('SET_LOADING', false)
           console.log(err.response)
           err.response ? commit('SET_MESSAGE', err.response.data.message) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })

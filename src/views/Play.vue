@@ -87,8 +87,9 @@ export default {
     setUserSolution (userSolution) {
       this.userSolution = userSolution
     },
-    async submitSolution () {
-      console.log('ini room yaaa', this.room)
+    async submitSolution() {
+      console.log("ini room yaaa", this.room);
+      this.$store.commit('SET_LOADING', true)
       // console.log("ini solution nya ya", this.userSolution);
       let obj = {
         code: this.userSolution,
@@ -105,14 +106,16 @@ export default {
           headers: {
             token: localStorage.getItem('token')
           }
-        })
-        this.$store.commit('SET_WINNER', localStorage.getItem('id'))
-        socket.emit('remove-room')
-        socket.emit('success-challenge', {
-          id: localStorage.getItem('id'),
+        });
+        this.$store.commit('SET_LOADING', false)
+        this.$store.commit("SET_WINNER", localStorage.getItem("id"));
+        socket.emit("remove-room");
+        socket.emit("success-challenge", {
+          id: localStorage.getItem("id"),
           room: this.$route.params.room
         })
       } else {
+        this.$store.commit('SET_LOADING', false)
         errorHandler({ data })
       }
       // .then(({ data }) => {

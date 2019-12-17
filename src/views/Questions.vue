@@ -8,6 +8,7 @@
           <h2>All Questions</h2>
           <div style="display:flex; justify-content:space-between;">
             <v-text-field
+              
               solo
               dense
               rounded
@@ -15,6 +16,7 @@
               label="Search question"
               prepend-inner-icon="mdi-magnify"
               style="margin-right:20px"
+              class="bg-white-fade"
             ></v-text-field>
             <v-btn @click="$router.push('/ask')" rounded class="primary-gradient">
               <b>ASK QUESTION</b>

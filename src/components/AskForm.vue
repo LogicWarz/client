@@ -1,5 +1,8 @@
 <template>
   <v-container class="form-container bg-white-fade elevated pa-10">
+    <div class="mb-3">
+      <h3>Add Question</h3>
+    </div>
     <v-text-field
       label="Title"
       dense
@@ -15,7 +18,7 @@
       row-height="25"
       shaped
     ></v-textarea> -->
-    <wysiwyg v-model="description" style="height: 100%; border-color: black; margin-bottom: 20px;" />
+    <wysiwyg v-model="description" style="height: 100%; border-color: #8F8E95; margin-bottom: 20px;" />
     <v-flex xs12>
       <v-combobox multiple
                 v-model="tags"
@@ -75,9 +78,14 @@ export default {
 </script>
 
 <style>
+.tag-input span.chip {
+  background-color: #1976d2;
+  color: rgb(42, 0, 66);
+  font-size: 1em;
+}
 .tag-input span.v-chip {
   background-color: #1976d2;
-  color: #fff;
+  color: rgb(48, 0, 54);
   font-size:1em;
   padding-left:7px;
 }

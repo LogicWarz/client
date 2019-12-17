@@ -5,7 +5,7 @@
       class="bg-white-fade elevated mb-3 navbar"
       dense
     >
-      <v-toolbar-title>CodeRoyale</v-toolbar-title>
+      <v-toolbar-title class="clickable logo-font" @click="$router.push('/')">code_<span style="color: #6C1BE1">royale</span></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
