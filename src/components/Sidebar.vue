@@ -1,11 +1,8 @@
 <template>
     <v-col class="center-item" cols="12" sm="3">
-        <v-card
-            class="mx-auto"
-            max-width="300"
-            tile
+        <v-card class="bg-white-fade"
         >
-            <v-list shaped>
+            <v-list class="bg-white-fade">
                 <v-subheader>MENU LIST</v-subheader>
                     <v-list-item-group color="primary">
                     <v-list-item @click="$router.push('/forum')" >
