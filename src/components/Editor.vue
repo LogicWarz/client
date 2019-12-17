@@ -63,6 +63,9 @@ export default {
       })
     }
   },
+  created() {
+    this.userSolution = this.skeletonCode
+  },
   watch: {
     userSolution () {
       this.$emit('setUserSolution', this.userSolution)
