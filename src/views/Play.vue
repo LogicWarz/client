@@ -42,6 +42,7 @@
             </v-col>
           </v-row>
           <v-row class="scroll" style="background: #ECE9FE; height: 30vh; width: 60vw;">
+            {{time}}
             ddqwdqd
             <br />ddqwdqd
             <br />ddqwdqd
@@ -76,7 +77,8 @@ export default {
   name: "play",
   data() {
     return {
-      userSolution: ""
+      userSolution: "",
+      time: 0
     };
   },
   components: {
@@ -180,6 +182,47 @@ export default {
     }
   },
   created() {
+    if (this.$store.state.oneRoom.level == "beginner") {
+      this.time = 600;
+      const timer = setInterval(() => {
+        this.time -= 1;
+        if (this.time === 0) {
+          socket.emit("success-challenge", {
+            id: null,
+            room: this.$route.params.room
+          });
+          clearInterval(timer);
+        }
+      }, 1000);
+    } else if (this.$store.state.oneRoom.level == "intermediate") {
+      this.time = 1200;
+      const timer = setInterval(() => {
+        this.time -= 1;
+        if (this.time === 0) {
+          socket.emit("success-challenge", {
+            id: null,
+            room: this.$route.params.room
+          });
+          clearInterval(timer);
+        }
+      }, 1000);
+    } else if (this.$store.state.oneRoom.level == "advance") {
+      this.time = 1800;
+      const timer = setInterval(() => {
+        this.time -= 1;
+        if (this.time === 0) {
+          socket.emit("success-challenge", {
+            id: null,
+            room: this.$route.params.room
+          });
+          clearInterval(timer);
+        }
+      }, 1000);
+    }
+    // if (this.$store.state.oneRoom.level == "Beginner") {
+    // console.log(this.$store.state.oneRoom.level, "-------------------");
+    // console.log("sesudah level,-------------------");
+    // }
     this.$store.dispatch("fetchRoom");
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
     socket.emit("in-game");
@@ -192,15 +235,21 @@ export default {
       this.$store.dispatch("fetchRoom");
     });
     socket.on("successChallenge", id => {
-      console.log("listener success");
-      this.$store.commit("SET_WINNER", id);
-      console.log("disini success id", id);
-      console.log("ini adalah room nya", this.room.players);
-      let losers = this.room.players.filter(player => {
-        return player._id != id.id._id;
-      });
-      this.$store.commit("SET_LOSERS", losers);
-      this.$router.push(`/result/${this.$route.params.room}`);
+      console.log("-----==========", id);
+      if (id.id != null) {
+        this.$store.commit("SET_WINNER", id);
+        console.log("disini success id", id);
+        console.log("ini adalah room nya", this.room.players);
+        let losers = this.room.players.filter(player => {
+          return player._id != id.id._id;
+        });
+        this.$store.commit("SET_LOSERS", losers);
+        this.$router.push(`/result/${this.$route.params.room}`);
+      } else {
+        console.log("pemain nya gagal smua");
+        this.$store.commit("SET_LOSERS", this.room.players);
+        this.$router.push(`/result/${this.$route.params.room}`);
+      }
     });
   }
 };
