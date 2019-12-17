@@ -5,8 +5,8 @@
   >
     <v-img
       src="../assets/logo.png"
-      height="60"
-      width="60"
+      height="90"
+      width="90"
       class="m-auto"
     ></v-img>
     <v-alert

@@ -139,9 +139,9 @@ export default {
       this.newUser = data
     })
     this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
-    setTimeout(() => {
-      this.$router.push('/')
-    }, 5000)
+    // setTimeout(() => {
+    //   this.$router.push('/')
+    // }, 5000)
   },
   beforeDestroy () {
     console.log('ini before destroy')

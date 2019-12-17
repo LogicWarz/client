@@ -20,6 +20,7 @@ export default {
       userSolution: ''
     }
   },
+  props: ['skeletonCode'],
   methods: {
     onChange (value) {
       console.log(value)
@@ -62,10 +63,12 @@ export default {
       })
     }
   },
-
   watch: {
     userSolution () {
       this.$emit('setUserSolution', this.userSolution)
+    },
+    skeletonCode() {
+       this.userSolution = this.skeletonCode
     }
   }
 }
