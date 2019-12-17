@@ -18,8 +18,7 @@
         <div>
           <h3 class="mt-4">{{room.challenge.title}}</h3>
         </div>
-        <div v-html="room.challenge.description">
-        </div>
+        <div v-html="room.challenge.description"></div>
       </v-col>
       <v-col cols="12" sm="8" style="padding: 0">
         <v-row style="height: 50vh;">
@@ -66,57 +65,62 @@
 </template>
 
 <script>
-import socket from '../socket/socket'
-import axios from '../../apis/axios'
+import socket from "../socket/socket";
+import axios from "../../apis/axios";
 
 // @ is an alias to /src
-import Editor from '../components/Editor'
-import errorHandler from '../utils/errorHandler'
+import Editor from "../components/Editor";
+import errorHandler from "../utils/errorHandler";
 // console.log(editor.value, 'value')
 export default {
-  name: 'play',
-  data () {
+  name: "play",
+  data() {
     return {
-      userSolution: ''
-    }
+      userSolution: ""
+    };
   },
   components: {
     Editor
   },
   methods: {
-    setUserSolution (userSolution) {
-      this.userSolution = userSolution
+    setUserSolution(userSolution) {
+      this.userSolution = userSolution;
     },
     async submitSolution() {
-      console.log("ini room yaaa", this.room);
-      this.$store.commit('SET_LOADING', true)
-      // console.log("ini solution nya ya", this.userSolution);
+      // console.log("ini room yaaa", this.room);
+      this.$store.commit("SET_LOADING", true);
       let obj = {
         code: this.userSolution,
         challenge: this.room.challenge
-      }
+      };
 
-      console.log('ini challenge yaaa', obj.challenge)
-      const { data } = await this.$store.dispatch('parsingData', obj)
-      console.log('masuk', data.input)
+      // console.log('ini challenge yaaa', obj.challenge)
+      const { data } = await this.$store.dispatch("parsingData", obj);
+      console.log("masuk", data.input);
       if (data.input) {
         const response = await axios({
-          method: 'delete',
+          method: "delete",
           url: `/rooms/success/${this.$route.params.room}`,
           headers: {
-            token: localStorage.getItem('token')
+            token: localStorage.getItem("token")
           }
         });
-        this.$store.commit('SET_LOADING', false)
-        this.$store.commit("SET_WINNER", localStorage.getItem("id"));
+        this.$store.commit("SET_LOADING", false);
+        console.log("ini state user", this.user);
+        this.$store.commit("SET_WINNER", this.user);
+        console.log("ini adalah room nya", this.room.players);
+        let losers = this.room.players.filter(player => {
+          return player._id != this.user._id;
+        });
+        this.$store.commit("SET_LOSERS", losers);
         socket.emit("remove-room");
         socket.emit("success-challenge", {
-          id: localStorage.getItem("id"),
+          id: this.user,
           room: this.$route.params.room
-        })
+        });
       } else {
-        this.$store.commit('SET_LOADING', false)
-        errorHandler({ data })
+        this.$store.commit("SET_LOADING", false);
+        errorHandler({ data });
       }
       // .then(({ data }) => {
       //   if (data.input) {
@@ -168,27 +172,38 @@ export default {
     }
   },
   computed: {
-    room () {
-      return this.$store.state.oneRoom
+    room() {
+      return this.$store.state.oneRoom;
+    },
+    user() {
+      return this.$store.state.user;
     }
   },
-  created () {
-    this.$store.dispatch('fetchRoom')
-    this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
-    socket.emit('in-game')
-    socket.on('inGame', msg => {
-      this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
-    })
+  created() {
+    this.$store.dispatch("fetchRoom");
+    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+    socket.emit("in-game");
+    socket.on("inGame", msg => {
+      this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+    });
 
-    socket.on('remove-room', () => {
-      socket.emit('getRoom', this.$store.state.oneRoom)
-      this.$store.dispatch('fetchRoom')
-    })
-    socket.on('successChallenge', id => {
-      this.$router.push(`/result/${this.$route.params.room}`)
-    })
+    socket.on("remove-room", () => {
+      socket.emit("getRoom", this.$store.state.oneRoom);
+      this.$store.dispatch("fetchRoom");
+    });
+    socket.on("successChallenge", id => {
+      console.log("listener success");
+      this.$store.commit("SET_WINNER", id);
+      console.log("disini success id", id);
+      console.log("ini adalah room nya", this.room.players);
+      let losers = this.room.players.filter(player => {
+        return player._id != id.id._id;
+      });
+      this.$store.commit("SET_LOSERS", losers);
+      this.$router.push(`/result/${this.$route.params.room}`);
+    });
   }
-}
+};
 </script>
 
 <style scoped>
