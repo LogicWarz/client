@@ -34,12 +34,20 @@
         <v-divider class="mt-4"></v-divider>
         <v-container class="answers-container elevated bg-white-fade pa-8 mt-2">
           <div>
+            <h3> Skeleton Code </h3>
+          </div>
+          <v-divider class="mt-4"></v-divider>
+              <code style="width:100%" v-html="challenge_detail.skeletonCode"></code>
+        </v-container>
+        <v-divider class="mt-4"></v-divider>
+        <v-container class="answers-container elevated bg-white-fade pa-8 mt-2">
+          <div>
             <h3>{{challenge_detail.testCase.length}} Test Cases</h3>
           </div>
           <v-divider class="mt-4"></v-divider>
           <v-row v-for="(test, i) in challenge_detail.testCase" :key="i">
             <v-col sm="12">
-              <p v-html="test"></p>
+              <code style="width:100%" v-html="test"></code>
             </v-col>
           </v-row>
         </v-container>

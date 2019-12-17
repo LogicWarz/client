@@ -6,7 +6,7 @@
       label="Level"
       outlined
       dense
-      v-model="level"
+      v-model="difficulty"
     ></v-select>
     <v-text-field
       label="Title"
@@ -24,12 +24,7 @@
       shaped
     ></v-textarea> -->
     <wysiwyg v-model="description" placeholder="Description" style="height: 100%; border-color: #BDBDC3; margin-bottom: 20px;" />
-    <v-select
-      v-model="difficulty"
-      :items="['beginner', 'intermediate', 'advance']"
-      label="Difficulty"
-      outlined
-    ></v-select>
+    
     <MonacoEditor class="editor" v-model="skeleton" language="javascript" />
     <div >
     <MonacoEditor  class="editor" v-model="testCase" language="javascript" />
@@ -48,7 +43,7 @@ export default {
   name: "ChallengeForm",
   data(){
     return {
-      level: "",
+      difficulty: "",
       title: "",
       description: "",
       skeleton: '// Skeleton Code\n\nfunction yourFunctionName (param1,param2){\n    \n}',
@@ -67,7 +62,7 @@ export default {
         description: this.description,
         skeletonCode: this.skeleton,
         testCase: parseTestCase,
-        level: this.level
+        difficulty: this.difficulty
       }
 
       this.$store.dispatch('addChallenge', challenge)
