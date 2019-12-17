@@ -36,7 +36,7 @@
               <v-btn class="bg-white-fade" @click="submitSolution">Run Test Case</v-btn>
             </v-col>
             <v-col cols="12" sm="3">
-              <v-btn color="warning" @click="submitSolution">
+              <v-btn color="warning" @click="submitSolution(room.level)">
                 <b>Submit</b>
               </v-btn>
             </v-col>
@@ -88,7 +88,15 @@ export default {
     setUserSolution(userSolution) {
       this.userSolution = userSolution;
     },
-    async submitSolution() {
+    async submitSolution(level) {
+      let point = 0;
+      if (level == "beginner") {
+        point = 10;
+      } else if (level == "intermediate") {
+        point = 20;
+      } else if (level == "advance") {
+        point = 30;
+      }
       // console.log("ini room yaaa", this.room);
       this.$store.commit("SET_LOADING", true);
       let obj = {
@@ -100,6 +108,16 @@ export default {
       const { data } = await this.$store.dispatch("parsingData", obj);
       console.log("masuk", data.input);
       if (data.input) {
+        const responsePoint = await axios({
+          method: "patch",
+          url: `/users/${localStorage.getItem("id")}`,
+          headers: {
+            token: localStorage.getItem("token")
+          },
+          data: {
+            points: point
+          }
+        });
         const response = await axios({
           method: "delete",
           url: `/rooms/success/${this.$route.params.room}`,
@@ -219,10 +237,6 @@ export default {
         }
       }, 1000);
     }
-    // if (this.$store.state.oneRoom.level == "Beginner") {
-    // console.log(this.$store.state.oneRoom.level, "-------------------");
-    // console.log("sesudah level,-------------------");
-    // }
     this.$store.dispatch("fetchRoom");
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
     socket.emit("in-game");

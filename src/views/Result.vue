@@ -67,7 +67,7 @@
 import io from "socket.io-client";
 import axios from "../../apis/axios";
 import Typed from "typed.js";
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect("http://coderoyale.server.edirates.xyz");
 
 export default {
   name: "Lobby",
@@ -90,22 +90,6 @@ export default {
       return this.$store.state.winner;
     }
   },
-  // watch: {
-  //   newUser() {
-  //     if (this.newUser) {
-  //       if (this.$store.state.winner) {
-  //         this.loser = this.$store.state.oneRoom.players.filter(player => {
-  //           return player._id != this.$store.state.winner;
-  //         });
-  //       } else {
-  //         // console.log("ini new user ======", this.newUser);
-  //         this.loser = this.$store.state.oneRoom.players.filter(player => {
-  //           return player._id != this.newUser._id;
-  //         });
-  //       }
-  //     }
-  //   }
-  // },
   created() {
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
     console.log("ini winner nya ya", this.$store.state.winner);
