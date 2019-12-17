@@ -436,7 +436,7 @@ export default new Vuex.Store({
         data: {
           title: payload.title,
           description: payload.description,
-          skeletonCode: 'payload.skeleton',
+          skeletonCode: payload.skeletonCode,
           testCase: payload.testCase,
           difficulty: payload.difficulty
         },
