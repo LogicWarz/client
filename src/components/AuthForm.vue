@@ -51,8 +51,16 @@
               <b @click="showLogin = false" class="clickable text-primary">Sign Up</b>
             </div>
           </v-col>
-          <v-col style="padding: 2vh">
-            <v-btn type="submit" class="custom-font float-right primary-gradient"><b>SIGN IN</b></v-btn>
+          <v-col style="padding: 2vh; display:flex;">
+            <g-signin-button
+                :params="googleSignInParams"
+                @success="onSignInSuccess"
+                @error="onSignInError"
+            >
+                <v-icon style="color:white; margin-right:5px;">mdi-google</v-icon>
+                SIGN
+            </g-signin-button>
+            <v-btn type="submit" class="custom-font float-right primary-gradient" style="height:45px;"><b>SIGN IN</b></v-btn>
           </v-col>
         </v-row>
       </Form>
@@ -116,7 +124,10 @@ export default {
       emailReg: '',
       passReg: '',
       emailLog: '',
-      passLog: ''
+      passLog: '',
+      googleSignInParams: {
+        client_id: '275391644898-thtmag7ptunudskuqijmmpj6mnahphr2.apps.googleusercontent.com',
+      },
     }
   },
   computed: {
@@ -137,7 +148,29 @@ export default {
         password: this.passLog
       }
       this.$store.dispatch('login', payload)
-    }
+    },
+    onSignInSuccess(googleUser) {
+      const profile = googleUser.getBasicProfile();
+      const { id_token } = googleUser.getAuthResponse();
+      this.$store.dispatch('glogin', { idToken: id_token })
+        .then(({data}) => {
+          localStorage.setItem('token', data.token)
+          localStorage.setItem('id', data.user_data._id)
+          localStorage.setItem('name', data.user_data.name)
+          localStorage.setItem('email', data.user_data.email)
+          this.$store.commit('SET_LOADING', false)
+          this.$store.commit('SET_USER', data.user_data)
+          this.$store.commit('SET_IS_LOGIN', true)
+          this.$store.commit('SET_MESSAGE', '')
+          this.$router.push('/')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    onSignInError(error) {
+      console.log(error);
+    },
   }
 }
 </script>
@@ -145,5 +178,17 @@ export default {
 <style>
 .form-container {
   padding: 5vh;
+}
+.g-signin-button {
+  float: right;
+  font-family: 'Montserrat', sans-serif !important;
+  color: #f1f1f1 !important;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 5px;
+  background: #8E2DE2;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #4A00E0, #8E2DE2);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #4A00E0, #8E2DE2); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 </style>

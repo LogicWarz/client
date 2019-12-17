@@ -8,8 +8,10 @@ import VueTypedJs from 'vue-typed-js'
 import VueConfetti from 'vue-confetti'
 import wysiwyg from 'vue-wysiwyg'
 import VuetifyToast from 'vuetify-toast-snackbar'
+import GSignInButton from 'vue-google-signin-button';
 Vue.use(VueTypedJs)
 Vue.use(VueConfetti)
+Vue.use(GSignInButton);
 Vue.use(wysiwyg, {
   maxHeight: '500px'
 })
