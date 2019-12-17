@@ -9,9 +9,9 @@
     </div>-->
     <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
-    <div>{{loser}}</div>
+    <!-- <div>{{loser}}</div>
     <hr />
-    <div>{{winner}}</div>
+    <div>{{winner}}</div> -->
     <div class="center-item mt-2 mb-5">
       <v-btn text @click="$router.push('/')" rounded class="primary-gradient">
         <b>BACK TO ROOM LIST</b>
@@ -26,60 +26,27 @@
           <v-row>
             <v-col>
               <div>
-                <v-avatar size="150">
-                  <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+                <v-avatar size="150" class="primary-gradient">
+                  <span v-if="winner.id.name" class="white--text" style="font-size: 5rem; font-weight: bold">{{winner.id.name.substring(0, 1).toUpperCase()}}</span>
                 </v-avatar>
               </div>
-              <div class="mt-3">John Watts</div>
+              <div class="mt-3">{{winner.id.name}}</div>
             </v-col>
           </v-row>
           <v-row>
-            <v-col v-for="n in 3" :key="n" sm="4">
-              <v-avatar>
-                <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+            <v-col v-for="player in loser" :key="player._id" sm="4">
+              <v-avatar color="white">
+                <span><b>{{player.name.substring(0, 1).toUpperCase()}}</b></span>
               </v-avatar>
               <div class="mt-3">
-                <small>John Watts</small>
+                <small>{{ player.name }}</small>
               </div>
-            </v-col>
-          </v-row>
-          <v-row
-            v-for="player in listPlayer.players"
-            :key="player._id"
-            justify="center"
-            align="center"
-          >
-            <v-col sm="2">
-              <v-badge color="orange">
-                <template v-slot:badge>
-                  <b>
-                    <small>{{player.points}}</small>
-                  </b>
-                </template>
-                <v-avatar>
-                  <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
-                </v-avatar>
-              </v-badge>
-            </v-col>
-            <v-col>
-              <span class="ml-3" style="color: grey">
-                <b>{{ player.name }}</b>
-              </span>
-            </v-col>
-            <v-col sm="3">
-              <v-chip class="ma-2" color="green" text-color="white">
-                Beginner
-                <v-icon right>mdi-star</v-icon>
-              </v-chip>
-            </v-col>
-            <v-col sm="2">
-              <v-img src="../assets/beginner.png" max-height="70px" max-width="70px"></v-img>
             </v-col>
           </v-row>
         </v-col>
         <v-col sm="6">
           <div>
-            <vue-typed-js :strings="['Player name wins!']">
+            <vue-typed-js :strings="[`${winner.id.name} wins!`]">
               <h3 style="margin: auto;" class="typing"></h3>
             </vue-typed-js>
             <v-img style="margin: auto;" src="../assets/win.gif" max-height="50vh" max-width="50vh"></v-img>
@@ -153,9 +120,9 @@ export default {
       console.log("ini dia ====", data);
       this.newUser = data;
     });
-    // setTimeout(() => {
-    //   this.$router.push("/");
-    // }, 5000);
+    setTimeout(() => {
+      this.$router.push("/");
+    }, 5000);
   },
   beforeDestroy() {
     console.log("ini before destroy");

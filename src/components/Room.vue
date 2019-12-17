@@ -6,6 +6,7 @@
       opacity="0.5"
       :style="hover? 'opacity: 1;' : 'opacity: 0.9'"
       shaped
+      @click="joinRoom(room._id, room.status)"
     >
       <v-list-item three-line>
         <v-list-item-content>
@@ -35,7 +36,6 @@
             >{{ room.level }}</v-chip>-->
           </div>
           <v-list-item-title
-            @click="joinRoom(room._id, room.status)"
             class="headline mb-1"
           >{{ room.title }}</v-list-item-title>
           <v-list-item-subtitle>
