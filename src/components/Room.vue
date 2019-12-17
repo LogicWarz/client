@@ -68,82 +68,82 @@
 </template>
 
 <script>
-import axios from "../../apis/axios";
-import socket from "../socket/socket";
+import axios from '../../apis/axios'
+import socket from '../socket/socket'
 import errorHandler from '../utils/errorHandler'
 
 export default {
-  name: "Room",
-  props: ["room"],
-  data() {
+  name: 'Room',
+  props: ['room'],
+  data () {
     return {
-      username: "satyo"
-    };
+      username: 'satyo'
+    }
   },
   methods: {
-    joinRoom(roomId, status) {
-      console.log(status);
-      if (status === "open" && this.room.players.length < 4) {
+    joinRoom (roomId, status) {
+      console.log(status)
+      if (status === 'open' && this.room.players.length < 4) {
         this.$store
-          .dispatch("joinRoom", { id: roomId, name: this.username })
+          .dispatch('joinRoom', { id: roomId, name: this.username })
           .then(data => {
-            this.$store.dispatch("fetchRoom");
-            this.$router.push(`/lobby/${roomId}`);
-            socket.emit("join-room", {
+            this.$store.dispatch('fetchRoom')
+            this.$router.push(`/lobby/${roomId}`)
+            socket.emit('join-room', {
               id: roomId,
               msg: `${this.username} is now connected`
-            });
+            })
           })
           .catch(err => {
-            console.log(err);
-          });
+            console.log(err)
+          })
       } else {
-        console.error("room sudah closed");
+        console.error('room sudah closed')
       }
     },
-    deleteRoom(roomId) {
+    deleteRoom (roomId) {
       axios({
-        method: "delete",
+        method: 'delete',
         url: `/rooms/${roomId}`,
         headers: {
-          token: localStorage.getItem("token")
+          token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          socket.emit("remove-room");
+          socket.emit('remove-room')
         })
-        .catch(errorHandler);
+        .catch(errorHandler)
     }
   },
-  created() {
-    socket.on("joinRoom", data => {
-      console.log("join-room triggered");
+  created () {
+    socket.on('joinRoom', data => {
+      console.log('join-room triggered')
       // if (data.id === this.$route.params.room) {
-      this.$store.dispatch("fetchRoom");
+      this.$store.dispatch('fetchRoom')
       //   this.newUser = data.msg;
       this.$store
-        .dispatch("fetchRoomId", { id: data.id })
+        .dispatch('fetchRoomId', { id: data.id })
         .then(data => {
           if (data.room.players.length === 4) {
-            socket.emit("play-game", {
+            socket.emit('play-game', {
               id: data.room._id,
-              msg: "game start"
-            });
-            this.$router.push(`/editor/${data.room._id}`);
+              msg: 'game start'
+            })
+            this.$router.push(`/editor/${data.room._id}`)
           }
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
       //   setTimeout(() => {
       //     this.newUser = "";
       //   }, 2000);
       // } else {
       // this.$store.dispatch("fetchRoomId", { id: data.id });
       // }
-    });
+    })
   }
-};
+}
 </script>
 <style scoped>
 .room {

@@ -69,7 +69,7 @@ export default {
     console.log(this.$router.history.current.fullPath)
   },
   watch: {
-    $route (to, from){
+    $route (to, from) {
       this.showNavbar = !(to.fullPath.includes('lobby') || to.fullPath.includes('play') || to.fullPath.includes('result'))
     }
   }

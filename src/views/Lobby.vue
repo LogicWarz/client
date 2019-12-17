@@ -114,26 +114,26 @@ import Typed from "typed.js";
 import { mapState } from 'vuex';
 
 export default {
-  name: "Lobby",
-  data() {
+  name: 'Lobby',
+  data () {
     return {
-      newUser: "",
+      newUser: '',
       player: []
-    };
+    }
   },
   methods: {
     playGame(id) {
       this.$store.commit('SET_LOADING', true)
       axios({
-        method: "patch",
+        method: 'patch',
         url: `/rooms/play/${id}`,
         headers: {
-          token: localStorage.getItem("token")
+          token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
           // this.$store.commit("SET_INGAME_PLAYERS", data.room.players);
-          return this.$store.dispatch("fetchRoomId", { id: data.room._id });
+          return this.$store.dispatch('fetchRoomId', { id: data.room._id })
         })
         .then(() => {
           this.$store.commit('SET_LOADING', false)
@@ -151,16 +151,16 @@ export default {
       let isAlone = false;
       this.$store.commit('SET_LOADING', true)
       if (this.listPlayer.players.length == 1) {
-        isAlone = true;
+        isAlone = true
       }
       axios({
-        method: "patch",
+        method: 'patch',
         url: `/rooms/leave/${id}`,
         data: {
-          player: "testQueen"
+          player: 'testQueen'
         },
         headers: {
-          token: localStorage.getItem("token")
+          token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
@@ -169,22 +169,22 @@ export default {
             this.$store.commit('SET_LOADING', false)
             this.$router.push("/");
           } else {
-            return this.$store.dispatch("fetchRoomId", { id: data.room._id });
+            return this.$store.dispatch('fetchRoomId', { id: data.room._id })
           }
         })
         .then(() => {
           this.$store.commit('SET_LOADING', false)
           if (isAlone) {
-            socket.emit("room-gone", { id });
+            socket.emit('room-gone', { id })
           }
           if (!isAlone) {
-            socket.emit("leave-room", { id, msg: "testQueen is disconnected" });
-            this.$router.push("/");
+            socket.emit('leave-room', { id, msg: 'testQueen is disconnected' })
+            this.$router.push('/')
           }
         })
         .catch(({ response }) => {
-          console.log(response);
-        });
+          console.log(response)
+        })
     }
   },
   computed: {
@@ -193,58 +193,58 @@ export default {
     },
     ...mapState(['user'])
   },
-  beforeCreate() {
-    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+  beforeCreate () {
+    this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
 
-    socket.on("joinRoom", data => {
+    socket.on('joinRoom', data => {
       // console.log("join-room triggered");
       if (data.id === this.$route.params.room) {
-        this.$store.dispatch("fetchRoom");
-        this.newUser = data.msg;
+        this.$store.dispatch('fetchRoom')
+        this.newUser = data.msg
         this.$store
-          .dispatch("fetchRoomId", { id: data.id })
+          .dispatch('fetchRoomId', { id: data.id })
           .then(data => {
             if (data.room.players.length === 3) {
-              socket.emit("play-game", {
+              socket.emit('play-game', {
                 id: data.room._id,
-                msg: "game start"
-              });
-              this.$router.push(`/play/${this.$route.params.room}`);
+                msg: 'game start'
+              })
+              this.$router.push(`/play/${this.$route.params.room}`)
             }
           })
           .catch(err => {
-            console.log(err);
-          });
+            console.log(err)
+          })
         setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
+          this.newUser = ''
+        }, 2000)
       } else {
-        this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+        this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
       }
-    });
+    })
 
-    socket.on("leaveRoom", data => {
+    socket.on('leaveRoom', data => {
       // console.log("masuk listener");
-      this.$store.dispatch("fetchRoom");
+      this.$store.dispatch('fetchRoom')
       if (data.id === this.$route.params.id) {
-        this.newUser = data.msg;
-        this.$store.dispatch("fetchRoomId", { id: data.id });
+        this.newUser = data.msg
+        this.$store.dispatch('fetchRoomId', { id: data.id })
         setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
+          this.newUser = ''
+        }, 2000)
       } else {
-        this.$store.dispatch("fetchRoomId", { id: data.id });
+        this.$store.dispatch('fetchRoomId', { id: data.id })
       }
-    });
+    })
 
-    socket.on("playGame", data => {
+    socket.on('playGame', data => {
       // console.log("ini listener play game");
-      this.$store.dispatch("fetchRoom");
-      this.$store.dispatch("fetchRoomId", { id: data.id });
-      this.$router.push(`/play/${this.$route.params.room}`);
-    });
+      this.$store.dispatch('fetchRoom')
+      this.$store.dispatch('fetchRoomId', { id: data.id })
+      this.$router.push(`/play/${this.$route.params.room}`)
+    })
   }
-};
+}
 </script>
 
 <style>

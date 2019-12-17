@@ -5,7 +5,8 @@
         <h3>{{question.title}}</h3>
       </div>
       <div @click="$router.push(`question/${question._id}`)" class="clickable">
-        <small style="color: grey" v-html="question.description"></small>
+        <small v-if="question.description.length > 50" style="color: grey" v-trim v-html="question.description"></small>
+        <small v-else style="color: grey" v-html="question.description"></small>
       </div>
       <div>
         <v-chip small class="mt-2 mr-1" v-for="(tag,i) in question.tags" :key="i" >{{tag}}</v-chip>
@@ -64,8 +65,8 @@ export default {
   name: 'question',
   props: ['question'],
   methods: {
-    formatDate(date) {
-      return moment(new Date(date)).fromNow();
+    formatDate (date) {
+      return moment(new Date(date)).fromNow()
     }
   }
 }

@@ -45,26 +45,26 @@ export default {
     }
   },
   methods: {
-    getMyAnswers() {
+    getMyAnswers () {
       this.$store.dispatch('getMyAnswers')
         .then((response) => {
-          this.$store.commit('SET_MY_ANSWERS', response.data);
+          this.$store.commit('SET_MY_ANSWERS', response.data)
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
-    },
+        })
+    }
   },
   created () {
-    this.getMyAnswers();
+    this.getMyAnswers()
   },
   computed: {
     ...mapState(['my_answers']),
-    filteredAnswers() {
+    filteredAnswers () {
       return this.my_answers.filter((el) => {
-        return el.QuestionId.title.toLowerCase().includes(this.search.toLowerCase());
-      });
+        return el.QuestionId.title.toLowerCase().includes(this.search.toLowerCase())
+      })
     }
   }
 }
