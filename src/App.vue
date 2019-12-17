@@ -15,6 +15,26 @@
     >
       {{alertMessage}}
     </v-snackbar>
+    <v-dialog
+      v-model="loading"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        class="primary-gradient"
+        dark
+      >
+        <v-card-text>
+          Please stand by
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -32,7 +52,7 @@ export default {
     showNavbar: true
   }),
   computed: {
-    ...mapState(['alert', 'alertMessage'])
+    ...mapState(['alert', 'alertMessage', 'loading'])
   },
   created () {
     if (localStorage.getItem('token')) {
@@ -59,6 +79,7 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Russo+One&display=swap');
 
 .app {
   background: rgb(254,254,255) !important;
@@ -135,5 +156,8 @@ background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, F
   background: #1A2980;  /* fallback for old browsers */
 background: -webkit-linear-gradient(to right, #26D0CE, #1A2980);  /* Chrome 10-25, Safari 5.1-6 */
 background: linear-gradient(to right, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+.logo-font {
+  font-family: 'Russo One', sans-serif;
 }
 </style>

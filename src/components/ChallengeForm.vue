@@ -1,6 +1,13 @@
 <template>
   <v-container class="form-container bg-white-fade elevated pa-10">
     <h3 class="mb-5">Add Challenge</h3>
+    <v-select
+      :items="['beginner', 'intermediate', 'advance']"
+      label="Level"
+      outlined
+      dense
+      v-model="level"
+    ></v-select>
     <v-text-field
       label="Title"
       dense
@@ -32,9 +39,10 @@
 import MonacoEditor from "vue-monaco";
 
 export default {
-  name: "askForm",
+  name: "ChallengeForm",
   data(){
     return {
+      level: "",
       title: "",
       description: "",
       skeleton: '// Skeleton Code\n\nfunction yourFunctionName (param1,param2){\n    \n}',

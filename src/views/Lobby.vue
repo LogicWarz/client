@@ -14,7 +14,7 @@
       <v-btn
         text
         @click="playGame(listPlayer._id)"
-        v-if="listPlayer.players.length >= 2"
+        v-if="listPlayer.players.length >= 2 && user._id === listPlayer.players[0]._id"
         rounded
         class="primary-gradient"
       >
@@ -61,8 +61,8 @@
                     <small>{{player.points}}</small>
                   </b>
                 </template>
-                <v-avatar>
-                  <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+                <v-avatar class="primary-gradient" style="font-size: 2rem">
+                  <span><b>{{player.name.substring(0, 1).toUpperCase()}}</b></span>
                 </v-avatar>
               </v-badge>
             </v-col>
@@ -111,6 +111,7 @@ import axios from "../../apis/axios";
 import io from "socket.io-client";
 import socket from "../socket/socket";
 import Typed from "typed.js";
+import { mapState } from 'vuex';
 
 export default {
   name: "Lobby",
@@ -122,6 +123,7 @@ export default {
   },
   methods: {
     playGame(id) {
+      this.$store.commit('SET_LOADING', true)
       axios({
         method: "patch",
         url: `/rooms/play/${id}`,
@@ -134,17 +136,20 @@ export default {
           return this.$store.dispatch("fetchRoomId", { id: data.room._id });
         })
         .then(() => {
+          this.$store.commit('SET_LOADING', false)
           socket.emit("play-game", { id, msg: "game start" });
           socket.emit("room-closed");
           this.$store.dispatch("fetchRoom");
           this.$router.push(`/play/${this.$route.params.room}`);
         })
         .catch(({ response }) => {
+          this.$store.commit('SET_LOADING', false)
           console.log(response);
         });
     },
     leaveRoom(id) {
       let isAlone = false;
+      this.$store.commit('SET_LOADING', true)
       if (this.listPlayer.players.length == 1) {
         isAlone = true;
       }
@@ -161,12 +166,14 @@ export default {
         .then(({ data }) => {
           if (isAlone) {
             // socket.emit("leave-room", { id, msg: "testQueen is disconnected" });
+            this.$store.commit('SET_LOADING', false)
             this.$router.push("/");
           } else {
             return this.$store.dispatch("fetchRoomId", { id: data.room._id });
           }
         })
         .then(() => {
+          this.$store.commit('SET_LOADING', false)
           if (isAlone) {
             socket.emit("room-gone", { id });
           }
@@ -183,7 +190,8 @@ export default {
   computed: {
     listPlayer() {
       return this.$store.state.oneRoom;
-    }
+    },
+    ...mapState(['user'])
   },
   beforeCreate() {
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });

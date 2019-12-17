@@ -89,6 +89,7 @@ export default {
     },
     async submitSolution() {
       console.log("ini room yaaa", this.room);
+      this.$store.commit('SET_LOADING', true)
       // console.log("ini solution nya ya", this.userSolution);
       let obj = {
         code: this.userSolution,
@@ -106,6 +107,7 @@ export default {
             token: localStorage.getItem("token")
           }
         });
+        this.$store.commit('SET_LOADING', false)
         this.$store.commit("SET_WINNER", localStorage.getItem("id"));
         socket.emit("remove-room");
         socket.emit("success-challenge", {
@@ -113,6 +115,7 @@ export default {
           room: this.$route.params.room
         });
       } else {
+        this.$store.commit('SET_LOADING', false)
         errorHandler({ data })
       }
       // .then(({ data }) => {

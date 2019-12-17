@@ -4,11 +4,11 @@
       class="bg-white-fade elevated mb-3 navbar"
       dense
     >
-      <v-toolbar-title class="clickable" @click="$router.push('/')">CodeRoyale</v-toolbar-title>
+      <v-toolbar-title class="clickable logo-font" @click="$router.push('/')">code_<span style="color: #6C1BE1">royale</span></v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn @click="$router.push('/challenges')" v-if="isLogin" icon>
+      <v-btn @click="$router.push('/challenges')" v-if="isLogin && user.admin" icon>
         <v-icon>mdi-settings</v-icon>
       </v-btn>
 
@@ -16,8 +16,8 @@
         <v-icon>mdi-comment</v-icon>
       </v-btn>
 
-      <v-btn icon>
-        <v-icon v-if="isLogin" @click="logout">mdi-logout</v-icon>
+      <v-btn v-if="isLogin" @click="logout" icon>
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
   </div>
@@ -28,7 +28,7 @@ import { mapState } from 'vuex'
 export default {
   name: 'Navbar',
   computed: {
-    ...mapState(['isLogin'])
+    ...mapState(['isLogin', 'user'])
   },
   methods: {
     logout () {
@@ -37,6 +37,9 @@ export default {
       this.$store.commit('SET_USER', {})
       this.$router.push('/signin')
     }
+  },
+  created() {
+    console.log(this.user.admin, 'ya')
   }
 }
 

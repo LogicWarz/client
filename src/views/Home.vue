@@ -147,6 +147,7 @@ export default {
   },
   methods: {
     createRoom(level) {
+      this.$store.commit('SET_LOADING', true)
       this.$store
         .dispatch("createRoom", {
           title: this.roomName,
@@ -154,6 +155,7 @@ export default {
           player: this.name
         })
         .then(room => {
+          this.$store.commit('SET_LOADING', false)
           console.log("ini room dengan challenge", room);
           socket.emit("getRoom", room);
           this.$store.dispatch("fetchRoomId", { id: room._id });
@@ -161,6 +163,7 @@ export default {
           this.roomName = "";
         })
         .catch(err => {
+          this.$store.commit('SET_LOADING', false)
           console.log(err.data);
           err.data
             ? this.$store.commit("SET_MESSAGE", err.data.message)
