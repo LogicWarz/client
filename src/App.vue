@@ -80,6 +80,7 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Courier+Prime&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Russo+One&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap');
 
 .app {
   background: rgb(254,254,255) !important;
@@ -159,5 +160,8 @@ background: linear-gradient(to right, #26D0CE, #1A2980); /* W3C, IE 10+/ Edge, F
 }
 .logo-font {
   font-family: 'Russo One', sans-serif;
+}
+.console-font {
+  font-family: 'Source Code Pro', monospace;
 }
 </style>
