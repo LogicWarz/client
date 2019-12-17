@@ -107,136 +107,136 @@
 </template>
 
 <script>
-import axios from "../../apis/axios";
-import io from "socket.io-client";
-import socket from "../socket/socket";
-import Typed from "typed.js";
+import axios from '../../apis/axios'
+import io from 'socket.io-client'
+import socket from '../socket/socket'
+import Typed from 'typed.js'
 
 export default {
-  name: "Lobby",
-  data() {
+  name: 'Lobby',
+  data () {
     return {
-      newUser: "",
+      newUser: '',
       player: []
-    };
+    }
   },
   methods: {
-    playGame(id) {
+    playGame (id) {
       axios({
-        method: "patch",
+        method: 'patch',
         url: `/rooms/play/${id}`,
         headers: {
-          token: localStorage.getItem("token")
+          token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
           // this.$store.commit("SET_INGAME_PLAYERS", data.room.players);
-          return this.$store.dispatch("fetchRoomId", { id: data.room._id });
+          return this.$store.dispatch('fetchRoomId', { id: data.room._id })
         })
         .then(() => {
-          socket.emit("play-game", { id, msg: "game start" });
-          socket.emit("room-closed");
-          this.$store.dispatch("fetchRoom");
-          this.$router.push(`/play/${this.$route.params.room}`);
+          socket.emit('play-game', { id, msg: 'game start' })
+          socket.emit('room-closed')
+          this.$store.dispatch('fetchRoom')
+          this.$router.push(`/play/${this.$route.params.room}`)
         })
         .catch(({ response }) => {
-          console.log(response);
-        });
+          console.log(response)
+        })
     },
-    leaveRoom(id) {
-      let isAlone = false;
+    leaveRoom (id) {
+      let isAlone = false
       if (this.listPlayer.players.length == 1) {
-        isAlone = true;
+        isAlone = true
       }
       axios({
-        method: "patch",
+        method: 'patch',
         url: `/rooms/leave/${id}`,
         data: {
-          player: "testQueen"
+          player: 'testQueen'
         },
         headers: {
-          token: localStorage.getItem("token")
+          token: localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
           if (isAlone) {
             // socket.emit("leave-room", { id, msg: "testQueen is disconnected" });
-            this.$router.push("/");
+            this.$router.push('/')
           } else {
-            return this.$store.dispatch("fetchRoomId", { id: data.room._id });
+            return this.$store.dispatch('fetchRoomId', { id: data.room._id })
           }
         })
         .then(() => {
           if (isAlone) {
-            socket.emit("room-gone", { id });
+            socket.emit('room-gone', { id })
           }
           if (!isAlone) {
-            socket.emit("leave-room", { id, msg: "testQueen is disconnected" });
-            this.$router.push("/");
+            socket.emit('leave-room', { id, msg: 'testQueen is disconnected' })
+            this.$router.push('/')
           }
         })
         .catch(({ response }) => {
-          console.log(response);
-        });
+          console.log(response)
+        })
     }
   },
   computed: {
-    listPlayer() {
-      return this.$store.state.oneRoom;
+    listPlayer () {
+      return this.$store.state.oneRoom
     }
   },
-  beforeCreate() {
-    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+  beforeCreate () {
+    this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
 
-    socket.on("joinRoom", data => {
+    socket.on('joinRoom', data => {
       // console.log("join-room triggered");
       if (data.id === this.$route.params.room) {
-        this.$store.dispatch("fetchRoom");
-        this.newUser = data.msg;
+        this.$store.dispatch('fetchRoom')
+        this.newUser = data.msg
         this.$store
-          .dispatch("fetchRoomId", { id: data.id })
+          .dispatch('fetchRoomId', { id: data.id })
           .then(data => {
             if (data.room.players.length === 3) {
-              socket.emit("play-game", {
+              socket.emit('play-game', {
                 id: data.room._id,
-                msg: "game start"
-              });
-              this.$router.push(`/play/${this.$route.params.room}`);
+                msg: 'game start'
+              })
+              this.$router.push(`/play/${this.$route.params.room}`)
             }
           })
           .catch(err => {
-            console.log(err);
-          });
+            console.log(err)
+          })
         setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
+          this.newUser = ''
+        }, 2000)
       } else {
-        this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+        this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
       }
-    });
+    })
 
-    socket.on("leaveRoom", data => {
+    socket.on('leaveRoom', data => {
       // console.log("masuk listener");
-      this.$store.dispatch("fetchRoom");
+      this.$store.dispatch('fetchRoom')
       if (data.id === this.$route.params.id) {
-        this.newUser = data.msg;
-        this.$store.dispatch("fetchRoomId", { id: data.id });
+        this.newUser = data.msg
+        this.$store.dispatch('fetchRoomId', { id: data.id })
         setTimeout(() => {
-          this.newUser = "";
-        }, 2000);
+          this.newUser = ''
+        }, 2000)
       } else {
-        this.$store.dispatch("fetchRoomId", { id: data.id });
+        this.$store.dispatch('fetchRoomId', { id: data.id })
       }
-    });
+    })
 
-    socket.on("playGame", data => {
+    socket.on('playGame', data => {
       // console.log("ini listener play game");
-      this.$store.dispatch("fetchRoom");
-      this.$store.dispatch("fetchRoomId", { id: data.id });
-      this.$router.push(`/play/${this.$route.params.room}`);
-    });
+      this.$store.dispatch('fetchRoom')
+      this.$store.dispatch('fetchRoomId', { id: data.id })
+      this.$router.push(`/play/${this.$route.params.room}`)
+    })
   }
-};
+}
 </script>
 
 <style>

@@ -1,15 +1,15 @@
 <template>
   <v-container>
-    <ChallengeForm></ChallengeForm>
+    <EditChallengeForm></EditChallengeForm>
   </v-container>
 </template>
 
 <script>
-import ChallengeForm from '../components/ChallengeForm'
+import EditChallengeForm from '../components/EditChallengeForm'
 export default {
-  name: 'ChallengeQuestion',
+  name: 'EditChallengeQuestion',
   components: {
-    ChallengeForm
+    EditChallengeForm
   }
 }
 </script>

@@ -38,7 +38,31 @@ const routes = [
   {
     path: '/challenges',
     name: 'challenges',
-    component: () => import(/* webpackChunkName: "forum" */ '../views/Challenges.vue'),
+    component: () => import(/* webpackChunkName: "challenges" */ '../views/Challenges.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/challenge/:id',
+    name: 'challenge',
+    component: () => import(/* webpackChunkName: "challenge" */ '../views/ChallengeDetail.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
+    path: '/challenge/edit/:id',
+    name: 'editchallenge',
+    component: () => import(/* webpackChunkName: "editchallenge" */ '../views/EditChallenge.vue'),
     beforeEnter: (to, from, next) => {
       if (localStorage.getItem('token')) {
         next()

@@ -17,7 +17,7 @@
             </v-btn>
           </div>
         </div>
-        
+
         <v-divider class="mt-4"></v-divider>
         <v-row>
           <v-col class="center-item" sm="1">
@@ -136,101 +136,101 @@ export default {
     Sidebar
   },
   data: () => ({
-    description: '',
+    description: ''
   }),
   methods: {
-    getQuestionDetail() {
+    getQuestionDetail () {
       this.$store.dispatch('getQuestionDetail', this.$route.params.id)
         .then((response) => {
-          this.$store.commit('SET_QUESTION_DETAIL', response.data);
+          this.$store.commit('SET_QUESTION_DETAIL', response.data)
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    viewQuestion() {
+    viewQuestion () {
       this.$store.dispatch('viewQuestion', this.$route.params.id)
         .then((response) => {
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    upvoteQuestion(id) {
+    upvoteQuestion (id) {
       this.$store.dispatch('upvoteQuestion', id)
         .then((response) => {
           // this.success(response.data.message);
-          this.getQuestionDetail();
+          this.getQuestionDetail()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    downvoteQuestion(id) {
+    downvoteQuestion (id) {
       this.$store.dispatch('downvoteQuestion', id)
         .then((response) => {
           // this.success(response.data.message);
-          this.getQuestionDetail();
+          this.getQuestionDetail()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    upvoteAnswer(id) {
+    upvoteAnswer (id) {
       this.$store.dispatch('upvoteAnswer', id)
         .then((response) => {
           // this.success(response.data.message);
-          this.getQuestionDetail();
+          this.getQuestionDetail()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    downvoteAnswer(id) {
+    downvoteAnswer (id) {
       this.$store.dispatch('downvoteAnswer', id)
         .then((response) => {
           // this.success(response.data.message);
-          this.getQuestionDetail();
+          this.getQuestionDetail()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    addSolution(questionId, answerId) {
+    addSolution (questionId, answerId) {
       this.$store.dispatch('addSolution', {
         questionId,
-        answerId,
+        answerId
       })
         .then((response) => {
           // this.success(response.data.message);
-          this.getQuestionDetail();
+          this.getQuestionDetail()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    addAnswer(questionId) {
+    addAnswer (questionId) {
       this.$store.dispatch('addAnswer', {
         QuestionId: questionId,
-        description: this.description,
+        description: this.description
       })
         .then((response) => {
           // this.success('Answer posted successfully');
-          this.getQuestionDetail();
+          this.getQuestionDetail()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    deleteAnswer(id) {
+    deleteAnswer (id) {
       // this.$buefy.dialog.confirm({
       //   title: 'Deleting answer',
       //   message: 'Are you sure you want to <b>delete</b> your answer? This action cannot be undone.',
@@ -238,21 +238,21 @@ export default {
       //   type: 'is-danger',
       //   hasIcon: true,
       //   onConfirm: () => {
-          this.$store.dispatch('deleteAnswer', id)
-            .then((response) => {
-              // this.success(response.data.message);
-              this.getQuestionDetail();
-            })
-            .catch((err) => {
-              console.log(err);
-              // this.danger(err.response.data.message);
-            });
+      this.$store.dispatch('deleteAnswer', id)
+        .then((response) => {
+          // this.success(response.data.message);
+          this.getQuestionDetail()
+        })
+        .catch((err) => {
+          console.log(err)
+          // this.danger(err.response.data.message);
+        })
       //   },
       // });
     },
-    formatDate(date) {
-      return moment(new Date(date)).fromNow();
-    },
+    formatDate (date) {
+      return moment(new Date(date)).fromNow()
+    }
   },
   data () {
     return {
@@ -260,8 +260,8 @@ export default {
     }
   },
   created () {
-    this.viewQuestion();
-    this.getQuestionDetail();
+    this.viewQuestion()
+    this.getQuestionDetail()
   },
   computed: mapState(['question_detail', 'user'])
 }

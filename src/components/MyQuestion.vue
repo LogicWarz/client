@@ -5,7 +5,8 @@
         <h3>{{question.title}}</h3>
       </div>
       <div @click="$router.push(`question/${question._id}`)" class="clickable">
-        <small style="color: grey" v-html="question.description"></small>
+        <small v-if="question.description.length > 50" style="color: grey" v-trim v-html="question.description"></small>
+        <small v-else style="color: grey" v-html="question.description"></small>
       </div>
       <div>
         <v-chip small class="mt-2 mr-1" v-for="(tag,i) in question.tags" :key="i" >{{tag}}</v-chip>
@@ -70,17 +71,17 @@ export default {
   name: 'MyQuestion',
   props: ['question'],
   methods: {
-    getMyQuestions() {
+    getMyQuestions () {
       this.$store.dispatch('getMyQuestions')
         .then((response) => {
-          this.$store.commit('SET_MY_QUESTIONS', response.data);
+          this.$store.commit('SET_MY_QUESTIONS', response.data)
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    deleteQuestion(id) {
+    deleteQuestion (id) {
       // this.$buefy.dialog.confirm({
       //   title: 'Deleting question',
       //   message: 'Are you sure you want to <b>delete</b> your question? This action cannot be undone.',
@@ -88,20 +89,20 @@ export default {
       //   type: 'is-danger',
       //   hasIcon: true,
       //   onConfirm: () => {
-          this.$store.dispatch('deleteQuestion', id)
-            .then((response) => {
-              // this.success(response.data.message);
-              this.getMyQuestions();
-            })
-            .catch((err) => {
-              console.log(err);
-              // this.danger(err.response.data.message);
-            });
+      this.$store.dispatch('deleteQuestion', id)
+        .then((response) => {
+          // this.success(response.data.message);
+          this.getMyQuestions()
+        })
+        .catch((err) => {
+          console.log(err)
+          // this.danger(err.response.data.message);
+        })
       //   },
       // });
     },
-    formatDate(date) {
-      return moment(new Date(date)).fromNow();
+    formatDate (date) {
+      return moment(new Date(date)).fromNow()
     }
   }
 }

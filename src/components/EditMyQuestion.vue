@@ -18,13 +18,13 @@
     <wysiwyg v-model="description" style="height: 100%; border-color: black; margin-bottom: 20px;" />
     <v-flex xs12>
       <v-combobox multiple
-                v-model="tags" 
-                label="Tags" 
+                v-model="tags"
+                label="Tags"
                 append-icon
                 chips
                 deletable-chips
                 class="tag-input"
-                :search-input.sync="search" 
+                :search-input.sync="search"
                 @keyup.tab="updateTags"
                 @paste="updateTags">
       </v-combobox>
@@ -43,50 +43,50 @@ export default {
       title: '',
       description: '',
       tags: [],
-      search: "" //sync search
+      search: '' // sync search
     }
   },
   methods: {
-    getQuestionDetail() {
+    getQuestionDetail () {
       this.$store.dispatch('getQuestionDetail', this.$route.params.id)
         .then((response) => {
-          this.title = response.data.title;
-          this.description = response.data.description;
-          this.tags = response.data.tags;
+          this.title = response.data.title
+          this.description = response.data.description
+          this.tags = response.data.tags
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    editQuestion() {
+    editQuestion () {
       this.$store.dispatch('editQuestion', {
         title: this.title,
         description: this.description,
         tags: this.tags,
-        QuestionId: this.$route.params.id,
+        QuestionId: this.$route.params.id
       })
         .then((response) => {
           // this.success('Question edited successfully');
-          this.$router.back();
+          this.$router.back()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    updateTags() {
+    updateTags () {
       this.$nextTick(() => {
-        this.tags.push(...this.search.split(","));
+        this.tags.push(...this.search.split(','))
         this.$nextTick(() => {
-          this.search = "";
-        });
-      });
+          this.search = ''
+        })
+      })
     }
   },
-  created() {
-    this.getQuestionDetail();
-  },
+  created () {
+    this.getQuestionDetail()
+  }
 }
 </script>
 

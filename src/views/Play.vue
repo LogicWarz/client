@@ -66,52 +66,52 @@
 </template>
 
 <script>
-import socket from "../socket/socket";
-import axios from "../../apis/axios";
+import socket from '../socket/socket'
+import axios from '../../apis/axios'
 
 // @ is an alias to /src
-import Editor from "../components/Editor";
-import errorHandler from '../utils/errorHandler';
+import Editor from '../components/Editor'
+import errorHandler from '../utils/errorHandler'
 // console.log(editor.value, 'value')
 export default {
-  name: "play",
-  data() {
+  name: 'play',
+  data () {
     return {
-      userSolution: ""
-    };
+      userSolution: ''
+    }
   },
   components: {
     Editor
   },
   methods: {
-    setUserSolution(userSolution) {
-      this.userSolution = userSolution;
+    setUserSolution (userSolution) {
+      this.userSolution = userSolution
     },
-    async submitSolution() {
-      console.log("ini room yaaa", this.room);
+    async submitSolution () {
+      console.log('ini room yaaa', this.room)
       // console.log("ini solution nya ya", this.userSolution);
       let obj = {
         code: this.userSolution,
         challenge: this.room.challenge
-      };
+      }
 
-      console.log("ini challenge yaaa", obj.challenge);
-      const { data } = await this.$store.dispatch("parsingData", obj);
-      console.log("masuk", data.input);
+      console.log('ini challenge yaaa', obj.challenge)
+      const { data } = await this.$store.dispatch('parsingData', obj)
+      console.log('masuk', data.input)
       if (data.input) {
         const response = await axios({
-          method: "delete",
+          method: 'delete',
           url: `/rooms/success/${this.$route.params.room}`,
           headers: {
-            token: localStorage.getItem("token")
+            token: localStorage.getItem('token')
           }
-        });
-        this.$store.commit("SET_WINNER", localStorage.getItem("id"));
-        socket.emit("remove-room");
-        socket.emit("success-challenge", {
-          id: localStorage.getItem("id"),
+        })
+        this.$store.commit('SET_WINNER', localStorage.getItem('id'))
+        socket.emit('remove-room')
+        socket.emit('success-challenge', {
+          id: localStorage.getItem('id'),
           room: this.$route.params.room
-        });
+        })
       } else {
         errorHandler({ data })
       }
@@ -165,27 +165,27 @@ export default {
     }
   },
   computed: {
-    room() {
-      return this.$store.state.oneRoom;
+    room () {
+      return this.$store.state.oneRoom
     }
   },
-  created() {
-    this.$store.dispatch("fetchRoom");
-    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
-    socket.emit("in-game");
-    socket.on("inGame", msg => {
-      this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
-    });
+  created () {
+    this.$store.dispatch('fetchRoom')
+    this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
+    socket.emit('in-game')
+    socket.on('inGame', msg => {
+      this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
+    })
 
-    socket.on("remove-room", () => {
-      socket.emit("getRoom", this.$store.state.oneRoom);
-      this.$store.dispatch("fetchRoom");
-    });
-    socket.on("successChallenge", id => {
-      this.$router.push(`/result/${this.$route.params.room}`);
-    });
+    socket.on('remove-room', () => {
+      socket.emit('getRoom', this.$store.state.oneRoom)
+      this.$store.dispatch('fetchRoom')
+    })
+    socket.on('successChallenge', id => {
+      this.$router.push(`/result/${this.$route.params.room}`)
+    })
   }
-};
+}
 </script>
 
 <style scoped>

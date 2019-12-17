@@ -1,6 +1,6 @@
 <template>
   <v-container class="form-container bg-white-fade elevated pa-10">
-    <h3 class="mb-5">Add Challenge</h3>
+    <h3 class="mb-5">Edit Challenge</h3>
     <v-text-field
       label="Title"
       dense
@@ -28,7 +28,7 @@
     <MonacoEditor  class="editor" v-model="testCase" language="javascript" />
     </div>
     <!-- <v-btn @click="addTestCase" text color="orange"><b>ADD TEST CASE</b></v-btn> -->
-    <v-btn rounded class="float-right primary-gradient" @click="addChallenge">
+    <v-btn rounded class="float-right primary-gradient" @click="editChallenge">
       <b>POST</b>
     </v-btn>
   </v-container>
@@ -36,6 +36,7 @@
 
 <script>
 import MonacoEditor from 'vue-monaco'
+import {mapState} from 'vuex'
 
 export default {
   name: 'askForm',
@@ -44,18 +45,34 @@ export default {
       title: '',
       description: '',
       difficulty: '',
-      skeleton: '// Skeleton Code\n\nfunction yourFunctionName (param1,param2){\n    \n}',
-      testCase: '[\n    {\n        \"input\": [\"params1\",\"params2\"],\n        \"output\": \"asdasddsa\"\n    },\n    {\n        \"input\": [\"params1\",\"params2\"],\n        \"output\": \"asdasddsa\"\n    },\n    {\n        \"input\": [\"params1\",\"params2\"],\n        \"output\": \"asdasddsa\"\n    }\n]'
+      skeleton: '',
+      testCase: ''
     }
   },
   components: {
     MonacoEditor
   },
   methods: {
-    addChallenge () {
+    getChallengeDetail () {
+      this.$store.dispatch('getChallengeDetail', this.$route.params.id)
+        .then((response) => {
+          this.title = response.data.title
+          this.description = response.data.description
+          this.difficulty = response.data.difficulty
+          this.skeleton = response.data.skeleton
+          this.testCase = JSON.stringify(response.data.testCase)
+          this.$store.commit('SET_CHALLENGE_DETAIL', response.data)
+        })
+        .catch((err) => {
+          console.log(err)
+          // this.danger(err.response.data.message);
+        })
+    },
+    editChallenge () {
       this.testCase = this.testCase.replace(/'/g, `"`)
       let parseTestCase = JSON.parse(this.testCase)
       let challenge = {
+        _id: this.$store.state.challenge_detail._id,
         title: this.title,
         description: this.description,
         skeletonCode: this.skeleton,
@@ -63,7 +80,7 @@ export default {
         difficulty: this.difficulty
       }
 
-      this.$store.dispatch('addChallenge', challenge)
+      this.$store.dispatch('editChallenge', challenge)
         .then(() => {
           this.$router.push('/challenges')
         })
@@ -71,10 +88,11 @@ export default {
           console.log(err)
         })
     }
-    // addTestCase() {
-    //   console.log(JSON.parse(this.testCase))
-    // }
-  }
+  },
+  created () {
+    this.getChallengeDetail()
+  },
+  computed: mapState(['challenge_detail'])
 }
 </script>
 

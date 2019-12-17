@@ -125,87 +125,87 @@
 </template>
 
 <script>
-import Room from "../components/Room";
-import axios from "../../apis/axios";
-import socket from "../socket/socket";
-import { mapState } from "vuex";
+import Room from '../components/Room'
+import axios from '../../apis/axios'
+import socket from '../socket/socket'
+import { mapState } from 'vuex'
 
 export default {
-  name: "home",
+  name: 'home',
   components: {
     Room
   },
-  data() {
+  data () {
     return {
       dialog: false,
-      roomName: "",
-      levels: ["beginner", "intermediate", "advance"],
-      name: "testQueen",
-      err: "",
+      roomName: '',
+      levels: ['beginner', 'intermediate', 'advance'],
+      name: 'testQueen',
+      err: '',
       roomData: []
-    };
+    }
   },
   methods: {
-    createRoom(level) {
+    createRoom (level) {
       this.$store
-        .dispatch("createRoom", {
+        .dispatch('createRoom', {
           title: this.roomName,
           level,
           player: this.name
         })
         .then(room => {
-          console.log("ini room dengan challenge", room);
-          socket.emit("getRoom", room);
-          this.$store.dispatch("fetchRoomId", { id: room._id });
-          this.$router.push(`/lobby/${room._id}`);
-          this.roomName = "";
+          console.log('ini room dengan challenge', room)
+          socket.emit('getRoom', room)
+          this.$store.dispatch('fetchRoomId', { id: room._id })
+          this.$router.push(`/lobby/${room._id}`)
+          this.roomName = ''
         })
         .catch(err => {
-          console.log(err.data);
+          console.log(err.data)
           err.data
-            ? this.$store.commit("SET_MESSAGE", err.data.message)
+            ? this.$store.commit('SET_MESSAGE', err.data.message)
             : this.$store.commit(
-                "SET_MESSAGE",
-                `couldn't connect to the server`
-              );
-        });
+              'SET_MESSAGE',
+              `couldn't connect to the server`
+            )
+        })
     }
   },
   computed: {
-    getRooms() {
-      return this.$store.state.allRoom;
+    getRooms () {
+      return this.$store.state.allRoom
     },
-    ...mapState(["message", 'user'])
+    ...mapState(['message', 'user'])
   },
-  created() {
-    console.log("-=");
-    if (localStorage.getItem("token")) {
-      this.$store.dispatch("fetchRoom");
+  created () {
+    console.log('-=')
+    if (localStorage.getItem('token')) {
+      this.$store.dispatch('fetchRoom')
     }
 
     // socket.on("refetchRoom", () => {
     //   this.$store.dispatch("fetchRoom");
     // });
 
-    socket.on("getRoom", data => {
-      this.$store.dispatch("fetchRoom");
-    });
+    socket.on('getRoom', data => {
+      this.$store.dispatch('fetchRoom')
+    })
 
-    socket.on("roomGone", () => {
-      console.log("masuk");
-      this.$store.dispatch("fetchRoom");
-    });
+    socket.on('roomGone', () => {
+      console.log('masuk')
+      this.$store.dispatch('fetchRoom')
+    })
 
-    socket.on("closing", () => {
-      this.$store.dispatch("fetchRoom");
-    });
+    socket.on('closing', () => {
+      this.$store.dispatch('fetchRoom')
+    })
 
-    socket.on("remove-room", () => {
-      console.log("masuk remove room kah ?");
-      this.$store.dispatch("fetchRoom");
-    });
+    socket.on('remove-room', () => {
+      console.log('masuk remove room kah ?')
+      this.$store.dispatch('fetchRoom')
+    })
   }
-};
+}
 </script>
 
 <style scoped>

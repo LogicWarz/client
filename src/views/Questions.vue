@@ -46,20 +46,20 @@ export default {
   },
   created () {
     this.$store.dispatch('getQuestions')
-    .then((response) => {
-      this.$store.commit('SET_QUESTIONS', response.data);
-    })
-    .catch((err) => {
-      console.log(err);
+      .then((response) => {
+        this.$store.commit('SET_QUESTIONS', response.data)
+      })
+      .catch((err) => {
+        console.log(err)
       // this.danger(err.response.data.message);
-    });
+      })
   },
   computed: {
     ...mapState(['questions']),
-    filteredQuestions() {
+    filteredQuestions () {
       return this.questions.filter((el) => {
-        return el.title.toLowerCase().includes(this.search.toLowerCase());
-      });
+        return el.title.toLowerCase().includes(this.search.toLowerCase())
+      })
     }
   }
 }

@@ -88,66 +88,66 @@
 </template>
 
 <script>
-import io from "socket.io-client";
-import axios from "../../apis/axios";
-import Typed from "typed.js";
-const socket = io.connect("http://localhost:3000");
+import io from 'socket.io-client'
+import axios from '../../apis/axios'
+import Typed from 'typed.js'
+const socket = io.connect('http://localhost:3000')
 
 export default {
-  name: "Lobby",
-  data() {
+  name: 'Lobby',
+  data () {
     return {
       newUser: null,
       player: []
-    };
+    }
   },
   methods: {},
   computed: {
-    loser() {
+    loser () {
       if (this.$store.state.winner) {
         return this.$store.state.oneRoom.players.filter(player => {
-          return player._id != this.$store.state.winner;
-        });
+          return player._id != this.$store.state.winner
+        })
       } else {
         return this.$store.state.oneRoom.players.filter(player => {
-          return player._id != this.newUser;
-        });
+          return player._id != this.newUser
+        })
       }
     },
-    listPlayer() {
-      return this.$store.state.oneRoom;
+    listPlayer () {
+      return this.$store.state.oneRoom
     },
-    winner() {
-      return this.$store.state.winner;
+    winner () {
+      return this.$store.state.winner
     }
   },
-  created() {
-    console.log("ini winner nya ya", this.$store.state.winner);
+  created () {
+    console.log('ini winner nya ya', this.$store.state.winner)
     if (this.$store.state.winner) {
       this.$confetti.start({
         particlesPerFrame: 0.2
-      });
+      })
     }
     if (this.$store.state.winner) {
       // let testTemp = this.$store.state.oneRoom.players.filter(player => {
       //   player._id != localStorage.getItem("id");
       // });
-      socket.emit("wadidaw", { winner: localStorage.getItem("id") });
+      socket.emit('wadidaw', { winner: localStorage.getItem('id') })
     }
-    socket.on("jiwa", data => {
-      console.log("ini dia ====", data);
-      this.newUser = data;
-    });
-    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+    socket.on('jiwa', data => {
+      console.log('ini dia ====', data)
+      this.newUser = data
+    })
+    this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
     setTimeout(() => {
-      this.$router.push("/");
-    }, 5000);
+      this.$router.push('/')
+    }, 5000)
   },
-  beforeDestroy() {
-    console.log("ini before destroy");
-    this.$confetti.stop();
+  beforeDestroy () {
+    console.log('ini before destroy')
+    this.$confetti.stop()
   }
-};
+}
 </script>
 
 <style>

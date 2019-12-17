@@ -5,7 +5,8 @@
         <h3>{{answer.QuestionId.title}}</h3>
       </div>
       <div @click="$router.push(`question/${answer.QuestionId._id}`)" class="clickable">
-        <small style="color: grey" v-html="answer.QuestionId.description"></small>
+        <small v-if="answer.QuestionId.description.length > 50" style="color: grey" v-trim v-html="answer.QuestionId.description"></small>
+        <small v-else style="color: grey" v-html="answer.QuestionId.description"></small>
       </div>
       <div>
         <v-chip small class="mt-2 mr-1" v-for="(tag,i) in answer.QuestionId.tags" :key="i" >{{tag}}</v-chip>
@@ -64,18 +65,18 @@ export default {
   name: 'MyAnswer',
   props: ['answer'],
   methods: {
-    getMyQuestions() {
+    getMyQuestions () {
       this.$store.dispatch('getMyQuestions')
         .then((response) => {
-          this.$store.commit('SET_MY_QUESTIONS', response.data);
+          this.$store.commit('SET_MY_QUESTIONS', response.data)
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    formatDate(date) {
-      return moment(new Date(date)).fromNow();
+    formatDate (date) {
+      return moment(new Date(date)).fromNow()
     }
   }
 }

@@ -41,6 +41,22 @@ Vue.use(VuetifyToast, {
 })
 Vue.config.productionTip = false
 
+// Vue.filter('truncate', function (value, limit) {
+//   if (value.length > limit) {
+//       value = value.substring(0, (limit - 3)) + '...';
+//   }
+
+//   return value
+// })
+
+Vue.directive('trim', {
+  inserted: function (el) {
+    var str = el.innerHTML
+    var resultString = str.split(' ').slice(0, 50).join(' ') + ' ... <a>[ Read More ]</a>'
+    el.innerHTML = resultString
+  }
+})
+
 new Vue({
   router,
   store,

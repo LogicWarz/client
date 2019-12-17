@@ -16,7 +16,7 @@
       shaped
     ></v-textarea> -->
     <wysiwyg v-model="description" style="height: 100%; border-color: black; margin-bottom: 20px;" />
-    
+
     <v-btn rounded class="primary-gradient" @click="editAnswer">
       <b>POST</b>
     </v-btn>
@@ -24,42 +24,42 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'EditForm',
   data: () => ({
-    description: '',
+    description: ''
   }),
   methods: {
-    getAnswerDetail() {
+    getAnswerDetail () {
       this.$store.dispatch('getAnswerDetail', this.$route.params.id)
         .then((response) => {
-          this.description = response.data.description;
-          this.$store.commit('SET_ANSWER_DETAIL', response.data);
+          this.description = response.data.description
+          this.$store.commit('SET_ANSWER_DETAIL', response.data)
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
+        })
     },
-    editAnswer() {
+    editAnswer () {
       this.$store.dispatch('editAnswer', {
         description: this.description,
-        AnswerId: this.$route.params.id,
+        AnswerId: this.$route.params.id
       })
         .then((response) => {
           // this.success('Answer edited successfully');
-          this.$router.back();
+          this.$router.back()
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
           // this.danger(err.response.data.message);
-        });
-    },
+        })
+    }
   },
-  created() {
-    this.getAnswerDetail();
+  created () {
+    this.getAnswerDetail()
   },
   computed: mapState(['answer_detail', 'user'])
 }

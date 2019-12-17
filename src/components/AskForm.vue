@@ -18,13 +18,13 @@
     <wysiwyg v-model="description" style="height: 100%; border-color: black; margin-bottom: 20px;" />
     <v-flex xs12>
       <v-combobox multiple
-                v-model="tags" 
-                label="Tags" 
+                v-model="tags"
+                label="Tags"
                 append-icon
                 chips
                 deletable-chips
                 class="tag-input"
-                :search-input.sync="search" 
+                :search-input.sync="search"
                 @keyup.tab="updateTags"
                 @paste="updateTags">
       </v-combobox>
@@ -43,7 +43,7 @@ export default {
       title: '',
       description: '',
       tags: [],
-      search: "" //sync search
+      search: '' // sync search
     }
   },
   methods: {
@@ -62,13 +62,13 @@ export default {
           console.log('Error')
         })
     },
-    updateTags() {
+    updateTags () {
       this.$nextTick(() => {
-        this.tags.push(...this.search.split(","));
+        this.tags.push(...this.search.split(','))
         this.$nextTick(() => {
-          this.search = "";
-        });
-      });
+          this.search = ''
+        })
+      })
     }
   }
 }
