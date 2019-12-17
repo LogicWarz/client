@@ -2,9 +2,7 @@
   <div class="play custom-font">
     <v-row>
       <v-col cols="12" sm="4" style="height: 90vh;" class="scroll challenge-container">
-        <v-row>
-
-        </v-row>
+        <v-row></v-row>
         <v-chip v-if="room.level === 'beginner'" color="green" text-color="white" small>
           <b>{{room.level}}</b>
           <v-icon size="small" right>mdi-star-outline</v-icon>
@@ -17,7 +15,10 @@
           <b>{{room.level}}</b>
           <v-icon size="small" right>mdi-star</v-icon>
         </v-chip>
-        <span class="ml-3">Timer: <b>{{time}}</b></span>
+        <span class="ml-3">
+          Timer:
+          <b>{{time}}</b>
+        </span>
         <hr />
         <div>
           <h3 class="mt-4">{{room.challenge.title}}</h3>
@@ -39,14 +40,20 @@
                 <b>Submit</b>
               </v-btn>
             </v-col>
-            <v-col sm="7">
-            </v-col>
+            <v-col sm="7"></v-col>
           </v-row>
         </div>
         <div style="height: 29vh; overflow: scroll" class="pl-4 pr-4">
-          <span class="mr-10 mt-2 clickable" @click="testCaseResult = ''" style="color: purple; position: fixed; right: 0">Clear Log</span>
-          <div class="pa-5 console-font" v-html="testCaseResult" style="min-height: 100%; background: white; border-radius: 10px">
-          </div>
+          <span
+            class="mr-10 mt-2 clickable"
+            @click="testCaseResult = ''"
+            style="color: purple; position: fixed; right: 0"
+          >Clear Log</span>
+          <div
+            class="pa-5 console-font"
+            v-html="testCaseResult"
+            style="min-height: 100%; background: white; border-radius: 10px"
+          ></div>
         </div>
       </v-col>
     </v-row>
@@ -67,7 +74,7 @@ export default {
     return {
       userSolution: "",
       time: 0,
-      testCaseResult: ''
+      testCaseResult: ""
     };
   },
   components: {
@@ -84,25 +91,25 @@ export default {
           code: this.userSolution,
           challenge: this.room.challenge
         };
-        this.testCaseResult += '== RUNNING TEST CASES ==<br><br>'
+        this.testCaseResult += "== RUNNING TEST CASES ==<br><br>";
         // console.log('ini challenge yaaa', obj.challenge)
         const { data } = await this.$store.dispatch("parsingTestCase", obj);
-        console.log(data.input)
-        const testCases = this.room.challenge.testCase
+        console.log(data.input);
+        const testCases = this.room.challenge.testCase;
         testCases.forEach((testCase, i) => {
-          this.testCaseResult += '== INPUT ==<br>'
-          this.testCaseResult += JSON.stringify(testCase.input) + '<br><br>'
-          this.testCaseResult += '== OUTPUT ==<br>'
-          this.testCaseResult += data.input[i] + '<br><br>'
-          if(data.input[i] === testCase.output) {
-            this.testCaseResult += '<< CORRECT >><br><br>'
+          this.testCaseResult += "== INPUT ==<br>";
+          this.testCaseResult += JSON.stringify(testCase.input) + "<br><br>";
+          this.testCaseResult += "== OUTPUT ==<br>";
+          this.testCaseResult += data.input[i] + "<br><br>";
+          if (data.input[i] === testCase.output) {
+            this.testCaseResult += "<< CORRECT >><br><br>";
           } else {
-            this.testCaseResult += '<< WRONG >><br>'
-            this.testCaseResult += `<< EXPECTED OUTPUT: ${testCase.output} >><br><br>`
+            this.testCaseResult += "<< WRONG >><br>";
+            this.testCaseResult += `<< EXPECTED OUTPUT: ${testCase.output} >><br><br>`;
           }
         });
-      } catch(err) {
-        errorHandler(err)
+      } catch (err) {
+        errorHandler(err);
       }
     },
     async submitSolution(level) {
@@ -172,9 +179,16 @@ export default {
   created() {
     if (this.$store.state.oneRoom.level == "beginner") {
       this.time = 600;
-      const timer = setInterval(() => {
+      const timer = setInterval(async () => {
         this.time -= 1;
         if (this.time === 0) {
+          const response = await axios({
+            method: "delete",
+            url: `/rooms/success/${this.$route.params.room}`,
+            headers: {
+              token: localStorage.getItem("token")
+            }
+          });
           socket.emit("success-challenge", {
             id: null,
             room: this.$route.params.room
@@ -184,9 +198,16 @@ export default {
       }, 1000);
     } else if (this.$store.state.oneRoom.level == "intermediate") {
       this.time = 1200;
-      const timer = setInterval(() => {
+      const timer = setInterval(async () => {
         this.time -= 1;
         if (this.time === 0) {
+          const response = await axios({
+            method: "delete",
+            url: `/rooms/success/${this.$route.params.room}`,
+            headers: {
+              token: localStorage.getItem("token")
+            }
+          });
           socket.emit("success-challenge", {
             id: null,
             room: this.$route.params.room
@@ -196,9 +217,16 @@ export default {
       }, 1000);
     } else if (this.$store.state.oneRoom.level == "advance") {
       this.time = 1800;
-      const timer = setInterval(() => {
+      const timer = setInterval(async () => {
         this.time -= 1;
         if (this.time === 0) {
+          const response = await axios({
+            method: "delete",
+            url: `/rooms/success/${this.$route.params.room}`,
+            headers: {
+              token: localStorage.getItem("token")
+            }
+          });
           socket.emit("success-challenge", {
             id: null,
             room: this.$route.params.room
