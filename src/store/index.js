@@ -152,6 +152,9 @@ export default new Vuex.Store({
           err.response ? commit('SET_MESSAGE', err.response.data.message) : commit('SET_MESSAGE', `couldn't connect to the server`)
         })
     },
+    parsingTestCase({ commit }, payload) {
+      return axios.post('https://x2145wu1d8.execute-api.us-east-1.amazonaws.com/dev/', payload, {})
+    },
     parsingData({ commit }, payload) {
       return axios.post('https://n4k8xe0cd7.execute-api.us-east-1.amazonaws.com/dev/', payload, {})
     },

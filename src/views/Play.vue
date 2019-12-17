@@ -1,7 +1,10 @@
 <template>
   <div class="play custom-font">
-    <v-row style="height: 90vh;">
+    <v-row>
       <v-col cols="12" sm="4" style="height: 90vh;" class="scroll challenge-container">
+        <v-row>
+
+        </v-row>
         <v-chip v-if="room.level === 'beginner'" color="green" text-color="white" small>
           <b>{{room.level}}</b>
           <v-icon size="small" right>mdi-star-outline</v-icon>
@@ -14,52 +17,37 @@
           <b>{{room.level}}</b>
           <v-icon size="small" right>mdi-star</v-icon>
         </v-chip>
+        <span class="ml-3">Timer: <b>{{time}}</b></span>
         <hr />
         <div>
           <h3 class="mt-4">{{room.challenge.title}}</h3>
         </div>
         <div v-html="room.challenge.description"></div>
       </v-col>
-      <v-col cols="12" sm="8" style="padding: 0">
-        <v-row style="height: 50vh;">
+      <v-col cols="12" sm="8" style="padding-left: 20px">
+        <div style="height: 50vh;">
           <Editor :skeletonCode="room.challenge.skeletonCode" @setUserSolution="setUserSolution"></Editor>
-        </v-row>
-        <v-row>
-          <v-row style="height: 10vh;">
-            <v-col cols="12" sm="5">
-              <v-text-field outlined dense></v-text-field>
+        </div>
+        <div class="pl-4">
+          <v-row>
+            <v-col sm="3">
+              <v-btn color="warning" @click="runTestCase">Run Test Case</v-btn>
             </v-col>
-            <v-col cols="12" sm="1">
-              <v-btn rounded class="primary-gradient" @click="submitSolution">Run</v-btn>
-            </v-col>
-            <v-col cols="12" sm="3">
-              <v-btn class="bg-white-fade" @click="submitSolution">Run Test Case</v-btn>
-            </v-col>
-            <v-col cols="12" sm="3">
-              <v-btn color="warning" @click="submitSolution(room.level)">
+
+            <v-col sm="2">
+              <v-btn rounded class="primary-gradient" @click="submitSolution(room.level)">
                 <b>Submit</b>
               </v-btn>
             </v-col>
+            <v-col sm="7">
+            </v-col>
           </v-row>
-          <v-row class="scroll" style="background: #ECE9FE; height: 30vh; width: 60vw;">
-            {{time}}
-            ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />ddqwdqd
-            <br />
-          </v-row>
-        </v-row>
+        </div>
+        <div style="height: 29vh; overflow: scroll" class="pl-4 pr-4">
+          <span class="mr-10 mt-2 clickable" @click="testCaseResult = ''" style="color: purple; position: fixed; right: 0">Clear Log</span>
+          <div class="pa-5 console-font" v-html="testCaseResult" style="min-height: 100%; background: white; border-radius: 10px">
+          </div>
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -78,7 +66,8 @@ export default {
   data() {
     return {
       userSolution: "",
-      time: 0
+      time: 0,
+      testCaseResult: ''
     };
   },
   components: {
@@ -87,6 +76,34 @@ export default {
   methods: {
     setUserSolution(userSolution) {
       this.userSolution = userSolution;
+    },
+
+    async runTestCase() {
+      try {
+        let obj = {
+          code: this.userSolution,
+          challenge: this.room.challenge
+        };
+        this.testCaseResult += '== RUNNING TEST CASES ==<br><br>'
+        // console.log('ini challenge yaaa', obj.challenge)
+        const { data } = await this.$store.dispatch("parsingTestCase", obj);
+        console.log(data.input)
+        const testCases = this.room.challenge.testCase
+        testCases.forEach((testCase, i) => {
+          this.testCaseResult += '== INPUT ==<br>'
+          this.testCaseResult += JSON.stringify(testCase.input) + '<br><br>'
+          this.testCaseResult += '== OUTPUT ==<br>'
+          this.testCaseResult += data.input[i] + '<br><br>'
+          if(data.input[i] === testCase.output) {
+            this.testCaseResult += '<< CORRECT >><br><br>'
+          } else {
+            this.testCaseResult += '<< WRONG >><br>'
+            this.testCaseResult += `<< EXPECTED OUTPUT: ${testCase.output} >><br><br>`
+          }
+        });
+      } catch(err) {
+        errorHandler(err)
+      }
     },
     async submitSolution(level) {
       let point = 0;
@@ -142,53 +159,6 @@ export default {
         this.$store.commit("SET_LOADING", false);
         errorHandler({ data });
       }
-      // .then(({ data }) => {
-      //   if (data.input) {
-      //     return axios({
-      //       method: "delete",
-      //       url: `/rooms/success/${this.$route.params.room}`,
-      //       headers: {
-      //         token: localStorage.getItem("token")
-      //       }
-      //     });
-      //   } else {
-      //     console.log("ini salah ya");
-      //   }
-      // })
-      // .then(() => {
-      //   console.log("nice");
-      // })
-      // .catch(err => {
-      //   console.log(err);
-      // });
-      // this.$store.commit("SET_WINNER", localStorage.getItem("id"));
-      // socket.emit("remove-room");
-      // socket.emit("success-challenge", {
-      //   id: localStorage.getItem("id"),
-      //   room: this.$route.params.room
-      // });
-      // this.$store
-      //   .dispatch("parsingData", this.userSolution)
-      //   .then(({ data }) => {
-      //     console.log(data);
-      //   });
-      // axios({
-      //   method: "delete",
-      //   url: `/rooms/success/${this.$route.params.room}`,
-      //   headers: {
-      //     token: localStorage.getItem("token")
-      //   }
-      // })
-      //   .then(({ data }) => {
-      //     socket.emit("remove-room");
-      //     socket.emit("success-challenge");
-      //     setTimeout(() => {
-      //       this.$router.push(`/result/${this.$route.params.room}`);
-      //     }, 300);
-      //   })
-      //   .catch(({ response }) => {
-      //     console.log(response);
-      //   });
     }
   },
   computed: {
