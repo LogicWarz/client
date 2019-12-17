@@ -73,7 +73,8 @@ export default {
   data() {
     return {
       userSolution: "",
-      time: 0,
+      time: "",
+      testaja: 0,
       testCaseResult: ""
     };
   },
@@ -113,6 +114,7 @@ export default {
       }
     },
     async submitSolution(level) {
+      console.log(this.time);
       let point = 0;
       if (level == "beginner") {
         point = 10;
@@ -132,6 +134,7 @@ export default {
       const { data } = await this.$store.dispatch("parsingData", obj);
       console.log("masuk", data.input);
       if (data.input) {
+        socket.emit("remove-room");
         const responsePoint = await axios({
           method: "patch",
           url: `/users/${localStorage.getItem("id")}`,
@@ -157,7 +160,6 @@ export default {
           return player._id != this.user._id;
         });
         this.$store.commit("SET_LOSERS", losers);
-        socket.emit("remove-room");
         socket.emit("success-challenge", {
           id: this.user,
           room: this.$route.params.room
@@ -178,10 +180,11 @@ export default {
   },
   created() {
     if (this.$store.state.oneRoom.level == "beginner") {
-      this.time = 600;
+      this.testaja = 600;
       const timer = setInterval(async () => {
-        this.time -= 1;
-        if (this.time === 0) {
+        this.time = `${Math.floor(this.testaja / 60)} : ${this.testaja % 60}`;
+        this.testaja -= 1;
+        if (this.testaja === 0) {
           const response = await axios({
             method: "delete",
             url: `/rooms/success/${this.$route.params.room}`,
@@ -197,10 +200,11 @@ export default {
         }
       }, 1000);
     } else if (this.$store.state.oneRoom.level == "intermediate") {
-      this.time = 1200;
+      this.testaja = 1200;
       const timer = setInterval(async () => {
-        this.time -= 1;
-        if (this.time === 0) {
+        this.time = `${Math.floor(this.testaja / 60)} : ${this.testaja % 60}`;
+        this.testaja -= 1;
+        if (this.testaja === 0) {
           const response = await axios({
             method: "delete",
             url: `/rooms/success/${this.$route.params.room}`,
@@ -216,10 +220,11 @@ export default {
         }
       }, 1000);
     } else if (this.$store.state.oneRoom.level == "advance") {
-      this.time = 1800;
+      this.testaja = 1800;
       const timer = setInterval(async () => {
-        this.time -= 1;
-        if (this.time === 0) {
+        this.time = `${Math.floor(this.testaja / 60)} : ${this.testaja % 60}`;
+        this.testaja -= 1;
+        if (this.testaja === 0) {
           const response = await axios({
             method: "delete",
             url: `/rooms/success/${this.$route.params.room}`,
