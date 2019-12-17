@@ -9,6 +9,9 @@
     </div>-->
     <!-- <button @click="playGame(listPlayer._id)" v-if="listPlayer.players.length >= 2">Play</button> -->
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
+    <div>{{loser}}</div>
+    <hr />
+    <div>{{winner}}</div>
     <div class="center-item mt-2 mb-5">
       <v-btn text @click="$router.push('/')" rounded class="primary-gradient">
         <b>BACK TO ROOM LIST</b>
@@ -88,66 +91,77 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
-import axios from '../../apis/axios'
-import Typed from 'typed.js'
-const socket = io.connect('http://localhost:3000')
+import io from "socket.io-client";
+import axios from "../../apis/axios";
+import Typed from "typed.js";
+const socket = io.connect("http://localhost:3000");
 
 export default {
-  name: 'Lobby',
-  data () {
+  name: "Lobby",
+  data() {
     return {
       newUser: null,
+      // loser: [],
       player: []
-    }
+    };
   },
   methods: {},
   computed: {
-    loser () {
-      if (this.$store.state.winner) {
-        return this.$store.state.oneRoom.players.filter(player => {
-          return player._id != this.$store.state.winner
-        })
-      } else {
-        return this.$store.state.oneRoom.players.filter(player => {
-          return player._id != this.newUser
-        })
-      }
+    loser() {
+      return this.$store.state.losers;
+      console.log("ini new user ======", this.newUser);
     },
-    listPlayer () {
-      return this.$store.state.oneRoom
+    listPlayer() {
+      return this.$store.state.oneRoom;
     },
-    winner () {
-      return this.$store.state.winner
+    winner() {
+      return this.$store.state.winner;
     }
   },
-  created () {
-    console.log('ini winner nya ya', this.$store.state.winner)
-    if (this.$store.state.winner) {
+  // watch: {
+  //   newUser() {
+  //     if (this.newUser) {
+  //       if (this.$store.state.winner) {
+  //         this.loser = this.$store.state.oneRoom.players.filter(player => {
+  //           return player._id != this.$store.state.winner;
+  //         });
+  //       } else {
+  //         // console.log("ini new user ======", this.newUser);
+  //         this.loser = this.$store.state.oneRoom.players.filter(player => {
+  //           return player._id != this.newUser._id;
+  //         });
+  //       }
+  //     }
+  //   }
+  // },
+  created() {
+    this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
+    console.log("ini winner nya ya", this.$store.state.winner.id);
+    if (this.$store.state.winner.id._id === localStorage.getItem("id")) {
       this.$confetti.start({
         particlesPerFrame: 0.2
-      })
+      });
     }
     if (this.$store.state.winner) {
-      // let testTemp = this.$store.state.oneRoom.players.filter(player => {
-      //   player._id != localStorage.getItem("id");
-      // });
-      socket.emit('wadidaw', { winner: localStorage.getItem('id') })
+      console.log("harusnya masukkk disini");
+      socket.emit("wadidaw", {
+        winner: this.$store.state.user,
+        room: this.$route.params.room
+      });
     }
-    socket.on('jiwa', data => {
-      console.log('ini dia ====', data)
-      this.newUser = data
-    })
-    this.$store.dispatch('fetchRoomId', { id: this.$route.params.room })
+    socket.on("sendWinner", data => {
+      console.log("ini dia ====", data);
+      this.newUser = data;
+    });
     // setTimeout(() => {
-    //   this.$router.push('/')
-    // }, 5000)
+    //   this.$router.push("/");
+    // }, 5000);
   },
-  beforeDestroy () {
-    console.log('ini before destroy')
-    this.$confetti.stop()
+  beforeDestroy() {
+    console.log("ini before destroy");
+    this.$confetti.stop();
   }
-}
+};
 </script>
 
 <style>
