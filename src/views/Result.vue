@@ -67,7 +67,7 @@
 import io from "socket.io-client";
 import axios from "../../apis/axios";
 import Typed from "typed.js";
-const socket = io.connect("http://localhost:3000");
+const socket = io.connect("http://coderoyale.server.edirates.xyz");
 
 export default {
   name: "Lobby",
