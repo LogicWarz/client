@@ -11,7 +11,7 @@
     <!-- <button @click="leaveRoom(listPlayer._id)" v-if="listPlayer.status === 'open'">Leave</button> -->
     <!-- <div>{{loser}}</div>
     <hr />
-    <div>{{winner}}</div> -->
+    <div>{{winner}}</div>-->
     <div class="center-item mt-2 mb-5">
       <v-btn text @click="$router.push('/')" rounded class="primary-gradient">
         <b>BACK TO ROOM LIST</b>
@@ -27,7 +27,11 @@
             <v-col>
               <div>
                 <v-avatar size="150" class="primary-gradient">
-                  <span v-if="winner.id.name" class="white--text" style="font-size: 5rem; font-weight: bold">{{winner.id.name.substring(0, 1).toUpperCase()}}</span>
+                  <span
+                    v-if="winner.id.name"
+                    class="white--text"
+                    style="font-size: 5rem; font-weight: bold"
+                  >{{winner.id.name.substring(0, 1).toUpperCase()}}</span>
                 </v-avatar>
               </div>
               <div class="mt-3">{{winner.id.name}}</div>
@@ -36,7 +40,9 @@
           <v-row>
             <v-col v-for="player in loser" :key="player._id" sm="4">
               <v-avatar color="white">
-                <span><b>{{player.name.substring(0, 1).toUpperCase()}}</b></span>
+                <span>
+                  <b>{{player.name.substring(0, 1).toUpperCase()}}</b>
+                </span>
               </v-avatar>
               <div class="mt-3">
                 <small>{{ player.name }}</small>
@@ -68,7 +74,6 @@ export default {
   data() {
     return {
       newUser: null,
-      // loser: [],
       player: []
     };
   },
@@ -103,8 +108,12 @@ export default {
   // },
   created() {
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
-    console.log("ini winner nya ya", this.$store.state.winner.id);
-    if (this.$store.state.winner.id._id === localStorage.getItem("id")) {
+    console.log("ini winner nya ya", this.$store.state.winner);
+    console.log("ini loser ya", this.$store.state.losers);
+    if (
+      this.$store.state.winner &&
+      this.$store.state.winner.id._id === localStorage.getItem("id")
+    ) {
       this.$confetti.start({
         particlesPerFrame: 0.2
       });
