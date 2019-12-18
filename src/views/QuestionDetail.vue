@@ -37,21 +37,23 @@
               <v-chip small class="mt-2 mr-1" v-for="(tag,i) in question_detail.tags" :key="i" >{{tag}}</v-chip>
             </div>
             <div class="mt-3">
-              <v-avatar size="30" class="mr-2">
-                <img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                >
+              <v-avatar class="mr-3" color="white">
+                <span>
+                  <b>{{question_detail.UserId.name.substring(0, 1).toUpperCase()}}</b>
+                </span>
               </v-avatar>
               <small>{{ question_detail.UserId.name }}</small>
-              <v-chip
-                class="ma-2"
-                color="green"
-                text-color="white"
-                small
-                label
-              >
-                beginner
+              <v-chip class="mr-2 ml-2" v-if="question_detail.UserId.points < 100" color="green" text-color="white" x-small>
+                <b>Beginner</b>
+                <v-icon small right>mdi-star-outline</v-icon>
+              </v-chip>
+              <v-chip class="mr-2 ml-2" v-else-if="question_detail.UserId.points < 200" color="blue" text-color="white" x-small>
+                <b>Intermediate</b>
+                <v-icon size="small" right>mdi-star-half</v-icon>
+              </v-chip>
+              <v-chip class="mr-2 ml-2" v-else color="red" text-color="white" x-small>
+                <b>Advance</b>
+                <v-icon size="small" right>mdi-star</v-icon>
               </v-chip>
               <small style="color: grey"> asked {{ formatDate(question_detail.createdAt) }}</small>
             </div>
@@ -83,21 +85,23 @@
           <v-col sm="11">
             <p v-html="answer.description"></p>
             <div class="mt-3">
-              <v-avatar size="30" class="mr-2">
-                <img
-                  src="https://cdn.vuetifyjs.com/images/john.jpg"
-                  alt="John"
-                >
+              <v-avatar class="mr-3" color="white">
+                <span>
+                  <b>{{answer.UserId.name.substring(0, 1).toUpperCase()}}</b>
+                </span>
               </v-avatar>
               <small>{{ answer.UserId.name }}</small>
-              <v-chip
-                class="ma-2"
-                color="green"
-                text-color="white"
-                small
-                label
-              >
-                beginner
+              <v-chip class="mr-2 ml-2" v-if="answer.UserId.points < 100" color="green" text-color="white" x-small>
+                <b>Beginner</b>
+                <v-icon small right>mdi-star-outline</v-icon>
+              </v-chip>
+              <v-chip class="mr-2 ml-2" v-else-if="answer.UserId.points < 200" color="blue" text-color="white" x-small>
+                <b>Intermediate</b>
+                <v-icon size="small" right>mdi-star-half</v-icon>
+              </v-chip>
+              <v-chip class="mr-2 ml-2" v-else color="red" text-color="white" x-small>
+                <b>Advance</b>
+                <v-icon size="small" right>mdi-star</v-icon>
               </v-chip>
               <small style="color: grey"> answered {{ formatDate(answer.createdAt) }}</small>
             </div>
