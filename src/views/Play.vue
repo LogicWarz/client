@@ -100,13 +100,22 @@ export default {
         testCases.forEach((testCase, i) => {
           this.testCaseResult += "== INPUT ==<br>";
           this.testCaseResult += JSON.stringify(testCase.input) + "<br><br>";
-          this.testCaseResult += "== OUTPUT ==<br>";
-          this.testCaseResult += data.input[i] + "<br><br>";
-          if (data.input[i] === testCase.output) {
-            this.testCaseResult += "<< CORRECT >><br><br>";
+          if (JSON.stringify(data.input[i]) === JSON.stringify(testCase.output)) {
+            this.testCaseResult += `== OUTPUT ==<br>`;
+            this.testCaseResult += `<b style="color: green">`
+            this.testCaseResult += JSON.stringify(data.input[i]) + "<br>";
+            this.testCaseResult += `<< CORRECT >><br><br>`;
+            this.testCaseResult += `</b>`
           } else {
-            this.testCaseResult += "<< WRONG >><br>";
-            this.testCaseResult += `<< EXPECTED OUTPUT: ${testCase.output} >><br><br>`;
+            this.testCaseResult += `== OUTPUT ==<br>`;
+            this.testCaseResult += `<b style="color: red">`;
+            this.testCaseResult += `<< WRONG >><br>`;
+            this.testCaseResult += `<< OUTPUT: ${JSON.stringify(data.input[i])} >><br>`;
+            this.testCaseResult += `</b>`
+            this.testCaseResult += `<b style="color: green">`;
+            this.testCaseResult += `<< EXPECTED OUTPUT: ${JSON.stringify(testCase.output)} >><br><br>`;
+            this.testCaseResult += `</b>`
+
           }
         });
       } catch (err) {
