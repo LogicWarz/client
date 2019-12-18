@@ -84,12 +84,11 @@
             >{{user.name.substring(0, 1).toUpperCase()}}</span>
           </v-avatar>
         </v-col>
-        <v-col sm="10" class="pl-10">
+        <v-col sm="2" class="pl-10">
           <div>
             <b>{{user.name}}</b>
           </div>
           <div style="color: grey">{{user.email}}</div>
-          <div>{{user.points}} points</div>
           <div>
             <v-chip v-if="user.points < 100" color="green" text-color="white" small>
               <b>Beginner</b>
@@ -103,6 +102,11 @@
               <b>Advance</b>
               <v-icon size="small" right>mdi-star</v-icon>
             </v-chip>
+          </div>
+        </v-col>
+        <v-col sm="8">
+          <div style="font-size: 25px; color: #5A0EE1; font-weight: bold; opacity: 0.8;">
+            <div>{{user.points}} points</div>
           </div>
         </v-col>
       </v-row>
