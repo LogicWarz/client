@@ -25,7 +25,7 @@
           </div>
           <v-row>
             <v-col>
-              <div>
+              <div v-if="winner">
                 <v-avatar size="150" class="primary-gradient">
                   <span
                     v-if="winner.id.name"
@@ -34,7 +34,7 @@
                   >{{winner.id.name.substring(0, 1).toUpperCase()}}</span>
                 </v-avatar>
               </div>
-              <div class="mt-3">{{winner.id.name}}</div>
+              <div class="mt-3" v-if="winner">{{winner.id.name}}</div>
             </v-col>
           </v-row>
           <v-row>
@@ -51,7 +51,7 @@
           </v-row>
         </v-col>
         <v-col sm="6">
-          <div>
+          <div v-if="winner">
             <vue-typed-js :strings="[`${winner.id.name} wins!`]">
               <h3 style="margin: auto;" class="typing"></h3>
             </vue-typed-js>
@@ -65,7 +65,7 @@
 
 <script>
 // import io from "socket.io-client";
-import socket from '../socket/socket'
+import socket from "../socket/socket";
 import axios from "../../apis/axios";
 import Typed from "typed.js";
 // const socket = io.connect("http://coderoyale.server.edirates.xyz");
@@ -92,6 +92,7 @@ export default {
     }
   },
   created() {
+    console.log("ini sebelum nge dispatch room id");
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
     console.log("ini winner nya ya", this.$store.state.winner);
     console.log("ini loser ya", this.$store.state.losers);
