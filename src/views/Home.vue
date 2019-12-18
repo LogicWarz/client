@@ -164,6 +164,9 @@ export default {
                 "SET_MESSAGE",
                 `couldn't connect to the server`
               );
+          setTimeout(() => {
+            this.$store.commit("SET_MESSAGE", "");
+          }, 2000);
         });
     }
   },
@@ -174,6 +177,7 @@ export default {
     ...mapState(["message", "user"])
   },
   created() {
+    this.$confetti.stop();
     this.$store.commit("SET_WINNER", null);
     if (localStorage.getItem("token")) {
       this.$store.dispatch("fetchRoom");
