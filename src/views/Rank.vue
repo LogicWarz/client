@@ -1,6 +1,7 @@
 <template>
   <v-container>
-     <Board :users="users"></Board>
+    <v-img contain height="20vh" class="mb-3" :src="require('../assets/rank.png')"></v-img>
+    <Board class="mb-10" :users="users"></Board>
   </v-container>
 </template>
 
