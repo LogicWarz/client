@@ -100,22 +100,27 @@ export default {
         testCases.forEach((testCase, i) => {
           this.testCaseResult += "== INPUT ==<br>";
           this.testCaseResult += JSON.stringify(testCase.input) + "<br><br>";
-          if (JSON.stringify(data.input[i]) === JSON.stringify(testCase.output)) {
+          if (
+            JSON.stringify(data.input[i]) === JSON.stringify(testCase.output)
+          ) {
             this.testCaseResult += `== OUTPUT ==<br>`;
-            this.testCaseResult += `<b style="color: green">`
+            this.testCaseResult += `<b style="color: green">`;
             this.testCaseResult += JSON.stringify(data.input[i]) + "<br>";
             this.testCaseResult += `<< CORRECT >><br><br>`;
-            this.testCaseResult += `</b>`
+            this.testCaseResult += `</b>`;
           } else {
             this.testCaseResult += `== OUTPUT ==<br>`;
             this.testCaseResult += `<b style="color: red">`;
             this.testCaseResult += `<< WRONG >><br>`;
-            this.testCaseResult += `<< OUTPUT: ${JSON.stringify(data.input[i])} >><br>`;
-            this.testCaseResult += `</b>`
+            this.testCaseResult += `<< OUTPUT: ${JSON.stringify(
+              data.input[i]
+            )} >><br>`;
+            this.testCaseResult += `</b>`;
             this.testCaseResult += `<b style="color: green">`;
-            this.testCaseResult += `<< EXPECTED OUTPUT: ${JSON.stringify(testCase.output)} >><br><br>`;
-            this.testCaseResult += `</b>`
-
+            this.testCaseResult += `<< EXPECTED OUTPUT: ${JSON.stringify(
+              testCase.output
+            )} >><br><br>`;
+            this.testCaseResult += `</b>`;
           }
         });
       } catch (err) {
@@ -124,14 +129,6 @@ export default {
     },
     async submitSolution(level) {
       console.log(this.time);
-      let point = 0;
-      if (level == "beginner") {
-        point = 10;
-      } else if (level == "intermediate") {
-        point = 20;
-      } else if (level == "advance") {
-        point = 30;
-      }
       // console.log("ini room yaaa", this.room);
       this.$store.commit("SET_LOADING", true);
       let obj = {
@@ -141,9 +138,18 @@ export default {
 
       // console.log('ini challenge yaaa', obj.challenge)
       const { data } = await this.$store.dispatch("parsingData", obj);
-      console.log("masuk", data.input);
+      console.log("dispatch parsing data", data.input);
       if (data.input) {
+        let point = 0;
+        if (level == "beginner") {
+          point = 10;
+        } else if (level == "intermediate") {
+          point = 20;
+        } else if (level == "advance") {
+          point = 30;
+        }
         socket.emit("remove-room");
+        console.log("sebelum axios update");
         const responsePoint = await axios({
           method: "patch",
           url: `/users/${localStorage.getItem("id")}`,
@@ -154,6 +160,7 @@ export default {
             points: point
           }
         });
+        console.log("sesudah axios update");
         const response = await axios({
           method: "delete",
           url: `/rooms/success/${this.$route.params.room}`,
@@ -161,10 +168,11 @@ export default {
             token: localStorage.getItem("token")
           }
         });
+        console.log("sesudah delete room ....");
         this.$store.commit("SET_LOADING", false);
-        console.log("ini state user", this.user);
+        // console.log("ini state user", this.user);
         this.$store.commit("SET_WINNER", this.user);
-        console.log("ini adalah room nya", this.room.players);
+        // console.log("ini adalah room nya", this.room.players);
         let losers = this.room.players.filter(player => {
           return player._id != this.user._id;
         });
@@ -249,7 +257,8 @@ export default {
         }
       }, 1000);
     }
-    this.$store.dispatch("fetchRoom");
+
+    // this.$store.dispatch("fetchRoom");
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
     socket.emit("in-game");
     socket.on("inGame", msg => {
@@ -257,9 +266,10 @@ export default {
     });
 
     socket.on("remove-room", () => {
-      socket.emit("getRoom", this.$store.state.oneRoom);
-      this.$store.dispatch("fetchRoom");
+      socket.emit("getRoom", this.$route.params.room);
+      // this.$store.dispatch("fetchRoom");
     });
+
     socket.on("successChallenge", id => {
       console.log("-----==========", id);
       if (id.id != null) {
