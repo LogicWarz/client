@@ -197,7 +197,7 @@ export default {
   },
   created() {
     if (this.$store.state.oneRoom.level == "beginner") {
-      this.testaja = 600;
+      this.testaja = 10;
       const timer = setInterval(async () => {
         this.time = `${Math.floor(this.testaja / 60)} : ${this.testaja % 60}`;
         this.testaja -= 1;

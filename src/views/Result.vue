@@ -21,7 +21,7 @@
       <v-row>
         <v-col sm="6" class="lobby-container bg-white-fade elevated pa-5 center-item">
           <div>
-            <h3>Winner</h3>
+            <h3 v-if="winner">Winner</h3>
           </div>
           <v-row>
             <v-col>
@@ -52,10 +52,24 @@
         </v-col>
         <v-col sm="6">
           <div v-if="winner">
-            <vue-typed-js :strings="[`${winner.id.name} wins!`]">
+            <div v-if="isWinner">
+            <vue-typed-js :strings="[`You won!`]">
               <h3 style="margin: auto;" class="typing"></h3>
             </vue-typed-js>
             <v-img style="margin: auto;" src="../assets/win.gif" max-height="50vh" max-width="50vh"></v-img>
+            </div>
+            <div v-else>
+            <vue-typed-js :strings="[`You lose`]">
+              <h3 style="margin: auto;" class="typing"></h3>
+            </vue-typed-js>
+            <v-img style="margin: auto;" src="../assets/lose.png" max-height="50vh" max-width="50vh"></v-img>
+            </div>
+          </div>
+          <div v-else>
+            <vue-typed-js :strings="[`Time's up!`]">
+              <h3 style="margin: auto;" class="typing"></h3>
+            </vue-typed-js>
+            <v-img style="margin: auto;" src="../assets/time.gif" max-height="50vh" max-width="50vh"></v-img>
           </div>
         </v-col>
       </v-row>
@@ -89,6 +103,9 @@ export default {
     },
     winner() {
       return this.$store.state.winner;
+    },
+    isWinner() {
+      return this.$store.state.winner.id._id === this.$store.state.user._id
     }
   },
   created() {
@@ -98,7 +115,7 @@ export default {
     console.log("ini loser ya", this.$store.state.losers);
     if (
       this.$store.state.winner &&
-      this.$store.state.winner.id._id === localStorage.getItem("id")
+      this.isWinner
     ) {
       this.$confetti.start({
         particlesPerFrame: 0.2
@@ -115,9 +132,9 @@ export default {
       console.log("ini dia ====", data);
       this.newUser = data;
     });
-    setTimeout(() => {
-      this.$router.push("/");
-    }, 5000);
+    // setTimeout(() => {
+    //   this.$router.push("/");
+    // }, 5000);
   },
   beforeDestroy() {
     console.log("ini before destroy");
