@@ -197,6 +197,18 @@ const routes = [
     }
   },
   {
+    path: '/rank',
+    name: 'rank',
+    component: () => import('../views/Rank.vue'),
+    beforeEnter: (to, from, next) => {
+      if (localStorage.getItem('token')) {
+        next()
+      } else {
+        next('/signin')
+      }
+    }
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,

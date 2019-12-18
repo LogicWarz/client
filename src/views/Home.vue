@@ -77,25 +77,30 @@
       <v-row class="pl-5">
         <v-col sm="1">
           <v-avatar size="100" class="orange-gradient">
-            <span
-              v-if="user.name"
-              class="white--text"
-              style="font-size: 4rem; font-weight: bold"
-            >{{user.name.substring(0, 1).toUpperCase()}}</span>
+            <span v-if="user.name" class="white--text" style="font-size: 4rem; font-weight: bold">{{user.name.substring(0, 1).toUpperCase()}}</span>
           </v-avatar>
         </v-col>
         <v-col sm="10" class="pl-10">
           <div>
             <b>{{user.name}}</b>
           </div>
-          <div style="color: grey">{{user.email}}</div>
-          <div>{{user.points}} points</div>
+          <div style="color: grey">
+            {{user.email}}
+          </div>
+          <div>
+            {{user.points}} points
+          </div>
           <div>
             <v-chip v-if="user.points < 100" color="green" text-color="white" small>
               <b>Beginner</b>
               <v-icon small right>mdi-star-outline</v-icon>
             </v-chip>
-            <v-chip v-else-if="user.points < 200" color="blue" text-color="white" x-small>
+            <v-chip
+              v-else-if="user.points < 200"
+              color="blue"
+              text-color="white"
+              x-small
+            >
               <b>Intermediate</b>
               <v-icon size="small" right>mdi-star-half</v-icon>
             </v-chip>
@@ -142,7 +147,7 @@ export default {
   },
   methods: {
     createRoom(level) {
-      this.$store.commit("SET_LOADING", true);
+      this.$store.commit('SET_LOADING', true)
       this.$store
         .dispatch("createRoom", {
           title: this.roomName,
@@ -150,7 +155,7 @@ export default {
           player: this.name
         })
         .then(room => {
-          this.$store.commit("SET_LOADING", false);
+          this.$store.commit('SET_LOADING', false)
           console.log("ini room dengan challenge", room);
           socket.emit("getRoom", room);
           this.$store.dispatch("fetchRoomId", { id: room._id });
@@ -158,7 +163,7 @@ export default {
           this.roomName = "";
         })
         .catch(err => {
-          this.$store.commit("SET_LOADING", false);
+          this.$store.commit('SET_LOADING', false)
           console.log(err.data);
           err.data
             ? this.$store.commit("SET_MESSAGE", err.data.message)
@@ -173,20 +178,17 @@ export default {
     getRooms() {
       return this.$store.state.allRoom;
     },
-    ...mapState(["message", "user"])
+    ...mapState(["message", 'user'])
   },
   created() {
+    console.log("-=");
     if (localStorage.getItem("token")) {
       this.$store.dispatch("fetchRoom");
-      this.$store
-        .dispatch("getUserData")
-        .then(({ data }) => {
-          this.$store.commit("SET_USER", data);
-        })
-        .catch(({ response }) => {
-          console.log(response);
-        });
     }
+
+    // socket.on("refetchRoom", () => {
+    //   this.$store.dispatch("fetchRoom");
+    // });
 
     socket.on("getRoom", data => {
       this.$store.dispatch("fetchRoom");
