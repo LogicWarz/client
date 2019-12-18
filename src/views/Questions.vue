@@ -35,6 +35,7 @@
 import Question from '../components/Question'
 import Sidebar from '../components/Sidebar'
 import { mapState } from 'vuex'
+import errorHandler from '../utils/errorHandler'
 export default {
   name: 'Questions',
   data () {
@@ -47,14 +48,13 @@ export default {
     Sidebar
   },
   created () {
+    this.$store.commit('SET_LOADING', true)
     this.$store.dispatch('getQuestions')
       .then((response) => {
+        this.$store.commit('SET_LOADING', false)
         this.$store.commit('SET_QUESTIONS', response.data)
       })
-      .catch((err) => {
-        console.log(err)
-      // this.danger(err.response.data.message);
-      })
+      .catch(errorHandler)
   },
   computed: {
     ...mapState(['questions']),
