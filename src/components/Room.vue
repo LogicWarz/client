@@ -54,7 +54,9 @@
             </template>
             <v-avatar color="white">
               <span>
-                <b>{{room.players[0].name.substring(0, 1).toUpperCase()}}</b>
+                <b
+                  v-if="room.players[0].name"
+                >{{room.players[0].name.substring(0, 1).toUpperCase()}}</b>
               </span>
             </v-avatar>
             <div style="color: grey">
@@ -82,7 +84,6 @@ export default {
   },
   methods: {
     joinRoom(roomId, status) {
-      console.log(status);
       if (status === "open" && this.room.players.length < 4) {
         this.$store
           .dispatch("joinRoom", { id: roomId, name: this.username })
@@ -117,7 +118,6 @@ export default {
   },
   created() {
     socket.on("joinRoom", data => {
-      console.log("join-room triggered");
       // if (data.id === this.$route.params.room) {
       this.$store.dispatch("fetchRoom");
       //   this.newUser = data.msg;

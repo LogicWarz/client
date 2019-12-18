@@ -6,75 +6,75 @@
 
 <script>
 // import io from "socket.io-client";
-import axios from '../../apis/axios'
-import MonacoEditor from 'vue-monaco'
-import socket from '../socket/socket'
+import axios from "../../apis/axios";
+import MonacoEditor from "vue-monaco";
+import socket from "../socket/socket";
 
 export default {
-  name: 'Editor',
+  name: "Editor",
   components: {
     MonacoEditor
   },
-  data () {
+  data() {
     return {
-      userSolution: ''
-    }
+      userSolution: ""
+    };
   },
-  props: ['skeletonCode'],
+  props: ["skeletonCode"],
   methods: {
-    onChange (value) {
-      console.log(value)
+    onChange(value) {
+      // console.log(value)
     },
 
-    submitEvent () {
+    submitEvent() {
       this.$store
-        .dispatch('parsingData', this.testing)
+        .dispatch("parsingData", this.testing)
         .then(({ data }) => {
-          console.log(data)
+          // console.log(data)
           return axios({
-            method: 'delete',
+            method: "delete",
             url: `/rooms/success/${this.$route.params.room}`,
             headers: {
-              token: localStorage.getItem('token')
+              token: localStorage.getItem("token")
             }
-          })
+          });
         })
         .then(() => {
-          console.log('nice')
+          // console.log('nice')
         })
         .catch(err => {
-          console.log(err)
-        })
-      this.$store.commit('SET_WINNER', localStorage.getItem('id'))
-      socket.emit('remove-room')
-      socket.emit('success-challenge', {
-        id: localStorage.getItem('id'),
+          console.log(err);
+        });
+      this.$store.commit("SET_WINNER", localStorage.getItem("id"));
+      socket.emit("remove-room");
+      socket.emit("success-challenge", {
+        id: localStorage.getItem("id"),
         room: this.$route.params.room
-      })
+      });
     }
   },
   computed: {
-    getPlayers () {
-      return this.$store.state.oneRoom.players
+    getPlayers() {
+      return this.$store.state.oneRoom.players;
       // console.log(this.testing)
-      this.$store.dispatch('parsingData', this.testing).then(({ data }) => {
+      this.$store.dispatch("parsingData", this.testing).then(({ data }) => {
         // alert(JSON.stringify(data))
-        console.log(data)
-      })
+        console.log(data);
+      });
     }
   },
   created() {
-    this.userSolution = this.skeletonCode
+    this.userSolution = this.skeletonCode;
   },
   watch: {
-    userSolution () {
-      this.$emit('setUserSolution', this.userSolution)
+    userSolution() {
+      this.$emit("setUserSolution", this.userSolution);
     },
     skeletonCode() {
-       this.userSolution = this.skeletonCode
+      this.userSolution = this.skeletonCode;
     }
   }
-}
+};
 </script>
 
 <style>
