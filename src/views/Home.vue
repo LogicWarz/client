@@ -181,7 +181,7 @@ export default {
         .dispatch("getUserData")
         .then(response => {
           // console.log("==============>", this.user.name);
-          // this.$store.commit("SET_USER", response.data);
+          this.$store.commit("SET_USER", response.data);
         })
         .catch(err => {
           this.danger(err.response.data.message);

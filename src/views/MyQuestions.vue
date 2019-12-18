@@ -4,7 +4,7 @@
     <v-row>
       <Sidebar />
       <v-col cols="12" sm="9">
-        <div style="display:flex; justify-content:space-between; padding-bottom:10px;">
+        <div style="display:flex; justify-content:space-between;">
           <h2>My Questions</h2>
           <div style="display:flex; justify-content:space-between;">
             <v-text-field

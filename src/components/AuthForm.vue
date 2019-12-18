@@ -58,7 +58,7 @@
                 @error="onSignInError"
             >
                 <v-icon style="color:white; margin-right:5px;">mdi-google</v-icon>
-                SIGN
+                Sign
             </g-signin-button>
             <v-btn type="submit" class="custom-font float-right primary-gradient" style="height:45px;"><b>SIGN IN</b></v-btn>
           </v-col>
@@ -183,8 +183,12 @@ export default {
   float: right;
   font-family: 'Montserrat', sans-serif !important;
   color: #f1f1f1 !important;
+  background: #f12711;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #f5af19, #f12711);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #f5af19, #f12711); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   font-weight: bold;
   border-radius: 5px;
+  cursor: pointer;
   padding: 10px;
   margin-right: 5px; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
