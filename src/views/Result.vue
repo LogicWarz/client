@@ -53,23 +53,38 @@
         <v-col sm="6">
           <div v-if="winner">
             <div v-if="isWinner">
-            <vue-typed-js :strings="[`You won!`]">
-              <h3 style="margin: auto;" class="typing"></h3>
-            </vue-typed-js>
-            <v-img style="margin: auto;" src="../assets/win.gif" max-height="50vh" max-width="50vh"></v-img>
+              <vue-typed-js :strings="[`You won!`]">
+                <h3 style="margin: auto;" class="typing"></h3>
+              </vue-typed-js>
+              <v-img
+                style="margin: auto;"
+                src="../assets/win.gif"
+                max-height="50vh"
+                max-width="50vh"
+              ></v-img>
             </div>
             <div v-else>
-            <vue-typed-js :strings="[`You lose`]">
-              <h3 style="margin: auto;" class="typing"></h3>
-            </vue-typed-js>
-            <v-img style="margin: auto;" src="../assets/lose.png" max-height="50vh" max-width="50vh"></v-img>
+              <vue-typed-js :strings="[`You lose`]">
+                <h3 style="margin: auto;" class="typing"></h3>
+              </vue-typed-js>
+              <v-img
+                style="margin: auto;"
+                src="../assets/lose.png"
+                max-height="50vh"
+                max-width="50vh"
+              ></v-img>
             </div>
           </div>
           <div v-else>
             <vue-typed-js :strings="[`Time's up!`]">
               <h3 style="margin: auto;" class="typing"></h3>
             </vue-typed-js>
-            <v-img style="margin: auto;" src="../assets/time.gif" max-height="50vh" max-width="50vh"></v-img>
+            <v-img
+              style="margin: auto;"
+              src="../assets/time.gif"
+              max-height="50vh"
+              max-width="50vh"
+            ></v-img>
           </div>
         </v-col>
       </v-row>
@@ -96,7 +111,6 @@ export default {
   computed: {
     loser() {
       return this.$store.state.losers;
-      console.log("ini new user ======", this.newUser);
     },
     listPlayer() {
       return this.$store.state.oneRoom;
@@ -105,39 +119,32 @@ export default {
       return this.$store.state.winner;
     },
     isWinner() {
-      return this.$store.state.winner.id._id === this.$store.state.user._id
+      return this.$store.state.winner.id._id === this.$store.state.user._id;
     }
   },
   created() {
-    console.log("ini sebelum nge dispatch room id");
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
-    console.log("ini winner nya ya", this.$store.state.winner);
-    console.log("ini loser ya", this.$store.state.losers);
-    if (
-      this.$store.state.winner &&
-      this.isWinner
-    ) {
+    if (this.$store.state.winner && this.isWinner) {
       this.$confetti.start({
         particlesPerFrame: 0.2
       });
     }
     if (this.$store.state.winner) {
-      console.log("harusnya masukkk disini");
+      // console.log("harusnya masukkk disini");
       socket.emit("wadidaw", {
         winner: this.$store.state.user,
         room: this.$route.params.room
       });
     }
     socket.on("sendWinner", data => {
-      console.log("ini dia ====", data);
+      // console.log("ini dia ====", data);
       this.newUser = data;
     });
-    // setTimeout(() => {
-    //   this.$router.push("/");
-    // }, 5000);
+    setTimeout(() => {
+      this.$router.push("/");
+    }, 5000);
   },
   beforeDestroy() {
-    console.log("ini before destroy");
     this.$confetti.stop();
   }
 };

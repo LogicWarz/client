@@ -95,7 +95,6 @@ export default {
         this.testCaseResult += "== RUNNING TEST CASES ==<br><br>";
         // console.log('ini challenge yaaa', obj.challenge)
         const { data } = await this.$store.dispatch("parsingTestCase", obj);
-        console.log(data.input);
         const testCases = this.room.challenge.testCase;
         testCases.forEach((testCase, i) => {
           this.testCaseResult += "== INPUT ==<br>";
@@ -128,17 +127,12 @@ export default {
       }
     },
     async submitSolution(level) {
-      console.log(this.time);
-      // console.log("ini room yaaa", this.room);
       this.$store.commit("SET_LOADING", true);
       let obj = {
         code: this.userSolution,
         challenge: this.room.challenge
       };
-
-      // console.log('ini challenge yaaa', obj.challenge)
       const { data } = await this.$store.dispatch("parsingData", obj);
-      console.log("dispatch parsing data", data.input);
       if (data.input) {
         let point = 0;
         if (level == "beginner") {
@@ -149,7 +143,6 @@ export default {
           point = 30;
         }
         socket.emit("remove-room");
-        console.log("sebelum axios update");
         const responsePoint = await axios({
           method: "patch",
           url: `/users/${localStorage.getItem("id")}`,
@@ -160,15 +153,18 @@ export default {
             points: point
           }
         });
-        console.log("sesudah axios update");
-        const response = await axios({
-          method: "delete",
-          url: `/rooms/success/${this.$route.params.room}`,
-          headers: {
-            token: localStorage.getItem("token")
-          }
+        const roomFound = await this.$store.dispatch("fetchRoomId", {
+          id: this.$route.params.room
         });
-        console.log("sesudah delete room ....");
+        if (roomFound.room) {
+          const response = await axios({
+            method: "delete",
+            url: `/rooms/success/${this.$route.params.room}`,
+            headers: {
+              token: localStorage.getItem("token")
+            }
+          });
+        }
         this.$store.commit("SET_LOADING", false);
         // console.log("ini state user", this.user);
         this.$store.commit("SET_WINNER", this.user);
@@ -271,18 +267,14 @@ export default {
     });
 
     socket.on("successChallenge", id => {
-      console.log("-----==========", id);
       if (id.id != null) {
         this.$store.commit("SET_WINNER", id);
-        console.log("disini success id", id);
-        console.log("ini adalah room nya", this.room.players);
         let losers = this.room.players.filter(player => {
           return player._id != id.id._id;
         });
         this.$store.commit("SET_LOSERS", losers);
         this.$router.push(`/result/${this.$route.params.room}`);
       } else {
-        console.log("pemain nya gagal smua");
         this.$store.commit("SET_LOSERS", this.room.players);
         this.$router.push(`/result/${this.$route.params.room}`);
       }

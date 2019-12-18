@@ -151,7 +151,6 @@ export default {
         })
         .then(room => {
           this.$store.commit("SET_LOADING", false);
-          console.log("ini room dengan challenge", room);
           socket.emit("getRoom", room);
           this.$store.dispatch("fetchRoomId", { id: room._id });
           this.$router.push(`/lobby/${room._id}`);
@@ -159,7 +158,6 @@ export default {
         })
         .catch(err => {
           this.$store.commit("SET_LOADING", false);
-          console.log(err.data);
           err.data
             ? this.$store.commit("SET_MESSAGE", err.data.message)
             : this.$store.commit(
@@ -177,30 +175,24 @@ export default {
   },
   created() {
     this.$store.commit("SET_WINNER", null);
-    console.log("-=");
     if (localStorage.getItem("token")) {
       this.$store.dispatch("fetchRoom");
       this.$store
         .dispatch("getUserData")
         .then(response => {
-          this.$store.commit("SET_USER", response.data);
+          // console.log("==============>", this.user.name);
+          // this.$store.commit("SET_USER", response.data);
         })
         .catch(err => {
-          console.log(err);
           this.danger(err.response.data.message);
         });
     }
-
-    // socket.on("refetchRoom", () => {
-    //   this.$store.dispatch("fetchRoom");
-    // });
 
     socket.on("getRoom", data => {
       this.$store.dispatch("fetchRoom");
     });
 
     socket.on("roomGone", () => {
-      console.log("masuk");
       this.$store.dispatch("fetchRoom");
     });
 
@@ -209,7 +201,6 @@ export default {
     });
 
     socket.on("remove-room", () => {
-      console.log("masuk remove room kah ?");
       this.$store.dispatch("fetchRoom");
     });
   }
