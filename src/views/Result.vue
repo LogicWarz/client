@@ -64,10 +64,11 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+// import io from "socket.io-client";
+import socket from '../socket/socket'
 import axios from "../../apis/axios";
 import Typed from "typed.js";
-const socket = io.connect("http://coderoyale.server.edirates.xyz");
+// const socket = io.connect("http://coderoyale.server.edirates.xyz");
 
 export default {
   name: "Lobby",
