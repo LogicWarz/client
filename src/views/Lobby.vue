@@ -202,7 +202,7 @@ export default {
         this.$store
           .dispatch("fetchRoomId", { id: data.id })
           .then(data => {
-            if (data.room.players.length === 3) {
+            if (data.room.players.length === 4) {
               socket.emit("play-game", {
                 id: data.room._id,
                 msg: "game start"
