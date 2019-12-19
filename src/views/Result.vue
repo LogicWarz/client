@@ -124,7 +124,11 @@ export default {
   },
   created() {
     this.$store.dispatch("fetchRoomId", { id: this.$route.params.room });
-    if (this.$store.state.winner && this.isWinner) {
+    if (
+      this.$store.state.winner &&
+      this.$store.state.winner.id._id == localStorage.getItem("id")
+    ) {
+      console.log("this is the winner spot");
       this.$confetti.start({
         particlesPerFrame: 0.2
       });
@@ -141,11 +145,9 @@ export default {
       this.newUser = data;
     });
     setTimeout(() => {
+      this.$confetti.stop();
       this.$router.push("/");
     }, 5000);
-  },
-  beforeDestroy() {
-    this.$confetti.stop();
   }
 };
 </script>
