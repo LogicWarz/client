@@ -89,6 +89,9 @@
             <b>{{user.name}}</b>
           </div>
           <div style="color: grey">{{user.email}}</div>
+          <div style="font-size: 25px; color: #5A0EE1; font-weight: bold; opacity: 0.8;">
+            <div>{{user.points}} points</div>
+          </div>
           <div>
             <v-chip v-if="user.points < 100" color="green" text-color="white" small>
               <b>Beginner</b>
@@ -104,11 +107,11 @@
             </v-chip>
           </div>
         </v-col>
-        <v-col sm="8">
+        <!-- <v-col sm="8">
           <div style="font-size: 25px; color: #5A0EE1; font-weight: bold; opacity: 0.8;">
             <div>{{user.points}} points</div>
           </div>
-        </v-col>
+        </v-col> -->
       </v-row>
       <div class="center-item mt-5" v-if="getRooms.length === 0">
         No room yet. Go make one!
